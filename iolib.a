@@ -1,0 +1,72 @@
+#include <comp421/filesystem.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <comp421/iolib.h>
+#include <comp421/hardware.h>
+
+int Link(char *oldname, char *newname);
+int Unlink(char *pathname);
+int SymLink(char *oldname, char *newname);
+int ReadLink(char *pathname, char *buf, int len);
+int MkDir(char *pathname);
+int RmDir(char *pathname);
+int ChDir(char *pathname);
+int Stat(char *pathname, struct Stat *statbuf);
+int Sync(void);
+int Shutdown(void);
+
+struct inode open_files[MAX_OPEN_FILES];
+
+
+int 
+Link(char *oldname, char *newname) 
+{
+
+}
+int 
+Unlink(char *pathname) 
+{
+
+}
+int SymLink
+(char *oldname, char *newname) 
+{
+    return 0;
+}
+int 
+ReadLink
+(char *pathname, char *buf, int len) 
+{
+
+}
+int 
+MkDir(char *pathname) 
+{
+
+}
+int 
+RmDir(char *pathname) 
+{
+
+}
+int 
+ChDir(char *pathname) 
+{
+
+}
+int 
+Stat(char *pathname, struct Stat *statbuf) 
+{
+
+}
+int 
+Sync(void) 
+{
+
+}
+int 
+Shutdown(void) 
+{
+
+}
