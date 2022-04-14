@@ -16,7 +16,15 @@ int Stat(char *pathname, struct Stat *statbuf);
 int Sync(void);
 int Shutdown(void);
 
+void *filesystem[];
+
+void InsertNode(struct node_list **wait, struct inode *node, struct file_tree *parent, char *name);
+int RemoveNode(struct node_list **wait, struct inode node);
+struct file_tree *ParsePathName(char *pathname);
+
 struct inode open_files[MAX_OPEN_FILES];
+struct file_tree *root;
+struct file_tree *cd;
 
 struct node_list {
     struct file_tree *first;
@@ -107,7 +115,7 @@ InsertNode(struct node_list **wait, struct inode *node, struct file_tree *parent
 }
 
 int
-RemoveWaitingList(struct node_list **wait, struct inode node)
+RemoveNode(struct node_list **wait, struct inode node)
 {
 	struct node_list *q = (*wait)->rest;
 	struct node_list *prev;
@@ -128,4 +136,10 @@ RemoveWaitingList(struct node_list **wait, struct inode node)
 	prev->rest = q->rest;
 	free(q);
 	return(0);
+}
+
+struct file_tree *  
+ParseFileName(char *filename) 
+{
+	return NULL;
 }
