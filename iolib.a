@@ -16,7 +16,7 @@ int Stat(char *pathname, struct Stat *statbuf);
 int Sync(void);
 int Shutdown(void);
 
-void *filesystem[];
+block filesystem[];
 
 void InsertNode(struct node_list **wait, struct inode *node, struct file_tree *parent, char *name);
 int RemoveNode(struct node_list **wait, struct inode node);
@@ -90,53 +90,53 @@ Shutdown(void)
 
 }
 
-void
-InsertNode(struct node_list **wait, struct inode *node, struct file_tree *parent, char *name)
-{
-	struct file_tree *new = malloc(sizeof(struct file_tree));
+// void
+// InsertNode(struct node_list **wait, struct inode *node, struct file_tree *parent, char *name)
+// {
+// 	struct file_tree *new = malloc(sizeof(struct file_tree));
   
-	new->cur = node;
-	new->name = name;
-	new->parent = parent;
-    new->children = NULL;
+// 	new->cur = node;
+// 	new->name = name;
+// 	new->parent = parent;
+//     new->children = NULL;
 
-	struct node_list *new_node = malloc(sizeof(struct node_list));
-	new_node->first = new;
-	new_node->rest = NULL;
+// 	struct node_list *new_node = malloc(sizeof(struct node_list));
+// 	new_node->first = new;
+// 	new_node->rest = NULL;
 
-    struct node_list *list = *wait;
-    TracePrintf(0, "InsertNode: Outside loop 1\n");
-    while (list->rest != NULL) {
-        list = list->rest;
-    }
-    TracePrintf(0, "InsertNode: Outside loop 2\n");
+//     struct node_list *list = *wait;
+//     TracePrintf(0, "InsertNode: Outside loop 1\n");
+//     while (list->rest != NULL) {
+//         list = list->rest;
+//     }
+//     TracePrintf(0, "InsertNode: Outside loop 2\n");
 
-    list->rest = new_node;
-}
+//     list->rest = new_node;
+// }
 
-int
-RemoveNode(struct node_list **wait, struct inode node)
-{
-	struct node_list *q = (*wait)->rest;
-	struct node_list *prev;
-	if (q != NULL && q->first->cur == node) {
-		(*wait)->rest = q->rest;
-		free(q);
-		return (0);
-	}
-	while (q != NULL && q->first->cur != node){
-		prev = q;
-		q = q->rest;
-	}
+// int
+// RemoveNode(struct node_list **wait, struct inode node)
+// {
+// 	struct node_list *q = (*wait)->rest;
+// 	struct node_list *prev;
+// 	if (q != NULL && q->first->cur == node) {
+// 		(*wait)->rest = q->rest;
+// 		free(q);
+// 		return (0);
+// 	}
+// 	while (q != NULL && q->first->cur != node){
+// 		prev = q;
+// 		q = q->rest;
+// 	}
 
-	if (q == NULL) {
-		return (-1);
-	}
+// 	if (q == NULL) {
+// 		return (-1);
+// 	}
 	
-	prev->rest = q->rest;
-	free(q);
-	return(0);
-}
+// 	prev->rest = q->rest;
+// 	free(q);
+// 	return(0);
+// }
 
 struct file_tree *  
 ParseFileName(char *filename) 
