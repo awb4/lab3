@@ -138,108 +138,208 @@ main(char *argc, char **argv)
     }
 }
 
-void *
-entry(int block_num, int inode_offset) {
-    char *file = (char *) filesystem;
-    return file + block_num * BLOCKSIZE + inode_offset * INODESIZE;
-}
-
 /* ---------------------------------------- YFS Server Functions ---------------------------------------- */
 
+/**
+ * Open
+ * 
+ * Expected message struct:
+ *     text[0:8] ptr to pathname
+ */
 int
 YFSOpen(struct message msg)
 {
-
+    char *pathname = GetPathName(message, 0);
 }
 
+/**
+ * Close
+ * 
+ * Expected message struct
+ *     text[0:4] fd (file descriptor number)
+ */
 int
 YFSClose(struct message msg)
 {
-    
+    int fd = (int) message->text[0]; // check if cast is correct
 }
 
+/**
+ * Create 
+ * 
+ * Expected message struct 
+ *     text[0:8] ptr to pathname
+ */
 int
 YFSCreate(struct message msg)
 {
-    
+    char *pathname = GetPathName(message, 0);
 }
 
+/**
+ * Read 
+ * 
+ * Expected message struct 
+ *     text[0:4] int fd (file descriptor)
+ *     text[4:12] ptr to buf
+ *     text[12:16] int size
+ */
 int
 YFSRead(struct message msg)
 {
-    
+    int fd = (int) message->text[0];
+    //char *buf = (char *) message->text[4]; probably need helper function
+    int size = (int) message->text[12];
 }
 
+/**
+ * Write 
+ * 
+ * Expected message struct 
+ *     text[0:4] int fd (file descriptor)
+ *     text[4:12] ptr to buf
+ *     text[12:16] int size
+ */
 int
 YFSWrite(struct message msg)
 {
-    
+    int fd = (int) message->text[0];
+    //char *buf = (char *) message->text[4]; probably need helper function
+    int size = (int) message->text[12];   
 }
 
+/**
+ * Seek 
+ * 
+ * Expected message struct 
+ *     text[0:4] int fd (file descriptor)
+ *     text[4:8] int offset
+ *     text[8:12] int whence
+ */
 int
 YFSSeek(struct message msg)
 {
-    
+    int fd = (int) message->text[0];
+    int offset = (int) message->text[4];
+    int size = (int) message->text[8];
 }
 
+/**
+ * Link
+ * 
+ * Expected message struct:
+ *     text[0:8] ptr to old name
+ *     text[8:16] ptr to new name
+ */
 int
 YFSLink(struct message msg)
 {
-    //text[0:8] = ptr to old name
-    //text[8:16] = ptr to new name
     char *oldname = GetPathName(message, 0);
     char *newname = GetPathName(message, 8);
     
 }
 
+/**
+ * Unlink
+ * 
+ * Expected message struct:
+ *     text[0:8] ptr to pathname
+ */ 
 int 
 YFSUnlink(struct message msg)
 {
-    char *pathname = GetPathName(message, 0); //text[0:8] = ptr to pathname
+    char *pathname = GetPathName(message, 0); 
 }
 
 int
 YFSSymLink(struct message msg)
 {
-    
+   return 0; 
 }
 
+/**
+ * ReadLink 
+ * 
+ * Expected message struct 
+ *     text[0:8] ptr to pathname
+ *     text[8:16] ptr to buf
+ *     text[16:20] int len
+ */
 int
 YFSReadLink(struct message msg)
 {
-    
+    char *pathname = GetPathName(message, 0);
+    char *pathname = GetPathName(message, 8);
+    int len = (int) message[16];
 }
 
+/**
+ * MkDir 
+ * 
+ * Expected message struct 
+ *     text[0:8] ptr to pathname
+ */
 int
 YFSMkDir(struct message msg)
 {
-    
+    char *pathname = GetPathName(message, 0);
 }
 
+/**
+ * RmDir 
+ * 
+ * Expected message struct 
+ *     text[0:8] ptr to pathname
+ */
 int
 YFSRmDir(struct message msg)
 {
-    
+    char *pathname = GetPathName(message, 0);
 }
 
+/**
+ * ChDir 
+ * 
+ * Expected message struct 
+ *     text[0:8] ptr to pathname
+ */
 int
 YFSChDir(struct message msg)
 {
-    
+    char *pathname = GetPathName(message, 0);
 }
 
+/**
+ * Stat 
+ * 
+ * Expected message struct 
+ *     text[0:8] ptr to pathname
+ *     text[8:16] ptr to struct Stat 
+ */
 int
 YFSStat(struct message msg)
 {
-    
+    char *pathname = GetPathName(message, 0);   
 }
 
+/**
+ * Sync 
+ * 
+ * Expected message struct
+ *     text has no meaningful contents 
+ */
 int
 YFSSync(struct message msg)
 {
     
 }
 
+/**
+ * Shutdoen 
+ * 
+ * Expected message struct 
+ *     text has no meaningful contents 
+ */
 int
 YFSShutdown(struct message msg)
 {
@@ -254,4 +354,5 @@ GetPathName(struct message *msg, int text_pos) {
     char *src = (char *) message->text[text_pos];
 
     CopyFrom(message->pid, name, src, MAXPATHNAMELEN);
+    return name;
 }

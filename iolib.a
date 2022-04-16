@@ -38,6 +38,76 @@ struct file_tree {
     char *name;
 }
 
+int
+Open(char *pathname) {
+    struct message *new_message = malloc(sizeof(struct message));
+    new_message->type = 0;
+    new_message->pid = GetPid();
+    new_message->text[0] = pathname;
+    Send(new_message, new_message->pid);
+    return 0;
+}
+
+int
+Close(int fd) {
+    struct message *new_message = malloc(sizeof(struct message));
+    new_message->type = 1;
+    new_message->pid = GetPid();
+    new_message->text[0] = fd;
+    Send(new_message, new_message->pid);
+    return 0;
+}
+
+int
+Create(char *pathname)
+{
+    struct message *new_message = malloc(sizeof(struct message));
+    new_message->type = 2;
+    new_message->pid = GetPid();
+    new_message->text[0] = pathname;
+    Send(new_message, new_message->pid);
+    return 0;
+}
+
+int
+Read(int fd, void *buf, int size)
+{
+    struct message *new_message = malloc(sizeof(struct message));
+    new_message->type = 3;
+    new_message->pid = GetPid();
+    new_message->text[0] = fd;
+    new_message->text[4] = buf;
+    new_message->text[12] = size; 
+    Send(new_message, new_message->pid);
+    return 0;
+}
+
+int
+Write(int fd, void *buf, int size)
+{
+    struct message *new_message = malloc(sizeof(struct message));
+    new_message->type = 4;
+    new_message->pid = GetPid();
+    new_message->text[0] = fd;
+    new_message->text[4] = buf;
+    new_message->text[12] = size; 
+    Send(new_message, new_message->pid);
+    return 0;
+}
+
+int
+Seek(int fd, int offset, int whence)
+{
+    struct message *new_message = malloc(sizeof(struct message));
+    new_message->type = 5;
+    new_message->pid = GetPid();
+    new_message->text[0] = fd;
+    new_message->text[4] = offset;
+    new_message->text[8] = whence; 
+    Send(new_message, new_message->pid);
+    return 0;
+}
+
 int 
 Link(char *oldname, char *newname) 
 {
@@ -53,58 +123,94 @@ int
 Unlink(char *pathname) 
 {
     struct message *new_message = malloc(sizeof(struct message));
-    new_message->type = 6;
+    new_message->type = 7;
     new_message->pid = GetPid();
     new_message->text[0] = pathname;
     Send(new_message, new_message->pid);
 }
 
-int SymLink
-(char *oldname, char *newname) 
+int 
+SymLink(char *oldname, char *newname) 
 {
     return 0;
 }
 
 int 
-ReadLink
-(char *pathname, char *buf, int len) 
+ReadLink(char *pathname, char *buf, int len) 
 {
-
+    struct message *new_message = malloc(sizeof(struct message));
+    new_message->type = 9;
+    new_message->pid = GetPid();
+    new_message->text[0] = pathname;
+    new_message->text[8] = buf;
+    new_message->text[16] = len; 
+    Send(new_message, new_message->pid);
+    return 0;
 }
+
 int 
 MkDir(char *pathname) 
 {
-
+    struct message *new_message = malloc(sizeof(struct message));
+    new_message->type = 10;
+    new_message->pid = GetPid();
+    new_message->text[0] = pathname;
+    Send(new_message, new_message->pid);
+    return 0;
 }
 
 int 
 RmDir(char *pathname) 
 {
-
+    struct message *new_message = malloc(sizeof(struct message));
+    new_message->type = 11;
+    new_message->pid = GetPid();
+    new_message->text[0] = pathname;
+    Send(new_message, new_message->pid);
+    return 0;
 }
 
 int 
 ChDir(char *pathname) 
 {
-
+    struct message *new_message = malloc(sizeof(struct message));
+    new_message->type = 12;
+    new_message->pid = GetPid();
+    new_message->text[0] = pathname;
+    Send(new_message, new_message->pid);
+    return 0;
 }
 
 int 
 Stat(char *pathname, struct Stat *statbuf) 
 {
-
+    struct message *new_message = malloc(sizeof(struct message));
+    new_message->type = 13;
+    new_message->pid = GetPid();
+    new_message->text[0] = pathname;
+    new_message->text[8] = statbuf;
+    Send(new_message, new_message->pid);
+    return 0;
 }
 
 int 
 Sync(void) 
 {
-
+    struct message *new_message = malloc(sizeof(struct message));
+    new_message->type = 14;
+    new_message->pid = GetPid();
+    Send(new_message, new_message->pid);
+    return 0;
 }
 
 int 
 Shutdown(void) 
 {
-
+    struct message *new_message = malloc(sizeof(struct message));
+    new_message->type = 15;
+    new_message->pid = GetPid();
+    Send(new_message, new_message->pid);
+    return 0;
 }
 
 // void
