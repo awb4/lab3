@@ -41,13 +41,20 @@ struct file_tree {
 int 
 Link(char *oldname, char *newname) 
 {
-
+    struct message *new_message = malloc(sizeof(struct message));
+    new_message->type = 6;
+    new_message->pid = GetPid();
+    new_message->text[0] = oldname;
+    new_message->test[8] = newname;
+    Send(new_message, new_message->pid);
 }
+
 int 
 Unlink(char *pathname) 
 {
 
 }
+
 int SymLink
 (char *oldname, char *newname) 
 {
