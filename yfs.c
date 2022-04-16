@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 #include <math.h>
 #include <comp421/iolib.h>
 #include <comp421/hardware.h>
@@ -149,7 +150,7 @@ main(char *argc, char **argv)
 int
 YFSOpen(struct message msg)
 {
-    char *pathname = GetPathName(message, 0);
+    char *pathname = GetPathName(message, 0); // Free this bitch at some point
 }
 
 /**
@@ -173,7 +174,7 @@ YFSClose(struct message msg)
 int
 YFSCreate(struct message msg)
 {
-    char *pathname = GetPathName(message, 0);
+    char *pathname = GetPathName(message, 0); // Free this bitch at some point
 }
 
 /**
@@ -188,8 +189,8 @@ int
 YFSRead(struct message msg)
 {
     int fd = (int) message->text[0];
-    //char *buf = (char *) message->text[4]; probably need helper function
     int size = (int) message->text[12];
+    char buf_contents = GetBufContents(msg, 4, len); // Free this bitch at some point
 }
 
 /**
@@ -204,8 +205,8 @@ int
 YFSWrite(struct message msg)
 {
     int fd = (int) message->text[0];
-    //char *buf = (char *) message->text[4]; probably need helper function
     int size = (int) message->text[12];   
+    char buf_contents = GetBufContents(msg, 4, len); // Free this bitch at some point
 }
 
 /**
@@ -234,8 +235,8 @@ YFSSeek(struct message msg)
 int
 YFSLink(struct message msg)
 {
-    char *oldname = GetPathName(message, 0);
-    char *newname = GetPathName(message, 8);
+    char *oldname = GetPathName(message, 0); // Free this bitch at some point
+    char *newname = GetPathName(message, 8); // Free this bitch at some point
     
 }
 
@@ -248,7 +249,7 @@ YFSLink(struct message msg)
 int 
 YFSUnlink(struct message msg)
 {
-    char *pathname = GetPathName(message, 0); 
+    char *pathname = GetPathName(message, 0); // Free this bitch at some point
 }
 
 int
@@ -269,8 +270,8 @@ int
 YFSReadLink(struct message msg)
 {
     char *pathname = GetPathName(message, 0);
-    char *pathname = GetPathName(message, 8);
     int len = (int) message[16];
+    char buf_contents = GetBufContents(msg, 8, len); // Free this bitch at some point
 }
 
 /**
@@ -282,7 +283,7 @@ YFSReadLink(struct message msg)
 int
 YFSMkDir(struct message msg)
 {
-    char *pathname = GetPathName(message, 0);
+    char *pathname = GetPathName(message, 0); // Free this bitch at some point
 }
 
 /**
@@ -294,7 +295,7 @@ YFSMkDir(struct message msg)
 int
 YFSRmDir(struct message msg)
 {
-    char *pathname = GetPathName(message, 0);
+    char *pathname = GetPathName(message, 0); // Free this bitch at some point
 }
 
 /**
@@ -306,7 +307,7 @@ YFSRmDir(struct message msg)
 int
 YFSChDir(struct message msg)
 {
-    char *pathname = GetPathName(message, 0);
+    char *pathname = GetPathName(message, 0); // Free this bitch at some point
 }
 
 /**
@@ -319,7 +320,7 @@ YFSChDir(struct message msg)
 int
 YFSStat(struct message msg)
 {
-    char *pathname = GetPathName(message, 0);   
+    char *pathname = GetPathName(message, 0); // Free this bitch at some point
 }
 
 /**
@@ -355,4 +356,52 @@ GetPathName(struct message *msg, int text_pos) {
 
     CopyFrom(message->pid, name, src, MAXPATHNAMELEN);
     return name;
+}
+
+char *
+GetBufContents(struct message *msg, int text_pos, int len) {
+    char *contents = malloc(len);
+    char *src = (char *) message->text[text_pos]; 
+    CopyFrom(message->pid, contents, src, len);
+    return contents;
+}
+
+short inum
+ParseFileName(char *filename) 
+{  
+    char *new_filename = MakeNullTerminated(filename);
+    // make traverse dir helper function
+    char *token = strtok(new_filename, '/');
+    while (token != 0) {
+        token = strtok(0, '/');
+    }
+    free(new_filename);
+}
+
+char *
+MakeNullTerminated(char *str) {
+    int i;
+    for (i = 0; i < MAXPATHNAMELEN; i++) {
+        if (str[i] == '\0')
+            break;
+    }
+    if (i == (MAXPATHNAMELEN - 1) && str[i] != '\0') {
+        char *new_str = malloc(MAXPATHNAMELEN + 1);
+        for (int j = 0; j < MAXPATHNAMELEN; j++) {
+            new_str[j] = str[j];
+        }
+        new_str[MAXPATHNAMELEN] = '\0';
+        return new_str;
+    }
+    char *new_str = malloc(i + 1);
+    for (int j = 0; j <= i; j++) {
+        new_str[j] = str[j];
+    }
+    return new_str;
+}
+
+short
+TraverseDirs(char *dir_name)
+{
+    
 }
