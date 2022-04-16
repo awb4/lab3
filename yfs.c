@@ -11,8 +11,6 @@
 bool *block_bitmap;
 bool *inode_bitmap;
 
-
-
 union {
     struct fs_header head;
     struct inode inode[IPB];
@@ -27,9 +25,6 @@ struct message {
 
 struct message *message;
 struct fs_header header;
-
-
-
 
 int 
 main(char *argc, char **argv) 
@@ -73,34 +68,68 @@ main(char *argc, char **argv)
             pid_t pid = Receive(message);
             switch (message->type) {
                 case 0:
-                    //text[0:8] = old name
-                    //text[8:16] = new name
-                    char *oldname = GetPathName(message, 0);
-                    char *newname = GetPathName(message, 8);
-                    Link(oldname, newname);
+                    // open
+                    YFSOpen(message);
                     break;  
                 case 1:
-                    //text[0:8] = name
-                    Unlink(GetPathName(message, 0));
+                    // close 
+                    YFSClose(message);
                     break;
                 case 2: 
-                    SymLink(NULL, NULL);
+                    // create
+                    YFSCreate(message);
                     break;
                 case 3:
-                    //text[0:8] = pathname
-                    
-                    char *pathname = GetPathName(message, 0);
+                    // read
+                    YFSRead(message);
+                    break;
                 case 4:
+                    // write
+                    YFSWrite(message);
                     break;
                 case 5:
+                    // seek
+                    YFSSeek(message);
                     break;
                 case 6:
+                    // link
+                    YFSLink(message);
                     break;
                 case 7:
+                    // unlink
+                    YFSUnlink(message);
                     break;
                 case 8:
+                    // symlink
+                    YFSSymLink(message);
                     break;
                 case 9:
+                    // readlink
+                    YFSReadLink(message);
+                    break;
+                case 10:
+                    // mkdir
+                    YFSMkDir(message);
+                    break;
+                case 11:
+                    // rmdir
+                    YFSRkDir(message);
+                    break;
+                case 12:
+                    // chdir
+                    YFSChDir(message);
+                    break;
+                case 13:
+                    // stat
+                    YFSStat(message);
+                    break;
+                case 14:
+                    // sync
+                    YFSSync(message);
+                    break;
+                case 15:
+                    // shutdown
+                    YFSShutdown(message);
                     break;
             }
             /* Construct and overwrite the message to reply */
@@ -109,13 +138,115 @@ main(char *argc, char **argv)
     }
 }
 
-
 void *
 entry(int block_num, int inode_offset) {
     char *file = (char *) filesystem;
     return file + block_num * BLOCKSIZE + inode_offset * INODESIZE;
 }
 
+/* ---------------------------------------- YFS Server Functions ---------------------------------------- */
+
+int
+YFSOpen(struct message msg)
+{
+
+}
+
+int
+YFSClose(struct message msg)
+{
+    
+}
+
+int
+YFSCreate(struct message msg)
+{
+    
+}
+
+int
+YFSRead(struct message msg)
+{
+    
+}
+
+int
+YFSWrite(struct message msg)
+{
+    
+}
+
+int
+YFSSeek(struct message msg)
+{
+    
+}
+
+int
+YFSLink(struct message msg)
+{
+    //text[0:8] = ptr to old name
+    //text[8:16] = ptr to new name
+    char *oldname = GetPathName(message, 0);
+    char *newname = GetPathName(message, 8);
+    
+}
+
+int 
+YFSUnlink(struct message msg)
+{
+    char *oldname = GetPathName(message, 0); //text[0:8] = ptr to oldname
+}
+
+int
+YFSSymLink(struct message msg)
+{
+    
+}
+
+int
+YFSReadLink(struct message msg)
+{
+    
+}
+
+int
+YFSMkDir(struct message msg)
+{
+    
+}
+
+int
+YFSRmDir(struct message msg)
+{
+    
+}
+
+int
+YFSChDir(struct message msg)
+{
+    
+}
+
+int
+YFSStat(struct message msg)
+{
+    
+}
+
+int
+YFSSync(struct message msg)
+{
+    
+}
+
+int
+YFSShutdown(struct message msg)
+{
+    
+}
+
+/* ---------------------------------------- YFS Helper Functions ---------------------------------------- */
 char *
 GetPathName(struct message *msg, int text_pos) {
     char *name = malloc(MAXPATHNAMELEN);

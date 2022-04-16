@@ -53,6 +53,7 @@ int SymLink
 {
     return 0;
 }
+
 int 
 ReadLink
 (char *pathname, char *buf, int len) 
@@ -64,26 +65,31 @@ MkDir(char *pathname)
 {
 
 }
+
 int 
 RmDir(char *pathname) 
 {
 
 }
+
 int 
 ChDir(char *pathname) 
 {
 
 }
+
 int 
 Stat(char *pathname, struct Stat *statbuf) 
 {
 
 }
+
 int 
 Sync(void) 
 {
 
 }
+
 int 
 Shutdown(void) 
 {
