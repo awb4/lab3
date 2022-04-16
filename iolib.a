@@ -52,7 +52,11 @@ Link(char *oldname, char *newname)
 int 
 Unlink(char *pathname) 
 {
-
+    struct message *new_message = malloc(sizeof(struct message));
+    new_message->type = 6;
+    new_message->pid = GetPid();
+    new_message->text[0] = pathname;
+    Send(new_message, new_message->pid);
 }
 
 int SymLink

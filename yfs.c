@@ -195,7 +195,7 @@ YFSLink(struct message msg)
 int 
 YFSUnlink(struct message msg)
 {
-    char *oldname = GetPathName(message, 0); //text[0:8] = ptr to oldname
+    char *pathname = GetPathName(message, 0); //text[0:8] = ptr to pathname
 }
 
 int
