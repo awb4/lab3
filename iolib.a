@@ -170,7 +170,7 @@ SymLink(char *oldname, char *newname)
 int 
 ReadLink(char *pathname, char *buf, int len) 
 {
-    struct message *new_message = malloc(sizeof(struct message));
+    /* struct message *new_message = malloc(sizeof(struct message));
     new_message->type = 9;
     new_message->pid = GetPid();
     if (pathname[0] == '/') {
@@ -182,7 +182,7 @@ ReadLink(char *pathname, char *buf, int len)
     }
     new_message->text[8] = buf;
     new_message->text[16] = len; 
-    Send(new_message, new_message->pid);
+    Send(new_message, new_message->pid); */
     return 0;
 }
 

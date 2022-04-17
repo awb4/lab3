@@ -269,9 +269,7 @@ YFSSymLink(struct message msg)
 int
 YFSReadLink(struct message msg)
 {
-    char *pathname = GetPathName(message, 0);
-    int len = (int) message[16];
-    char buf_contents = GetBufContents(msg, 8, len); // Free this bitch at some point
+    return 0;
 }
 
 /**
@@ -369,8 +367,8 @@ GetBufContents(struct message *msg, int text_pos, int len) {
 short inum
 ParseFileName(char *filename) 
 {  
-    char *new_filename = MakeNullTerminated(filename);
-    // make traverse dir helper function
+    char *new_filename = MakeNullTerminated(filename, MAXPATHNAMELEN);
+    
     char *token = strtok(new_filename, '/');
     while (token != 0) {
         token = strtok(0, '/');
@@ -378,19 +376,26 @@ ParseFileName(char *filename)
     free(new_filename);
 }
 
+/**
+ * @brief returns a new char * with a null terminated version of the input string.
+ * 
+ * @param str the string to turn into a null terminated string
+ * @param max_len the max len of the input string
+ * @return char* a new char * with a null terminated version of the input string.
+ */
 char *
-MakeNullTerminated(char *str) {
+MakeNullTerminated(char *str, int max_len) {
     int i;
-    for (i = 0; i < MAXPATHNAMELEN; i++) {
+    for (i = 0; i < max_len; i++) {
         if (str[i] == '\0')
             break;
     }
-    if (i == (MAXPATHNAMELEN - 1) && str[i] != '\0') {
-        char *new_str = malloc(MAXPATHNAMELEN + 1);
-        for (int j = 0; j < MAXPATHNAMELEN; j++) {
+    if (i == (max_len - 1) && str[i] != '\0') {
+        char *new_str = malloc(max_len + 1);
+        for (int j = 0; j < max_len; j++) {
             new_str[j] = str[j];
         }
-        new_str[MAXPATHNAMELEN] = '\0';
+        new_str[max_len] = '\0';
         return new_str;
     }
     char *new_str = malloc(i + 1);
@@ -400,8 +405,82 @@ MakeNullTerminated(char *str) {
     return new_str;
 }
 
+/**
+ * @brief 
+ * 
+ * @param dir_name a null terminated directory name
+ * @param dir_inum an inode number
+ * @return short the inum corresponding to dir_name
+ */
 short
-TraverseDirs(char *dir_name)
+TraverseDirs(char *dir_name, short dir_inum)
 {
-    
+    int sector_num = (dir_inum / IPB) + 1;
+    struct inode *first_inodes = malloc(SECTORSIZE);
+    if (ReadSector(sector_num, first_inodes) != 0) {
+        TracePrintf(0, "Freak the fuck out\n");
+        Exit(-1);
+    }
+
+    // iterate over direct block
+    int diff = dir_inum - ((sector_num - 1) * IPB)
+    struct inode *root_inode = first_inodes + diff;
+    for (int i = 0; i < NUM_DIRECT; i++) {
+        int curr_block = root_inode->direct[i];
+
+        if (curr_block == 0)
+            break;
+
+        short inum = TraverseDirsHelper(dir_name, curr_block);
+        if (inum > 0) {
+            free(first_inodes);
+            return inum;
+        }
+    }
+
+    int indir_block = root_inode->indirect;
+    if (indir_block != 0) {
+        int ints_per_block = BLOCKSIZE / sizeof(int);
+        for (int j = 0; j < ints_per_block; j++) {
+            if (j == 0)
+                break;
+
+            short inum = TraverseDirsHelper(dir_name, j);
+            if (inum > 0) {
+                free(first_inodes);
+                return inum;
+            }
+        }
+    }
+    free(first_inodes);
+    return -1;
+}
+
+short
+TraverseDirsHelper(char *dir_name, int curr_block)
+{
+    struct dir_entry *dir_entries = malloc(SECTORSIZE);
+    if (curr_block == 0) {
+        free(dir_entry);
+        return -1;
+    }    
+        
+    if (ReadSector(curr_block, dir_entries) != 0) {
+        TracePrintf(0, "Freak the fuck out\n");
+        Exit(-1);
+    }
+        
+    struct dir_entry *curr_entry = dir_entries;
+    int entries_per_block = BLOCKSIZE / sizeof(struct dir_entry);
+    for (int j = 0; j < entries_per_block; j++) {
+        char *curr_dir_name = MakeNullTerminated(curr_entry->name, DIRNAMELEN);
+        if (curr_dir_name == dir_name) {
+            free(dir_entries);
+            return (curr_entry->inum);
+        }
+        curr_entry++;
+    }
+
+    free(dir_entries);
+    return -1;
 }
