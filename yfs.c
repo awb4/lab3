@@ -12,24 +12,72 @@
 bool *block_bitmap;
 bool *inode_bitmap;
 
+int YFSOpen(struct message *msg);
+int YFSClose(struct message *msg);
+int YFSCreate(struct message *msg);
+int YFSRead(struct message *msg);
+int YFSWrite(struct message *msg);
+int YFSSeek(struct message *msg);
+int YFSLink(struct message *msg);
+int YFSUnlink(struct message *msg);
+int YFSSymLink(struct message *msg);
+int YFSReadLink(struct message *msg);
+int YFSMkDir(struct message *msg);
+int YFSRmDir(struct message *msg);
+int YFSChDir(struct message *msg);
+int YFSStat(struct message *msg);
+int YFSSync(struct message *msg);
+int YFSShutdown(struct message *msg);
+
+char *GetPathName(struct message *msg, int text_pos);
+char *GetBufContents(struct message *msg, int text_pos, int len);
+char *MakeNullTerminated(char *, int max_len);
+short TraverseDirs(char *dir_name, short dir_inum);
+short TraverseDirsHelper(char *dir_name, int curr_block);
+void InsertOpenFile(struct open_file_list **wait, int fd, short inum);
+void InsertFD(struct open_file_list **wait, int fd);
+int RemoveOpenFile(struct open_file_list **wait, int fd);
+int RemoveMinFD(struct open_file_list **wait);
+
+
+
+
 union {
     struct fs_header head;
     struct inode inode[IPB];
     char buf[BLOCKSIZE];
 } *read_block;
 
+struct open_file_list {
+    int fd;
+    short inum;
+    struct open_file_list *next;
+}
+
+struct free_fd_list {
+    int fd;
+    struct free_fd_list *next;
+}
+
 struct message {
     int type;
     pid_t pid;
-    char text[24];
+    int retval;
+    char text[20];
 };
+
+int cur_fd;
 
 struct message *message;
 struct fs_header header;
+struct open_file_list *open_files;
+
+
 
 int 
 main(char *argc, char **argv) 
 {
+    cur_fd = 0;
     if (Register(FILE_SERVER) == -1) {
         TracePrintf(0, "Register File Server: Freak the Fuck out\n");
         Exit(-1);
@@ -147,10 +195,25 @@ main(char *argc, char **argv)
  * Expected message struct:
  *     text[0:8] ptr to pathname
  */
-int
+void
 YFSOpen(struct message msg)
 {
-    char *pathname = GetPathName(message, 0); // Free this bitch at some point
+    char *pathname = GetPathName(msg, 0); // Free this bitch at some point
+    short inum = ParseFileName(pathname);
+    int new_fd = RemoveMinFD(open_files);
+    if (new_fd == -1) {
+        new_fd = cur_fd;
+    }
+    if (inum <= 0){
+        msg->retval = ERROR;
+    }
+    else {
+        msg->retval = new_fd;
+        if (new_fd == cur_fd) {
+            cur_fd++;
+        }
+        InsertOpenFile(&open_files, cur_fd, inum);
+    }
 }
 
 /**
@@ -163,6 +226,13 @@ int
 YFSClose(struct message msg)
 {
     int fd = (int) message->text[0]; // check if cast is correct
+    InsertFD(&open_files, fd);
+    if (RemoveOpenFile(&open_files, fd) == -1) {
+        msg->retval = ERROR;
+    } 
+    else {
+        meg->retval = 0;
+    }
 }
 
 /**
@@ -174,7 +244,44 @@ YFSClose(struct message msg)
 int
 YFSCreate(struct message msg)
 {
+    struct inode *block;
     char *pathname = GetPathName(message, 0); // Free this bitch at some point
+    char *null_path = MakeNullTerminated(pathname);
+    char *directory;
+    char *new_file;
+    int i;
+    int n = strlen(null_path);
+    for (i = n - 1; i >= 0; i++) {
+        if (null_path[i] == '/') {
+            directory = malloc(i-1);
+            new_file = malloc(n-i+1);
+            *directory = *(null_path[0]);
+            *new_file = *(null_path[i+1]);
+        }
+    }
+    if (i == 0) {
+        directory = "";
+        new_file = null_path;
+    }
+    short inum = ParseFileName(directory);
+    if (inum <= 0) {
+        msg->retval = ERROR;
+    }
+    block = malloc(BLOCKSIZE);
+    if (ReadSector((int) (inum / IPB + 1), block) == -1) {
+        TracePrintf(0, "Freak the Fuck out\n");
+        Exit(-1);
+    }
+    int sector_num = ((int) inum / IPB) + 1;
+    int diff = (int) inum - ((sector_num - 1) * IPB)
+    struct inode *cur_node = block[diff];
+    if (cur_node.type == INODE_DIRECTORY) {
+        //make new file
+    }
+    else {
+        TracePrintf(0, "Not Directory Freak the Fuck Out\n");
+        msg->retval = ERROR;
+    }
 }
 
 /**
@@ -282,6 +389,43 @@ int
 YFSMkDir(struct message msg)
 {
     char *pathname = GetPathName(message, 0); // Free this bitch at some point
+    struct inode *block;
+    char *null_path = MakeNullTerminated(pathname);
+    char *directory;
+    char *new_file;
+    int i;
+    int n = strlen(null_path);
+    for (i = n - 1; i >= 0; i++) {
+        if (null_path[i] == '/') {
+            directory = malloc(i-1);
+            new_file = malloc(n-i+1);
+            *directory = *(null_path[0]);
+            *new_file = *(null_path[i+1]);
+        }
+    }
+    if (i == 0) {
+        directory = "";
+        new_file = null_path;
+    }
+    short inum = ParseFileName(directory);
+    if (inum <= 0) {
+        msg->retval = ERROR;
+    }
+    block = malloc(BLOCKSIZE);
+    if (ReadSector((int) (inum / IPB + 1), block) == -1) {
+        TracePrintf(0, "Freak the Fuck out\n");
+        Exit(-1);
+    }
+    int sector_num = ((int) inum / IPB) + 1;
+    int diff = (int) inum - ((sector_num - 1) * IPB)
+    struct inode *cur_node = block[diff];
+    if (cur_node.type == INODE_DIRECTORY) {
+        //make new file
+    }
+    else {
+        TracePrintf(0, "Not Directory Freak the Fuck Out\n");
+        msg->retval = ERROR;
+    }
 }
 
 /**
@@ -364,16 +508,19 @@ GetBufContents(struct message *msg, int text_pos, int len) {
     return contents;
 }
 
-short inum
+short
 ParseFileName(char *filename) 
 {  
     char *new_filename = MakeNullTerminated(filename, MAXPATHNAMELEN);
     
     char *token = strtok(new_filename, '/');
+    short inum = TraverseDirs(token, 1);
     while (token != 0) {
         token = strtok(0, '/');
+        inum = TraverseDirs(token, inum);
     }
     free(new_filename);
+    return inum;
 }
 
 /**
@@ -483,4 +630,98 @@ TraverseDirsHelper(char *dir_name, int curr_block)
 
     free(dir_entries);
     return -1;
+}
+
+void
+InsertOpenFile(struct open_file_list **wait, int fd, short inum)
+{
+	struct open_file_list *new = malloc(sizeof(struct open_file_list));
+  
+	new->fd = fd;
+	new->inum = inum;
+    new->next = NULL;
+
+    struct node_list *list = *wait;
+    TracePrintf(0, "InsertNode: Outside loop 1\n");
+    while (list->next != NULL) {
+        list = list->next;
+    }
+    TracePrintf(0, "InsertNode: Outside loop 2\n");
+
+    list->next = new;
+}
+
+int
+RemoveOpenFile(struct open_file_list **wait, int fd)
+{
+	struct open_file_list *q = (*wait);
+	struct open_file_list *prev;
+	if (q != NULL && q->fd == fd) {
+		(*wait)->next = q->next;
+		free(q);
+		return (0);
+	}
+	while (q != NULL && q->fd != fd){
+		prev = q;
+		q = q->next;
+	}
+
+	if (q == NULL) {
+		return (-1);
+	}
+	
+	prev->next = q->next;
+	free(q);
+	return(0);
+}
+
+void
+InsertFD(struct free_fd_list **wait, int fd)
+{
+	struct free_fd_list *new = malloc(sizeof(struct free_fd_list));
+  
+	new->fd = fd;
+    new->next = NULL;
+
+    struct node_list *list = *wait;
+    TracePrintf(0, "InsertNode: Outside loop 1\n");
+    while (list->next != NULL) {
+        list = list->next;
+    }
+    TracePrintf(0, "InsertNode: Outside loop 2\n");
+
+    list->next = new;
+}
+
+int
+RemoveMinFD(struct free_fd_list **wait)
+{
+	struct free_fd_list *q = (*wait);
+	struct free_fd_list *prev;
+    int min = INT_MAX;
+
+    while (q != NULL) {
+        if (q->fd < min) {
+            min = q->fd;
+        }
+        q = q->next;
+    }
+    q = (*wait);
+	if (q != NULL && q->fd == min) {
+		(*wait)->next = q->next;
+		free(q);
+		return (0);
+	}
+	while (q != NULL && q->fd != min){
+		prev = q;
+		q = q->next;
+	}
+
+	if (q == NULL) {
+		return (-1);
+	}
+	
+	prev->next = q->next;
+	free(q);
+	return(min);
 }
