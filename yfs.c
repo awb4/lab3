@@ -38,7 +38,8 @@ void InsertOpenFile(struct open_file_list **wait, int fd, short inum);
 void InsertFD(struct open_file_list **wait, int fd);
 int RemoveOpenFile(struct open_file_list **wait, int fd);
 int RemoveMinFD(struct open_file_list **wait);
-
+struct inode *MakeNewFile(void);
+void *GetFreeBlock(void);
 
 
 
@@ -200,7 +201,7 @@ YFSOpen(struct message msg)
 {
     char *pathname = GetPathName(msg, 0); // Free this bitch at some point
     short inum = ParseFileName(pathname);
-    int new_fd = RemoveMinFD(open_files);
+    int new_fd = RemoveMinFD(free_fd_list);
     if (new_fd == -1) {
         new_fd = cur_fd;
     }
@@ -226,7 +227,7 @@ int
 YFSClose(struct message msg)
 {
     int fd = (int) message->text[0]; // check if cast is correct
-    InsertFD(&open_files, fd);
+    InsertFD(&free_fd_list, fd);
     if (RemoveOpenFile(&open_files, fd) == -1) {
         msg->retval = ERROR;
     } 
@@ -724,4 +725,14 @@ RemoveMinFD(struct free_fd_list **wait)
 	prev->next = q->next;
 	free(q);
 	return(min);
+}
+
+struct inode *
+MakeNewFile(void) {
+
+}
+
+void *
+GetFreeBlock(void) {
+    
 }
