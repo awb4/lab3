@@ -50,6 +50,7 @@ struct dir_entry *CreateDirEntry(short inum, char *name);
 
 int GetSectorNum(int inum);
 int GetSectorPosition(int inum);
+struct inode *GetInodeAt(short inum);
 
 
 union {
@@ -85,6 +86,7 @@ int ni;
 struct message *message;
 struct fs_header header;
 struct open_file_list *open_files;
+struct free_fd_list *free_fds;
 
 
 
@@ -214,12 +216,20 @@ YFSOpen(struct message *msg)
 {
     char *pathname = GetPathName(msg, 0); // Free this bitch at some point
     short inum = ParseFileName(pathname);
-    int new_fd = RemoveMinFD(free_fd_list);
+    struct inode *my_node = GetInodeAt(inum);
+    if (my_node->type != INODE_REGULAR) {
+        TracePrintf(0, "Tried to use Open on a directory\n");
+        msg->retval = ERROR;
+        return;
+    }
+    int new_fd = RemoveMinFD(&free_fds);
     if (new_fd == -1) {
         new_fd = cur_fd;
     }
-    if (inum <= 0){
+    if (inum <= 0) {
+        TracePrintf(0, "ParseFilename found bullshit\n");
         msg->retval = ERROR;
+        return;
     }
     else {
         msg->retval = new_fd;
@@ -240,7 +250,7 @@ void
 YFSClose(struct message *msg)
 {
     int fd = (int) message->text[0]; // check if cast is correct
-    InsertFD(&free_fd_list, fd);
+    InsertFD(&free_fds, fd);
     if (RemoveOpenFile(&open_files, fd) == -1) {
         msg->retval = ERROR;
     } 
@@ -414,7 +424,7 @@ YFSStat(struct message *msg)
 void
 YFSSync(struct message *msg)
 {
-    
+
 }
 
 /**
@@ -426,7 +436,7 @@ YFSSync(struct message *msg)
 void
 YFSShutdown(struct message *msg)
 {
-    
+    Exit(-1);
 }
 
 /* ---------------------------------------- YFS Helper Functions ---------------------------------------- */
@@ -504,7 +514,7 @@ TraverseDirs(char *dir_name, short dir_inum)
 {
     int sector_num = (dir_inum / IPB) + 1;
     struct inode *first_inodes = malloc(SECTORSIZE);
-    if (ReadSector(sector_num, first_inodes) != 0) {
+    if (ReadFromBlock(sector_num, first_inodes) != 0) {
         TracePrintf(0, "Freak the fuck out\n");
         Exit(-1);
     }
@@ -552,7 +562,7 @@ TraverseDirsHelper(char *dir_name, int curr_block)
         return -1;
     }    
         
-    if (ReadSector(curr_block, dir_entries) != 0) {
+    if (ReadFromBlock(curr_block, dir_entries) != 0) {
         TracePrintf(0, "Freak the fuck out\n");
         Exit(-1);
     }
@@ -700,7 +710,7 @@ YFSCreateMkDir(struct message *msg, bool dir) {
         msg->retval = ERROR;
     }
     block = malloc(BLOCKSIZE);
-    if (ReadSector((int) (inum / IPB + 1), block) == -1) {
+    if (ReadFromBlock((int) (inum / IPB + 1), block) == -1) {
         TracePrintf(0, "Freak the Fuck out\n");
         Exit(-1);
     }
@@ -725,10 +735,7 @@ YFSCreateMkDir(struct message *msg, bool dir) {
             return;
         } 
         else {
-            struct inode *blk = malloc(BLOCKSIZE);
-            int sector = GetSectorNum((int) existing_inum);
-            ReadSector(sector, blk);
-            new_node = sector + GetSectorPosition((int) existing_inum);
+            new_node = GetInodeAt(existing_inum);
         }
         
         MakeNewFile(new_node, dir);
@@ -852,4 +859,12 @@ WriteINum(int inum, struct inode node) {
     ReadFromBlock(sector, nodes);
     nodes[position] = node;
     return WriteToBlock(sector, nodes);
+}
+
+struct inode *
+GetInodeAt(short inum) {
+    struct inode *blk = malloc(BLOCKSIZE);
+    int sector = GetSectorNum((int) inum);
+    ReadFromBlock(sector, blk);
+    return sector + GetSectorPosition((int) inum);
 }
