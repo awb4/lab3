@@ -12,22 +12,22 @@
 bool *block_bitmap;
 bool *inode_bitmap;
 
-int YFSOpen(struct message *msg);
-int YFSClose(struct message *msg);
-int YFSCreate(struct message *msg);
-int YFSRead(struct message *msg);
-int YFSWrite(struct message *msg);
-int YFSSeek(struct message *msg);
-int YFSLink(struct message *msg);
-int YFSUnlink(struct message *msg);
-int YFSSymLink(struct message *msg);
-int YFSReadLink(struct message *msg);
-int YFSMkDir(struct message *msg);
-int YFSRmDir(struct message *msg);
-int YFSChDir(struct message *msg);
-int YFSStat(struct message *msg);
-int YFSSync(struct message *msg);
-int YFSShutdown(struct message *msg);
+void YFSOpen(struct message *msg);
+void YFSClose(struct message *msg);
+void YFSCreate(struct message *msg);
+void YFSRead(struct message *msg);
+void YFSWrite(struct message *msg);
+void YFSSeek(struct message *msg);
+void YFSLink(struct message *msg);
+void YFSUnlink(struct message *msg);
+void YFSMkDir(struct message *msg);
+void YFSRmDir(struct message *msg);
+void YFSChDir(struct message *msg);
+void YFSStat(struct message *msg);
+void YFSSync(struct message *msg);
+void YFSShutdown(struct message *msg);
+
+void YFSCreateMkDir(struct message *msg;)
 
 char *GetPathName(struct message *msg, int text_pos);
 char *GetBufContents(struct message *msg, int text_pos, int len);
@@ -40,7 +40,10 @@ int RemoveOpenFile(struct open_file_list **wait, int fd);
 int RemoveMinFD(struct open_file_list **wait);
 struct inode *MakeNewFile(void);
 void *GetFreeBlock(void);
+struct inode *GetFreeINode();
 
+int GetSectorNum(int inum);
+int GetSectorPosition(int inum);
 
 
 union {
@@ -68,6 +71,8 @@ struct message {
 };
 
 int cur_fd;
+int nb;
+int ni;
 
 struct message *message;
 struct fs_header header;
@@ -90,8 +95,8 @@ main(char *argc, char **argv)
             TracePrintf(0, "ReadSector: Freak the Fuck out\n");
             Exit(-1);
         }
-        int nb = read_block->head.num_blocks;
-        int ni = read_block->head.num_inodes;
+        nb = read_block->head.num_blocks;
+        ni = read_block->head.num_inodes;
         int maxfb =  nb - ceil((ni + 1) / IPB); 
         block_bitmap = malloc(sizeof(bool) * maxfb);
         inode_bitmap = malloc(sizeof(bool) * ni);
@@ -151,11 +156,11 @@ main(char *argc, char **argv)
                     break;
                 case 8:
                     // symlink
-                    YFSSymLink(message);
+                    // YFSSymLink(message);
                     break;
                 case 9:
                     // readlink
-                    YFSReadLink(message);
+                    // YFSReadLink(message);
                     break;
                 case 10:
                     // mkdir
@@ -197,7 +202,7 @@ main(char *argc, char **argv)
  *     text[0:8] ptr to pathname
  */
 void
-YFSOpen(struct message msg)
+YFSOpen(struct message *msg)
 {
     char *pathname = GetPathName(msg, 0); // Free this bitch at some point
     short inum = ParseFileName(pathname);
@@ -223,8 +228,8 @@ YFSOpen(struct message msg)
  * Expected message struct
  *     text[0:4] fd (file descriptor number)
  */
-int
-YFSClose(struct message msg)
+void
+YFSClose(struct message *msg)
 {
     int fd = (int) message->text[0]; // check if cast is correct
     InsertFD(&free_fd_list, fd);
@@ -242,47 +247,10 @@ YFSClose(struct message msg)
  * Expected message struct 
  *     text[0:8] ptr to pathname
  */
-int
+void
 YFSCreate(struct message msg)
 {
-    struct inode *block;
-    char *pathname = GetPathName(message, 0); // Free this bitch at some point
-    char *null_path = MakeNullTerminated(pathname);
-    char *directory;
-    char *new_file;
-    int i;
-    int n = strlen(null_path);
-    for (i = n - 1; i >= 0; i++) {
-        if (null_path[i] == '/') {
-            directory = malloc(i-1);
-            new_file = malloc(n-i+1);
-            *directory = *(null_path[0]);
-            *new_file = *(null_path[i+1]);
-        }
-    }
-    if (i == 0) {
-        directory = "";
-        new_file = null_path;
-    }
-    short inum = ParseFileName(directory);
-    if (inum <= 0) {
-        msg->retval = ERROR;
-    }
-    block = malloc(BLOCKSIZE);
-    if (ReadSector((int) (inum / IPB + 1), block) == -1) {
-        TracePrintf(0, "Freak the Fuck out\n");
-        Exit(-1);
-    }
-    int sector_num = ((int) inum / IPB) + 1;
-    int diff = (int) inum - ((sector_num - 1) * IPB)
-    struct inode *cur_node = block[diff];
-    if (cur_node.type == INODE_DIRECTORY) {
-        //make new file
-    }
-    else {
-        TracePrintf(0, "Not Directory Freak the Fuck Out\n");
-        msg->retval = ERROR;
-    }
+    YFSCreateMkDir(msg, false);
 }
 
 /**
@@ -293,8 +261,8 @@ YFSCreate(struct message msg)
  *     text[4:12] ptr to buf
  *     text[12:16] int size
  */
-int
-YFSRead(struct message msg)
+void
+YFSRead(struct message *msg)
 {
     int fd = (int) message->text[0];
     int size = (int) message->text[12];
@@ -309,8 +277,8 @@ YFSRead(struct message msg)
  *     text[4:12] ptr to buf
  *     text[12:16] int size
  */
-int
-YFSWrite(struct message msg)
+void
+YFSWrite(struct message*msg)
 {
     int fd = (int) message->text[0];
     int size = (int) message->text[12];   
@@ -325,8 +293,8 @@ YFSWrite(struct message msg)
  *     text[4:8] int offset
  *     text[8:12] int whence
  */
-int
-YFSSeek(struct message msg)
+void
+YFSSeek(struct message *msg)
 {
     int fd = (int) message->text[0];
     int offset = (int) message->text[4];
@@ -340,8 +308,8 @@ YFSSeek(struct message msg)
  *     text[0:8] ptr to old name
  *     text[8:16] ptr to new name
  */
-int
-YFSLink(struct message msg)
+void
+YFSLink(struct message *msg)
 {
     char *oldname = GetPathName(message, 0); // Free this bitch at some point
     char *newname = GetPathName(message, 8); // Free this bitch at some point
@@ -354,17 +322,17 @@ YFSLink(struct message msg)
  * Expected message struct:
  *     text[0:8] ptr to pathname
  */ 
-int 
-YFSUnlink(struct message msg)
+void 
+YFSUnlink(struct message *msg)
 {
     char *pathname = GetPathName(message, 0); // Free this bitch at some point
 }
 
-int
-YFSSymLink(struct message msg)
-{
-   return 0; 
-}
+// void
+// YFSSymLink(struct message msg)
+// {
+//    return 0; 
+// }
 
 /**
  * ReadLink 
@@ -374,11 +342,11 @@ YFSSymLink(struct message msg)
  *     text[8:16] ptr to buf
  *     text[16:20] int len
  */
-int
-YFSReadLink(struct message msg)
-{
-    return 0;
-}
+// void
+// YFSReadLink(struct message msg)
+// {
+    
+// }
 
 /**
  * MkDir 
@@ -386,47 +354,10 @@ YFSReadLink(struct message msg)
  * Expected message struct 
  *     text[0:8] ptr to pathname
  */
-int
-YFSMkDir(struct message msg)
+void
+YFSMkDir(struct message *msg)
 {
-    char *pathname = GetPathName(message, 0); // Free this bitch at some point
-    struct inode *block;
-    char *null_path = MakeNullTerminated(pathname);
-    char *directory;
-    char *new_file;
-    int i;
-    int n = strlen(null_path);
-    for (i = n - 1; i >= 0; i++) {
-        if (null_path[i] == '/') {
-            directory = malloc(i-1);
-            new_file = malloc(n-i+1);
-            *directory = *(null_path[0]);
-            *new_file = *(null_path[i+1]);
-        }
-    }
-    if (i == 0) {
-        directory = "";
-        new_file = null_path;
-    }
-    short inum = ParseFileName(directory);
-    if (inum <= 0) {
-        msg->retval = ERROR;
-    }
-    block = malloc(BLOCKSIZE);
-    if (ReadSector((int) (inum / IPB + 1), block) == -1) {
-        TracePrintf(0, "Freak the Fuck out\n");
-        Exit(-1);
-    }
-    int sector_num = ((int) inum / IPB) + 1;
-    int diff = (int) inum - ((sector_num - 1) * IPB)
-    struct inode *cur_node = block[diff];
-    if (cur_node.type == INODE_DIRECTORY) {
-        //make new file
-    }
-    else {
-        TracePrintf(0, "Not Directory Freak the Fuck Out\n");
-        msg->retval = ERROR;
-    }
+    YFSCreateMkDir(msg, true);
 }
 
 /**
@@ -435,8 +366,8 @@ YFSMkDir(struct message msg)
  * Expected message struct 
  *     text[0:8] ptr to pathname
  */
-int
-YFSRmDir(struct message msg)
+void
+YFSRmDir(struct message *msg)
 {
     char *pathname = GetPathName(message, 0); // Free this bitch at some point
 }
@@ -447,7 +378,7 @@ YFSRmDir(struct message msg)
  * Expected message struct 
  *     text[0:8] ptr to pathname
  */
-int
+void
 YFSChDir(struct message msg)
 {
     char *pathname = GetPathName(message, 0); // Free this bitch at some point
@@ -460,8 +391,8 @@ YFSChDir(struct message msg)
  *     text[0:8] ptr to pathname
  *     text[8:16] ptr to struct Stat 
  */
-int
-YFSStat(struct message msg)
+void
+YFSStat(struct message *msg)
 {
     char *pathname = GetPathName(message, 0); // Free this bitch at some point
 }
@@ -472,8 +403,8 @@ YFSStat(struct message msg)
  * Expected message struct
  *     text has no meaningful contents 
  */
-int
-YFSSync(struct message msg)
+void
+YFSSync(struct message *msg)
 {
     
 }
@@ -484,8 +415,8 @@ YFSSync(struct message msg)
  * Expected message struct 
  *     text has no meaningful contents 
  */
-int
-YFSShutdown(struct message msg)
+void
+YFSShutdown(struct message *msg)
 {
     
 }
@@ -515,7 +446,7 @@ ParseFileName(char *filename)
     char *new_filename = MakeNullTerminated(filename, MAXPATHNAMELEN);
     
     char *token = strtok(new_filename, '/');
-    short inum = TraverseDirs(token, 1);
+    short inum = (token, 1);
     while (token != 0) {
         token = strtok(0, '/');
         inum = TraverseDirs(token, inum);
@@ -727,12 +658,97 @@ RemoveMinFD(struct free_fd_list **wait)
 	return(min);
 }
 
-struct inode *
-MakeNewFile(void) {
+void 
+YFSCreateMkDir(struct message *msg, bool dir) {
+    struct inode *block;
+    char *pathname = GetPathName(message, 0); // Free this bitch at some point
+    char *null_path = MakeNullTerminated(pathname);
+    char *directory;
+    char *new_file;
+    int i;
+    int n = strlen(null_path);
+    for (i = n - 1; i >= 0; i++) {
+        if (null_path[i] == '/') {
+            directory = malloc(i-1);
+            new_file = malloc(n-i+1);
+            *directory = *(null_path[0]);
+            *new_file = *(null_path[i+1]);
+        }
+    }
+    if (i == 0) {
+        directory = "";
+        new_file = null_path;
+    }
+    short inum = ParseFileName(directory);
+    if (inum <= 0) {
+        msg->retval = ERROR;
+    }
+    block = malloc(BLOCKSIZE);
+    if (ReadSector((int) (inum / IPB + 1), block) == -1) {
+        TracePrintf(0, "Freak the Fuck out\n");
+        Exit(-1);
+    }
+    int sector_num = ((int) inum / IPB) + 1;
+    int diff = (int) inum - ((sector_num - 1) * IPB);
+    struct inode *cur_node = block[diff];
+    if (cur_node.type == INODE_DIRECTORY) {
+        //make new file
+        if (TraverseDirs(new_file, inum) <= 0) {
+            struct inode *new_node = GetFreeINode();
 
+        }
+        else {
+            if (directory) {
+                msg->retval = ERROR;
+            }
+        }
+    }
+    else {
+        TracePrintf(0, "Not Directory Freak the Fuck Out\n");
+        msg->retval = ERROR;
+    }
 }
 
-void *
-GetFreeBlock(void) {
-    
+
+struct inode *
+MakeNewFile(struct inode *node, bool directory) {
+   
+    if (directory) {
+        node->type = INODE_DIRECTORY;
+    } else {
+        node->type = INODE_REGULAR;
+    }
+    int i;
+    for (i = 0; i < NUM_DIRECT; i++){
+        node->direct[i] = 0;
+    }
+    node->size = 0;
+    node->nlink = 1;
+    node->reuse = 0;
+    node->indirect = 0;
+}
+
+struct inode *
+GetFreeINode() {
+    struct inode *nodes = malloc(BLOCKSIZE);
+    for (i = 0; i < ni + 1; i++) {
+        if (inode_bitmap[i]) {
+            inode_bitmap[i] = 0;
+            ReadSector(GetSectorNum(i), nodes);
+            return nodes[GetSectorPosition(i)];
+        }
+    }
+    TracePrintf(0, "No free nodes remaining.\n");
+    return NULL;
+}
+
+int 
+GetSectorNum(int inum) {
+    return (inum / IPB) + 1;
+}
+
+int
+GetSectorPosition(int inum) {
+    int sector_num = GetSectorNum(inum);
+    return (inum - ((sector_num - 1) * IPB));
 }
