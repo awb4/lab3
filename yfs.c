@@ -83,7 +83,7 @@ int WriteINum(int inum, struct inode node);
 
 short GetFreeInode();
 int GetFreeBlock();
-struct dir_entry *CreateDirEntry(short inum, char *name);
+struct dir_entry CreateDirEntry(short inum, char *name);
 
 int GetSectorNum(int inum);
 int GetSectorPosition(int inum);
@@ -738,7 +738,7 @@ YFSCreateMkDir(struct message *msg, bool dir)
 {
     struct inode *block;
     char *pathname = GetPathName(message, 0); // Free this bitch at some point
-    char *null_path = MakeNullTerminated(pathname);
+    char *null_path = MakeNullTerminated(pathname, MAXPATHNAMELEN);
     char *directory;
     char *new_file;
     int i;
@@ -755,25 +755,25 @@ YFSCreateMkDir(struct message *msg, bool dir)
         directory = "";
         new_file = null_path;
     }
-    short inum = ParseFileName(directory);
+    short parent_inum = ParseFileName(directory);
     if (inum <= 0) {
         msg->retval = ERROR;
     }
     block = malloc(BLOCKSIZE);
-    if (ReadFromBlock((int) (inum / IPB + 1), block) == -1) {
+    if (ReadFromBlock((int) (parent_inum / IPB + 1), block) == -1) {
         TracePrintf(0, "Freak the Fuck out\n");
         Exit(-1);
     }
-    int sector_num = ((int) inum / IPB) + 1;
-    int diff = (int) inum - ((sector_num - 1) * IPB);
+    int sector_num = ((int) parent_inum / IPB) + 1;
+    int diff = (int) parent_inum - ((sector_num - 1) * IPB);
     struct inode *cur_node = block + diff;
     if (cur_node->type == INODE_DIRECTORY) {
         //make new file
         struct inode *new_node;
-        short existing_inum;
-        if ((existing_inum = TraverseDirs(new_file, inum)) <= 0) {
-            existing_inum = GetFreeInode();
-            if (existing_inum < 0) {
+        short child_inum;
+        if ((child_inum = TraverseDirs(new_file, parent_inum)) <= 0) {
+            child_inum = GetFreeInode();
+            if (child_inum < 0) {
                 msg->retval = ERROR;
                 free(pathname);
                 return;
@@ -785,21 +785,21 @@ YFSCreateMkDir(struct message *msg, bool dir)
             return;
         } 
         else {
-            new_node = GetInodeAt(existing_inum);
+            new_node = GetInodeAt(child_inum);
         }
-        
+        struct dir_entry new_file_entry = CreateDirEntry(child_inum, new_file);
+        AddToBlock(parent_inum, &new_file_entry, sizeof(struct dir_entry));
         MakeNewFile(new_node, dir);
         if (dir) {
-            struct dir_entry *dot = CreateDirEntry(existing_inum, ".");
-            struct dir_entry *dotdot = CreateDirEntry(inum, "..");
-            struct dir_entry *blk = malloc(BLOCKSIZE); //check in office hours, seems sus
+            struct dir_entry dot = CreateDirEntry(child_inum, ".");
+            struct dir_entry dotdot = CreateDirEntry(parent_inum, "..");
+            struct dir_entry *blk = malloc(2 * sizeof(struct dir_entry)); //check in office hours, seems sus
             int blknum = GetFreeBlock();
-            ReadFromBlock(blknum, blk);
-            blk[0] = *dot;
-            blk[1] = *dotdot;
-            WriteToBlock(blknum, blk);
+            blk[0] = dot;
+            blk[1] = dotdot;
+            AddToBlock(child_inum, blk, 2*sizeof(struct dir_entry));
         }
-        WriteINum(existing_inum, *new_node);
+        WriteINum(child_inum, *new_node);
         free(pathname);
         if (dir) {
             msg->retval = 0;
@@ -807,7 +807,6 @@ YFSCreateMkDir(struct message *msg, bool dir)
         else {
             YFSOpen(msg);
         }
-        
     }
     else {
         TracePrintf(0, "Not Directory Freak the Fuck Out\n");
@@ -881,12 +880,12 @@ GetSectorPosition(int inum)
     return (inum - ((sector_num - 1) * IPB));
 }
 
-struct dir_entry *
+struct dir_entry 
 CreateDirEntry(short inum, char *name) 
 {
-    struct dir_entry *entry = malloc(sizeof(struct dir_entry));
-    entry->inum = inum;
-    entry->name = name;
+    struct dir_entry entry;
+    entry.inum = inum;
+    entry.name = name;
     return entry;
 }
 
@@ -985,6 +984,7 @@ AddToBlock(short inum, void *buf, int len)
         }
         WriteToBlock(write_num, edit_blk);
         EditOpenFile(&open_files, file->fd, blknum, i);
+        WriteINum(inum, node);
     }
     return 0;
 }
