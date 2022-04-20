@@ -59,7 +59,7 @@ void YFSShutdown(struct message *msg);
 
 void YFSCreateMkDir(struct message *msg, bool directory);
 
-short ParseFileName(char *filename); 
+short ParseFileName(char *filename, short dir_inum); 
 char *GetPathName(struct message *msg, int text_pos);
 char *GetBufContents(struct message *msg, int text_pos, int len);
 char *MakeNullTerminated(char *, int max_len);
@@ -215,12 +215,13 @@ main(int argc, char **argv)
  * 
  * Expected message struct:
  *     text[0:8] ptr to pathname
+ *     cd a short, the inum of the dir at which to start looking for pathname
  */
 void
 YFSOpen(struct message *msg)
 {
     char *pathname = GetPathName(msg, 0); // Free this bitch at some point
-    short inum = ParseFileName(pathname);
+    short inum = ParseFileName(pathname, msg->cd);
     struct inode *my_node = GetInodeAt(inum);
     if (my_node->type != INODE_REGULAR) {
         TracePrintf(0, "Tried to use Open on a directory\n");
@@ -469,13 +470,22 @@ GetBufContents(struct message *msg, int text_pos, int len) {
     return contents;
 }
 
+/**
+ * @brief Looks for the file specified by the pathname "filename" starting
+ * at the directory with inum "dir_inum". Returns the inum of the desired
+ * file on success, -1 otherwise.
+ * 
+ * @param filename the path to the desired file
+ * @param dir_inum the inum of the directory at which to start looking for "filename"
+ * @return the inum for file "filename"
+ */
 short
-ParseFileName(char *filename) 
+ParseFileName(char *filename, short dir_inum) 
 {  
     char *new_filename = MakeNullTerminated(filename, MAXPATHNAMELEN);
     
     char *token = strtok(new_filename, "/");
-    short inum = TraverseDirs(token, 1);
+    short inum = TraverseDirs(token, dir_inum);
     while (token != 0) {
         token = strtok(0, "/");
         inum = TraverseDirs(token, inum);
@@ -761,55 +771,73 @@ YFSCreateMkDir(struct message *msg, bool dir)
     char *null_path = MakeNullTerminated(pathname, MAXPATHNAMELEN);
     char *directory;
     char *new_file;
+
     int i;
     int n = strlen(null_path);
-    for (i = n - 1; i >= 0; i++) {
+
+
+    for (i = n - 1; i >= 0; i--) {
         if (null_path[i] == '/') {
             directory = malloc(i-1);
             new_file = malloc(n-i+1);
+
+            // the lines below seems sus, copy manually instead?
             *directory = *null_path;
             *new_file = *(null_path + i + 1);
+            break;
         }
     }
-    if (i == 0) {
+
+    short parent_inum = 1;
+    if (i > 0) {
+        parent_inum = ParseFileName(directory, msg->cd);
+    } else if (i < 0) {
         directory = "";
+        parent_inum = msg->cd;
         new_file = null_path;
     }
-    short parent_inum = ParseFileName(directory);
+    
     if (parent_inum <= 0) {
         msg->retval = ERROR;
     }
+    
     block = malloc(BLOCKSIZE);
     if (ReadFromBlock((int) (parent_inum / IPB + 1), block) == -1) {
         TracePrintf(0, "Freak the Fuck out\n");
         Exit(-1);
     }
-    int sector_num = ((int) parent_inum / IPB) + 1;
-    int diff = (int) parent_inum - ((sector_num - 1) * IPB);
+    int sector_num = GetSectorNum((int) parent_inum);
+    int diff = GetSectorPosition((int) parent_inum);
     struct inode *cur_node = block + diff;
     if (cur_node->type == INODE_DIRECTORY) {
         //make new file
         struct inode *new_node;
         short child_inum;
+
         if ((child_inum = TraverseDirs(new_file, parent_inum)) <= 0) {
+            // file we're creating does not have an inode yet
             child_inum = GetFreeInode();
             if (child_inum < 0) {
                 msg->retval = ERROR;
                 free(pathname);
                 return;
             }
-        }
-        if (dir) {
+        } else if (dir) {
+            // if we are trying to make a directory that alreay exists freak the fuck out
             msg->retval = ERROR;
             free(pathname);
             return;
-        } 
-        else {
+        } else {
             new_node = GetInodeAt(child_inum);
         }
+
+        // making a new directory or "creating" a file (existing or not)
+
+        // create dir entry and add it to parent directory
         struct dir_entry *new_file_entry = CreateDirEntry(child_inum, new_file);
         AddToBlock(parent_inum, new_file_entry, sizeof(struct dir_entry));
-        MakeNewFile(new_node, dir);
+
+        MakeNewFile(new_node, dir); // updates inode
         int openval = InsertOFDeluxe(child_inum);
         if (dir) {
             struct dir_entry *dot = CreateDirEntry(child_inum, ".");
@@ -823,19 +851,17 @@ YFSCreateMkDir(struct message *msg, bool dir)
         free(pathname);
         if (dir) {
             msg->retval = 0;
-        }
-        else {
+        } else {
             msg->retval = openval;
         }
-    }
-    else {
+    } else {
         TracePrintf(0, "Not Directory Freak the Fuck Out\n");
         free(pathname);
         msg->retval = ERROR;
     }
 }
 
-//Shoves data into empty inode struct
+// Shoves data into empty inode struct
 void
 MakeNewFile(struct inode *node, bool directory) 
 {
