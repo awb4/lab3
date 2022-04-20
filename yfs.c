@@ -37,31 +37,31 @@ int cur_fd;
 int nb;
 int ni;
 
-struct message *message;
+void *message;
 struct fs_header header;
 struct open_file_list *open_files;
 struct free_fd_list *free_fds;
 
-void YFSOpen(struct message *msg);
-void YFSClose(struct message *msg);
-void YFSCreate(struct message *msg);
-void YFSRead(struct message *msg);
-void YFSWrite(struct message *msg);
-void YFSSeek(struct message *msg);
-void YFSLink(struct message *msg);
-void YFSUnlink(struct message *msg);
-void YFSMkDir(struct message *msg);
-void YFSRmDir(struct message *msg);
-void YFSChDir(struct message *msg);
-void YFSStat(struct message *msg);
-void YFSSync(struct message *msg);
-void YFSShutdown(struct message *msg);
+void YFSOpen(void *m);
+void YFSClose(void *m);
+void YFSCreate(void *m);
+void YFSRead(void *m);
+void YFSWrite(void *m);
+void YFSSeek(void *m);
+void YFSLink(void *m);
+void YFSUnlink(void *m);
+void YFSMkDir(void *m);
+void YFSRmDir(void *m);
+void YFSChDir(void *m);
+void YFSStat(void *m);
+void YFSSync(void *m);
+void YFSShutdown(void *m);
 
-void YFSCreateMkDir(struct message *msg, bool directory);
+void YFSCreateMkDir(void *m, bool directory);
 
 short ParseFileName(char *filename, short dir_inum); 
-char *GetPathName(struct message *msg, int text_pos);
-char *GetBufContents(struct message *msg, int text_pos, int len);
+char *GetPathName(pid_t pid, char *pathname);
+char *GetBufContents(pid_t pid, void *buf, int len);
 short TraverseDirs(char *dir_name, short dir_inum);
 short TraverseDirsHelper(char *dir_name, int curr_block);
 void InsertOpenFile(struct open_file_list **wait, int fd, short inum);
@@ -134,7 +134,8 @@ main(int argc, char **argv)
         while(1) {
             
             pid_t pid = Receive(message);
-            switch (message->type) {
+            struct messageSinglePath *castMsg = (struct messageSinglePath *) message;
+            switch (castMsg->type) {
                 case 0:
                     // open
                     YFSOpen(message);
@@ -217,9 +218,10 @@ main(int argc, char **argv)
  *     cd a short, the inum of the dir at which to start looking for pathname
  */
 void
-YFSOpen(struct message *msg)
+YFSOpen(void *m)
 {
-    char *pathname = GetPathName(msg, 0); // Free this bitch at some point
+    struct messageSinglePath *msg = (struct messageSinglePath *) m;
+    char *pathname = GetPathName(msg->pid, msg->pathname); // Free this bitch at some point
     short inum = ParseFileName(pathname, msg->cd);
     struct inode *my_node = GetInodeAt(inum);
     if (my_node->type != INODE_REGULAR) {
@@ -245,9 +247,10 @@ YFSOpen(struct message *msg)
  *     text[0:4] fd (file descriptor number)
  */
 void
-YFSClose(struct message *msg)
+YFSClose(void *m)
 {
-    int fd = (int) message->text[0]; // check if cast is correct
+    struct messageFDSizeBuf *msg = (struct messageFDSizeBuf *) m;
+    int fd = (int) msg->fd; // check if cast is correct
     InsertFD(&free_fds, fd);
     if (RemoveOpenFile(&open_files, fd) == -1) {
         msg->retval = ERROR;
@@ -264,9 +267,9 @@ YFSClose(struct message *msg)
  *     text[0:8] ptr to pathname
  */
 void
-YFSCreate(struct message *msg)
+YFSCreate(void *m)
 {
-    YFSCreateMkDir(msg, false);
+    YFSCreateMkDir(m, false);
 }
 
 /**
@@ -278,11 +281,12 @@ YFSCreate(struct message *msg)
  *     text[12:16] int size
  */
 void
-YFSRead(struct message *msg)
+YFSRead(void *m)
 {
-    int fd = (int) message->text[0];
-    int size = (int) message->text[12];
-    char *buf_contents = GetBufContents(msg, 4, size); // Free this bitch at some point
+    struct messageFDSizeBuf *msg = (struct messageFDSizeBuf *) m;
+    int fd = (int) msg->fd;
+    int size = (int) msg->size;
+    char *buf_contents = GetBufContents(msg->pid, msg->buf, size); // Free this bitch at some point
     (void) buf_contents;
     (void) fd;
 }
@@ -298,9 +302,10 @@ YFSRead(struct message *msg)
 void
 YFSWrite(struct message*msg)
 {
-    int fd = (int) message->text[0];
-    int size = (int) message->text[12];   
-    char *buf_contents = GetBufContents(msg, 4, size); // Free this bitch at some point
+    struct messageFDSizeBuf *msg = (struct messageFDSizeBuf *) m;
+    int fd = (int) msg->fd;
+    int size = (int) msg->size;   
+    char *buf_contents = GetBufContents(msg->pid, msg->buf, size); // Free this bitch at some point
     (void) buf_contents;
     (void) fd;
 }
@@ -314,11 +319,13 @@ YFSWrite(struct message*msg)
  *     text[8:12] int whence
  */
 void
-YFSSeek(struct message *msg)
+YFSSeek(void *m)
 {
-    int fd = (int) msg->text[0];
-    int offset = (int) msg->text[4];
-    int size = (int) msg->text[8];
+    struct messageSeek *msg = (struct messageSeek *) m;
+
+    int fd = (int) msg->fd;
+    int offset = (int) msg->offset;
+    int size = (int) msg->size;
     (void) fd;
     (void) size;
     (void) offset;
@@ -332,10 +339,12 @@ YFSSeek(struct message *msg)
  *     text[8:16] ptr to new name
  */
 void
-YFSLink(struct message *msg)
+YFSLink(void *m)
 {
-    char *oldname = GetPathName(msg, 0); // Free this bitch at some point
-    char *newname = GetPathName(msg, 8); // Free this bitch at some point
+    struct messageDoublePath *msg = (struct messageDoublePath *) m;
+
+    char *oldname = GetPathName(msg->pid, msg->pathname1); // Free this bitch at some point
+    char *newname = GetPathName(msg->pid, msg->pathname2); // Free this bitch at some point
     (void) oldname;
     (void) newname;
 }
@@ -347,9 +356,11 @@ YFSLink(struct message *msg)
  *     text[0:8] ptr to pathname
  */ 
 void 
-YFSUnlink(struct message *msg)
+YFSUnlink(void *m)
 {
-    char *pathname = GetPathName(msg, 0); // Free this bitch at some point
+    struct messageSinglePath *msg = (struct messageSinglePath *) m;
+
+    char *pathname = GetPathName(msg->pid, msg->pathname); // Free this bitch at some point
     (void) pathname;
 }
 
@@ -380,9 +391,9 @@ YFSUnlink(struct message *msg)
  *     text[0:8] ptr to pathname
  */
 void
-YFSMkDir(struct message *msg)
+YFSMkDir(void *m)
 {
-    YFSCreateMkDir(msg, true);
+    YFSCreateMkDir(m, true);
 }
 
 /**
@@ -392,9 +403,10 @@ YFSMkDir(struct message *msg)
  *     text[0:8] ptr to pathname
  */
 void
-YFSRmDir(struct message *msg)
+YFSRmDir(void *m)
 {
-    char *pathname = GetPathName(msg, 0); // Free this bitch at some point
+    struct messageSinglePath *msg = (struct messageSinglePath *) m;
+    char *pathname = GetPathName(msg->pid, msg->pathname); // Free this bitch at some point
     (void) pathname;
 }
 
@@ -405,9 +417,10 @@ YFSRmDir(struct message *msg)
  *     text[0:8] ptr to pathname
  */
 void
-YFSChDir(struct message *msg)
+YFSChDir(void *m)
 {
-    char *pathname = GetPathName(msg, 0); // Free this bitch at some point
+    struct messageSinglePath *msg = (struct messageSinglePath *) m;
+    char *pathname = GetPathName(msg->pid, msg->pathname); // Free this bitch at some point
     (void) pathname;
 }
 
@@ -419,9 +432,10 @@ YFSChDir(struct message *msg)
  *     text[8:16] ptr to struct Stat 
  */
 void
-YFSStat(struct message *msg)
+YFSStat(void *m)
 {
-    char *pathname = GetPathName(msg, 0); // Free this bitch at some point
+    struct messageDoublePath *msg = (struct messageDoublePath *) m;
+    char *pathname = GetPathName(msg->pid, msg->pathname); // Free this bitch at some point
     (void) pathname;
 }
 
@@ -432,8 +446,9 @@ YFSStat(struct message *msg)
  *     text has no meaningful contents 
  */
 void
-YFSSync(struct message *msg)
+YFSSync(void *m)
 {
+    struct messageSinglePath *msg = (struct messageSinglePath *) m;
     (void) msg;
 }
 
@@ -444,28 +459,25 @@ YFSSync(struct message *msg)
  *     text has no meaningful contents 
  */
 void
-YFSShutdown(struct message *msg)
+YFSShutdown(void *m)
 {
+    struct messageSinglePath *msg = (struct messageSinglePath *) m;
     (void) msg;
     Exit(-1);
 }
 
 /* ---------------------------------------- YFS Helper Functions ---------------------------------------- */
 char *
-GetPathName(struct message *msg, int text_pos) {
+GetPathName(pid_t pid, char *pathname) {
     char *name = malloc(MAXPATHNAMELEN);
-                    
-    char *src = (char *) (msg->text + text_pos);
-
-    CopyFrom(msg->pid, name, src, MAXPATHNAMELEN);
+    CopyFrom(pid, name, pathname, MAXPATHNAMELEN);
     return name;
 }
 
 char *
-GetBufContents(struct message *msg, int text_pos, int len) {
+GetBufContents(pid_t pid, void *buf, int len) {
     char *contents = malloc(len);
-    char *src = (char *) msg->text + text_pos; 
-    CopyFrom(msg->pid, contents, src, len);
+    CopyFrom(pid, contents, buf, len);
     return contents;
 }
 
@@ -732,10 +744,11 @@ RemoveMinFD(struct free_fd_list **wait)
  *     text[0:8] ptr to pathname
  */
 void 
-YFSCreateMkDir(struct message *msg, bool dir) 
+YFSCreateMkDir(void *m, bool dir) 
 {
+    struct messageSinglePath *msg = (struct messageSinglePath *) m;
     struct inode *block;
-    char *pathname = GetPathName(message, 0); // Free this bitch at some point
+    char *pathname = GetPathName(msg->pid, msg->pathname); // Free this bitch at some point
     char *null_path = MakeNullTerminated(pathname, MAXPATHNAMELEN);
     char *directory;
     char *new_file;

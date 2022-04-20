@@ -42,10 +42,10 @@ short cd;
 
 int
 Open(char *pathname) {
-    struct message *new_message = malloc(sizeof(struct message));
+    struct messageSinglePath *new_message = malloc(sizeof(struct messageSinglePath));
     new_message->type = 0;
     new_message->pid = GetPid();
-    new_message->text = pathname;
+    new_message->pathname = pathname;
     if (pathname[0] != '/') {
         // absolute filename
         new_message->cd = 1;
@@ -58,10 +58,10 @@ Open(char *pathname) {
 
 int
 Close(int fd) {
-    struct message *new_message = malloc(sizeof(struct message));
+    struct messageFDSizeBuf *new_message = malloc(sizeof(struct messageFDSizeBuf));
     new_message->type = 1;
     new_message->pid = GetPid();
-    new_message->text = fd;
+    new_message->fd = fd;
     Send(new_message, new_message->pid);
     return 0;
 }
@@ -69,10 +69,10 @@ Close(int fd) {
 int
 Create(char *pathname)
 {
-    struct message *new_message = malloc(sizeof(struct message));
+    struct messageSinglePath *new_message = malloc(sizeof(struct messageSinglePath));
     new_message->type = 2;
     new_message->pid = GetPid();
-    new_message->text = pathname;
+    new_message->pathname = pathname;
     if (pathname[0] != '/') {
         // absolute filename
         new_message->cd = 1;
@@ -86,12 +86,12 @@ Create(char *pathname)
 int
 Read(int fd, void *buf, int size)
 {
-    struct message *new_message = malloc(sizeof(struct message));
+    struct messageFDSizeBuf *new_message = malloc(sizeof(struct messageFDSizeBuf));
     new_message->type = 3;
     new_message->pid = GetPid();
-    new_message->text = fd;
-    ((new_message->text) + 4) = buf;
-    ((new_message->text) + 12) = size; 
+    new_message->fd = fd;
+    new_message->buf = buf;
+    new_message->size = size; 
     Send(new_message, new_message->pid);
     return 0;
 }
@@ -99,12 +99,12 @@ Read(int fd, void *buf, int size)
 int
 Write(int fd, void *buf, int size)
 {
-    struct message *new_message = malloc(sizeof(struct message));
+    struct messageFDSizeBuf *new_message = malloc(sizeof(struct messageFDSizeBuf));
     new_message->type = 4;
     new_message->pid = GetPid();
-    new_message->text = fd;
-    ((new_message->text) + 4) = buf;
-    ((new_message->text) + 12) = size; 
+    new_message->fd = fd;
+    new_message->buf = buf;
+    new_message->size = size;
     Send(new_message, new_message->pid);
     return 0;
 }
@@ -112,12 +112,12 @@ Write(int fd, void *buf, int size)
 int
 Seek(int fd, int offset, int whence)
 {
-    struct message *new_message = malloc(sizeof(struct message));
+    struct messageSeek *new_message = malloc(sizeof(struct messageSeek));
     new_message->type = 5;
     new_message->pid = GetPid();
-    new_message->text = fd;
-    ((new_message->text) + 4) = offset;
-    ((new_message->text) + 8) = whence; 
+    new_message->fd = fd;
+    new_message->offset = offset;
+    new_message->whence = whence; 
     Send(new_message, new_message->pid);
     return 0;
 }
@@ -125,19 +125,19 @@ Seek(int fd, int offset, int whence)
 int 
 Link(char *oldname, char *newname) 
 {
-    struct message *new_message = malloc(sizeof(struct message));
+    struct messageDoublePath *new_message = malloc(sizeof(struct messageDoublePath));
     new_message->type = 6;
     new_message->pid = GetPid();
-    new_message->text = oldname;
+    new_message->pathname1 = oldname;
 
     if (oldname[0] == '/') {
         // absolute filename
-        new_message->cd = 0;
+        new_message->cd1 = 0;
     } else {
         // relative filename
-        new_message->cd = cd;
+        new_message->cd1 = cd;
     }
-    new_message->text[8] = newname;
+    new_message->pathname2 = newname;
     if (newname[0] == '/') {
         // absolute filename
         new_message->cd2 = 0;
@@ -152,10 +152,10 @@ Link(char *oldname, char *newname)
 int 
 Unlink(char *pathname) 
 {
-    struct message *new_message = malloc(sizeof(struct message));
+    struct messageSinglePath *new_message = malloc(sizeof(struct messageSinglePath));
     new_message->type = 7;
     new_message->pid = GetPid();
-    new_message->text = pathname;
+    new_message->pathname = pathname;
     if (pathname[0] != '/') {
         // absolute filename
         new_message->cd = 1;
@@ -193,10 +193,10 @@ ReadLink(char *pathname, char *buf, int len)
 int 
 MkDir(char *pathname) 
 {
-    struct message *new_message = malloc(sizeof(struct message));
+    struct messageSinglePath *new_message = malloc(sizeof(struct messageSinglePath));
     new_message->type = 10;
     new_message->pid = GetPid();
-    new_message->text = pathname;
+    new_message->pathname = pathname;
     if (pathname[0] != '/') {
         // absolute filename
         new_message->cd = 1;
@@ -210,10 +210,10 @@ MkDir(char *pathname)
 int 
 RmDir(char *pathname) 
 {
-    struct message *new_message = malloc(sizeof(struct message));
+    struct messageSinglePath *new_message = malloc(sizeof(struct messageSinglePath));
     new_message->type = 11;
     new_message->pid = GetPid();
-    new_message->text = pathname;
+    new_message->pathname = pathname;
     if (pathname[0] != '/') {
         // absolute filename
         new_message->cd = 1;
@@ -227,10 +227,10 @@ RmDir(char *pathname)
 int 
 ChDir(char *pathname) 
 {
-    struct message *new_message = malloc(sizeof(struct message));
+    struct messageSinglePath *new_message = malloc(sizeof(struct messageSinglePath));
     new_message->type = 12;
     new_message->pid = GetPid();
-    new_message->text = pathname;
+    new_message->pathname = pathname;
     if (pathname[0] == '/') {
         // absolute filename
         new_message->cd = 1;
@@ -245,17 +245,17 @@ ChDir(char *pathname)
 int 
 Stat(char *pathname, struct Stat *statbuf) 
 {
-    struct message *new_message = malloc(sizeof(struct message));
+    struct messageDoublePath *new_message = malloc(sizeof(struct messageDoublePath));
     new_message->type = 13;
     new_message->pid = GetPid();
-    new_message->text = pathname;
+    new_message->pathname1 = pathname;
     if (pathname[0] != '/') {
         // absolute filename
-        new_message->cd = 1;
+        new_message->cd1 = 1;
     } else {
-        new_message->cd = cd;
+        new_message->cd1 = cd;
     }
-    ((new_message->text) + 8) = statbuf;
+    new_message->pathname2 = statbuf;
     Send(new_message, new_message->pid);
     return 0;
 }
@@ -263,7 +263,7 @@ Stat(char *pathname, struct Stat *statbuf)
 int 
 Sync(void) 
 {
-    struct message *new_message = malloc(sizeof(struct message));
+    struct messageSinglePath *new_message = malloc(sizeof(struct messageSinglePath));
     new_message->type = 14;
     new_message->pid = GetPid();
     Send(new_message, new_message->pid);
@@ -273,7 +273,7 @@ Sync(void)
 int 
 Shutdown(void) 
 {
-    struct message *new_message = malloc(sizeof(struct message));
+    struct messageSinglePath *new_message = malloc(sizeof(struct messageSinglePath));
     new_message->type = 15;
     new_message->pid = GetPid();
     Send(new_message, new_message->pid);

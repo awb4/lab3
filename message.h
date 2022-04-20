@@ -1,29 +1,22 @@
-struct message {
-    int type;
-    pid_t pid;
-    int retval;
-    char text[16];
-    short cd;
-    short cd2;
-};
+
 
 // Use for Open/Close/Create
-struct messageSinglePathName {
+struct messageSinglePath {
     int type;
     pid_t pid;
-    int retval;
     void *pathname;
+    int retval;
     short cd;
     char pad[10];
 }
 
-// 
-struct messageDoublePathName {
+// For double pathnames and stat
+struct messageDoublePath {
     int type;
     pid_t pid;
-    int retval;
     void *pathname1;
     void *pathname2;
+    int retval;
     short cd1;
     short cd2;
 }
@@ -32,10 +25,10 @@ struct messageDoublePathName {
 struct messageFDSizeBuf {
     int type;
     pid_t pid;
+    void *buf;
     int retval;
     int fd;
     int size;
-    void *buf;
     char pad[4];
 }
 
@@ -46,7 +39,10 @@ struct messageSeek {
     int fd;
     int offset;
     int whence;
+    char pad[8];
 }
+
+
 
 /**
  * @brief returns a new char * with a null terminated version of the input string.
