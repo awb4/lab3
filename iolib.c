@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 #include <comp421/iolib.h>
 #include <comp421/hardware.h>
 #include <comp421/yalnix.h>
@@ -23,6 +24,7 @@ int Shutdown(void);
 // struct file_tree *ParsePathName(char *pathname);
 
 struct inode open_files[MAX_OPEN_FILES];
+short cd;
 // struct file_tree *root;
 // struct file_tree *cd;
 
@@ -43,12 +45,12 @@ Open(char *pathname) {
     struct message *new_message = malloc(sizeof(struct message));
     new_message->type = 0;
     new_message->pid = GetPid();
-    if (pathname[0] == '/') {
+    new_message->text[0] = pathname;
+    if (pathname[0] != '/') {
         // absolute filename
-        new_message->text[0] = pathname;
+        new_message->cd = 1;
     } else {
-        // relative filename
-        new_message->text[0] = cd + pathname;
+        new_message->cd = cd;
     }
     Send(new_message, new_message->pid);
     return 0;
@@ -70,12 +72,12 @@ Create(char *pathname)
     struct message *new_message = malloc(sizeof(struct message));
     new_message->type = 2;
     new_message->pid = GetPid();
-    if (pathname[0] == '/') {
+    new_message->text[0] = pathname;
+    if (pathname[0] != '/') {
         // absolute filename
-        new_message->text[0] = pathname;
+        new_message->cd = 1;
     } else {
-        // relative filename
-        new_message->text[0] = cd + pathname;
+        new_message->cd = cd;
     }
     Send(new_message, new_message->pid);
     return 0;
@@ -126,21 +128,23 @@ Link(char *oldname, char *newname)
     struct message *new_message = malloc(sizeof(struct message));
     new_message->type = 6;
     new_message->pid = GetPid();
-    
+    new_message->text[0] = oldname;
+
     if (oldname[0] == '/') {
         // absolute filename
-        new_message->text[0] = oldname;
+        new_message->cd = 0;
     } else {
         // relative filename
-        new_message->text[0] = cd + oldname;
+        new_message->cd = cd;
     }
-
+    new_message->text[8] = newname;
     if (newname[0] == '/') {
         // absolute filename
-        new_message->text[8] = newname;
+        new_message->cd2 = 0;
+
     } else {
         // relative filename
-        new_message->text[8] = cd + newname;
+        new_message->cd2 = cd;
     }
     Send(new_message, new_message->pid);
 }
@@ -151,12 +155,12 @@ Unlink(char *pathname)
     struct message *new_message = malloc(sizeof(struct message));
     new_message->type = 7;
     new_message->pid = GetPid();
-    if (pathname[0] == '/') {
+    new_message->text[0] = pathname;
+    if (pathname[0] != '/') {
         // absolute filename
-        new_message->text[0] = pathname;
+        new_message->cd = 1;
     } else {
-        // relative filename
-        new_message->text[0] = cd + pathname;
+        new_message->cd = cd;
     }
     Send(new_message, new_message->pid);
 }
@@ -178,7 +182,7 @@ ReadLink(char *pathname, char *buf, int len)
         new_message->text[0] = pathname;
     } else {
         // relative filename
-        new_message->text[0] = cd + pathname;
+        new_message->text[0] = strcat(cd, MakeNullTerminated(pathname, MAXPATHNAMELEN));;
     }
     new_message->text[8] = buf;
     new_message->text[16] = len; 
@@ -192,12 +196,12 @@ MkDir(char *pathname)
     struct message *new_message = malloc(sizeof(struct message));
     new_message->type = 10;
     new_message->pid = GetPid();
-    if (pathname[0] == '/') {
+    new_message->text[0] = pathname;
+    if (pathname[0] != '/') {
         // absolute filename
-        new_message->text[0] = pathname;
+        new_message->cd = 1;
     } else {
-        // relative filename
-        new_message->text[0] = cd + pathname;
+        new_message->cd = cd;
     }
     Send(new_message, new_message->pid);
     return 0;
@@ -209,12 +213,12 @@ RmDir(char *pathname)
     struct message *new_message = malloc(sizeof(struct message));
     new_message->type = 11;
     new_message->pid = GetPid();
-    if (pathname[0] == '/') {
+    new_message->text[0] = pathname;
+    if (pathname[0] != '/') {
         // absolute filename
-        new_message->text[0] = pathname;
+        new_message->cd = 1;
     } else {
-        // relative filename
-        new_message->text[0] = cd + pathname;
+        new_message->cd = cd;
     }
     Send(new_message, new_message->pid);
     return 0;
@@ -231,7 +235,7 @@ ChDir(char *pathname)
         new_message->text[0] = pathname;
     } else {
         // relative filename
-        new_message->text[0] = cd + pathname;
+        new_message->text[0] = strcat(cd, MakeNullTerminated(pathname, MAXPATHNAMELEN));;
     }
     Send(new_message, new_message->pid);
     return 0;
@@ -243,12 +247,12 @@ Stat(char *pathname, struct Stat *statbuf)
     struct message *new_message = malloc(sizeof(struct message));
     new_message->type = 13;
     new_message->pid = GetPid();
-    if (pathname[0] == '/') {
+    new_message->text[0] = pathname;
+    if (pathname[0] != '/') {
         // absolute filename
-        new_message->text[0] = pathname;
+        new_message->cd = 1;
     } else {
-        // relative filename
-        new_message->text[0] = cd + pathname;
+        new_message->cd = cd;
     }
     new_message->text[8] = statbuf;
     Send(new_message, new_message->pid);
