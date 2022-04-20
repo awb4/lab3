@@ -62,7 +62,6 @@ void YFSCreateMkDir(struct message *msg, bool directory);
 short ParseFileName(char *filename, short dir_inum); 
 char *GetPathName(struct message *msg, int text_pos);
 char *GetBufContents(struct message *msg, int text_pos, int len);
-char *MakeNullTerminated(char *, int max_len);
 short TraverseDirs(char *dir_name, short dir_inum);
 short TraverseDirsHelper(char *dir_name, int curr_block);
 void InsertOpenFile(struct open_file_list **wait, int fd, short inum);
@@ -495,37 +494,6 @@ ParseFileName(char *filename, short dir_inum)
 }
 
 /**
- * @brief returns a new char * with a null terminated version of the input string.
- * 
- * @param str the string to turn into a null terminated string
- * @param max_len the max len of the input string
- * @return char* a new char * with a null terminated version of the input string.
- */
-char *
-MakeNullTerminated(char *str, int max_len) {
-    int i;
-    for (i = 0; i < max_len; i++) {
-        if (str[i] == '\0')
-            break;
-    }
-    if (i == (max_len - 1) && str[i] != '\0') {
-        char *new_str = malloc(max_len + 1);
-        int j;
-        for (j = 0; j < max_len; j++) {
-            new_str[j] = str[j];
-        }
-        new_str[max_len] = '\0';
-        return new_str;
-    }
-    char *new_str = malloc(i + 1);
-    int j;
-    for (j = 0; j <= i; j++) {
-        new_str[j] = str[j];
-    }
-    return new_str;
-}
-
-/**
  * @brief 
  * 
  * @param dir_name a null terminated directory name
@@ -806,7 +774,7 @@ YFSCreateMkDir(struct message *msg, bool dir)
         TracePrintf(0, "Freak the Fuck out\n");
         Exit(-1);
     }
-    int sector_num = GetSectorNum((int) parent_inum);
+    //int sector_num = GetSectorNum((int) parent_inum);
     int diff = GetSectorPosition((int) parent_inum);
     struct inode *cur_node = block + diff;
     if (cur_node->type == INODE_DIRECTORY) {

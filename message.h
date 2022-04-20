@@ -7,6 +7,47 @@ struct message {
     short cd2;
 };
 
+// Use for Open/Close/Create
+struct messageSinglePathName {
+    int type;
+    pid_t pid;
+    int retval;
+    void *pathname;
+    short cd;
+    char pad[10];
+}
+
+// 
+struct messageDoublePathName {
+    int type;
+    pid_t pid;
+    int retval;
+    void *pathname1;
+    void *pathname2;
+    short cd1;
+    short cd2;
+}
+
+// Use for Close Read Write
+struct messageFDSizeBuf {
+    int type;
+    pid_t pid;
+    int retval;
+    int fd;
+    int size;
+    void *buf;
+    char pad[4];
+}
+
+struct messageSeek {
+    int type;
+    pid_t pid;
+    int retval;
+    int fd;
+    int offset;
+    int whence;
+}
+
 /**
  * @brief returns a new char * with a null terminated version of the input string.
  * 
