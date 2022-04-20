@@ -1,6 +1,4 @@
-
-
-// Use for Open/Close/Create
+// Use for Open, Create, Unlink, MkDir, RmDir, ChDir, Sync, Shutdown
 struct messageSinglePath {
     int type;
     pid_t pid;
@@ -10,7 +8,7 @@ struct messageSinglePath {
     char pad[10];
 }
 
-// For double pathnames and stat
+// Used for Link, Stat
 struct messageDoublePath {
     int type;
     pid_t pid;
@@ -21,7 +19,7 @@ struct messageDoublePath {
     short cd2;
 }
 
-// Use for Close Read Write
+// Use for Close, Read, Write
 struct messageFDSizeBuf {
     int type;
     pid_t pid;

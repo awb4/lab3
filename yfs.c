@@ -96,6 +96,10 @@ int
 main(int argc, char **argv) 
 {
     (void) argc;
+    TracePrintf(0, "Size of messageSinglePath: %d\n", sizeof(struct messageSinglePath));
+    TracePrintf(0, "Size of messageDoublePath: %d\n", sizeof(struct messageDoublePath));
+    TracePrintf(0, "Size of messageFDSizeBuf: %d\n", sizeof(struct messageFDSizeBuf));
+    TracePrintf(0, "Size of messageSeek: %d\n", sizeof(struct messageSeek));
     cur_fd = 0;
     if (Register(FILE_SERVER) == -1) {
         TracePrintf(0, "Register File Server: Freak the Fuck out\n");
@@ -211,11 +215,9 @@ main(int argc, char **argv)
 /* ---------------------------------------- YFS Server Functions ---------------------------------------- */
 
 /**
- * Open
+ * Open a file
  * 
- * Expected message struct:
- *     text[0:8] ptr to pathname
- *     cd a short, the inum of the dir at which to start looking for pathname
+ * Expected message struct: messageSinglePath
  */
 void
 YFSOpen(void *m)
@@ -243,8 +245,7 @@ YFSOpen(void *m)
 /**
  * Close
  * 
- * Expected message struct
- *     text[0:4] fd (file descriptor number)
+ * Expected message struct: messageFDSizeBuf
  */
 void
 YFSClose(void *m)
@@ -263,8 +264,7 @@ YFSClose(void *m)
 /**
  * Create 
  * 
- * Expected message struct 
- *     text[0:8] ptr to pathname
+ * Expected message struct: messageSinglePath
  */
 void
 YFSCreate(void *m)
@@ -275,10 +275,7 @@ YFSCreate(void *m)
 /**
  * Read 
  * 
- * Expected message struct 
- *     text[0:4] int fd (file descriptor)
- *     text[4:12] ptr to buf
- *     text[12:16] int size
+ * Expected message struct: messageFDSizeBuf
  */
 void
 YFSRead(void *m)
@@ -286,18 +283,24 @@ YFSRead(void *m)
     struct messageFDSizeBuf *msg = (struct messageFDSizeBuf *) m;
     int fd = (int) msg->fd;
     int size = (int) msg->size;
-    char *buf_contents = GetBufContents(msg->pid, msg->buf, size); // Free this bitch at some point
+    void *buf = msg->buf;
+    //char *buf_contents = GetBufContents(msg->pid, msg->buf, size); // Free this bitch at some point
     (void) buf_contents;
     (void) fd;
+    // Check if fd is in the list of free files. If not return error.
+    // Read from the file starting at the current position
+        // Reads 0 bytes if we're at the end of the file
+        // Otherwise read min(size, bytes left in file)
+    // If not error, update current position according to number of bytes read
+    // If not error, based on data read, update the contents of buf accordingly
+    // Returns the number of bytes read or ERROR
+    // It is not an error to attempt to Read() from a file descriptor that is open on a directory
 }
 
 /**
  * Write 
  * 
- * Expected message struct 
- *     text[0:4] int fd (file descriptor)
- *     text[4:12] ptr to buf
- *     text[12:16] int size
+ * Expected message struct: messageFDSizeBuf
  */
 void
 YFSWrite(struct message*msg)
@@ -313,10 +316,7 @@ YFSWrite(struct message*msg)
 /**
  * Seek 
  * 
- * Expected message struct 
- *     text[0:4] int fd (file descriptor)
- *     text[4:8] int offset
- *     text[8:12] int whence
+ * Expected message struct: messageSeek
  */
 void
 YFSSeek(void *m)
@@ -334,9 +334,7 @@ YFSSeek(void *m)
 /**
  * Link
  * 
- * Expected message struct:
- *     text[0:8] ptr to old name
- *     text[8:16] ptr to new name
+ * Expected message struct: messageDoublePath
  */
 void
 YFSLink(void *m)
@@ -352,8 +350,7 @@ YFSLink(void *m)
 /**
  * Unlink
  * 
- * Expected message struct:
- *     text[0:8] ptr to pathname
+ * Expected message struct: messageSinglePath
  */ 
 void 
 YFSUnlink(void *m)
@@ -387,8 +384,7 @@ YFSUnlink(void *m)
 /**
  * MkDir 
  * 
- * Expected message struct 
- *     text[0:8] ptr to pathname
+ * Expected message struct: messageSinglePath
  */
 void
 YFSMkDir(void *m)
@@ -399,8 +395,7 @@ YFSMkDir(void *m)
 /**
  * RmDir 
  * 
- * Expected message struct 
- *     text[0:8] ptr to pathname
+ * Expected message struct: messageSinglePath
  */
 void
 YFSRmDir(void *m)
@@ -413,8 +408,7 @@ YFSRmDir(void *m)
 /**
  * ChDir 
  * 
- * Expected message struct 
- *     text[0:8] ptr to pathname
+ * Expected message struct: messageSinglePath
  */
 void
 YFSChDir(void *m)
@@ -427,9 +421,7 @@ YFSChDir(void *m)
 /**
  * Stat 
  * 
- * Expected message struct 
- *     text[0:8] ptr to pathname
- *     text[8:16] ptr to struct Stat 
+ * Expected message struct: messageDoublePath
  */
 void
 YFSStat(void *m)
@@ -442,8 +434,7 @@ YFSStat(void *m)
 /**
  * Sync 
  * 
- * Expected message struct
- *     text has no meaningful contents 
+ * Expected message struct: messageSinglePath
  */
 void
 YFSSync(void *m)
@@ -455,8 +446,7 @@ YFSSync(void *m)
 /**
  * Shutdoen 
  * 
- * Expected message struct 
- *     text has no meaningful contents 
+ * Expected message struct: messageSinglePath
  */
 void
 YFSShutdown(void *m)
@@ -539,14 +529,19 @@ TraverseDirs(char *dir_name, short dir_inum)
         }
     }
 
+    // iterate over indirect block
     int indir_block = root_inode->indirect;
     if (indir_block != 0) {
         int ints_per_block = BLOCKSIZE / sizeof(int);
         int j;
+
+        // read contents of indirect block
         int *block = malloc(BLOCKSIZE);
         if (ReadFromBlock(indir_block, block) < 0) {
             TracePrintf(0, "TraverseDirs: Freak the fuck out\n");
         }
+
+        // iterate over every block number in the indirect block
         for (j = 0; j < ints_per_block; j++) {
             if (block[j] == 0)
                 break;
@@ -561,6 +556,15 @@ TraverseDirs(char *dir_name, short dir_inum)
     return -1;
 }
 
+/**
+ * @brief iterates over the directory entries in "curr_block" looking for a directory
+ * with the same name as "dir_name". If a match is found, return the inum in the
+ * directory entry. Otherwise return -1.
+ * 
+ * @param dir_name the directory  name we are looking for
+ * @param curr_block the block in which to search
+ * @return short the inum at the directory entry with name "dir_name"
+ */
 short
 TraverseDirsHelper(char *dir_name, int curr_block)
 {
