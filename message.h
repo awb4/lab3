@@ -1,3 +1,7 @@
+
+
+
+
 // Use for Open, Create, Unlink, MkDir, RmDir, ChDir, Sync, Shutdown
 struct messageSinglePath {
     int type;
@@ -6,7 +10,7 @@ struct messageSinglePath {
     int retval;
     short cd;
     char pad[10];
-}
+};
 
 // Used for Link, Stat
 struct messageDoublePath {
@@ -17,7 +21,7 @@ struct messageDoublePath {
     int retval;
     short cd1;
     short cd2;
-}
+};
 
 // Use for Close, Read, Write
 struct messageFDSizeBuf {
@@ -28,7 +32,7 @@ struct messageFDSizeBuf {
     int fd;
     int size;
     char pad[4];
-}
+};
 
 struct messageSeek {
     int type;
@@ -38,8 +42,16 @@ struct messageSeek {
     int offset;
     int whence;
     char pad[8];
-}
+};
 
+//Global message to be sent and received
+// union {
+//     struct messageSinglePath msp;
+//     struct messageDoublePath mdp;
+//     struct messageFDSizeBuf mfdsb;
+//     struct messageSeek mseek;
+// } *message;
+struct messageSinglePath *message;
 
 
 /**
@@ -54,7 +66,7 @@ MakeNullTerminated(char *str, int max_len) {
     int i;
     for (i = 0; i < max_len; i++) {
         if (str[i] == '\0')
-            break;
+            return str;
     }
     if (i == (max_len - 1) && str[i] != '\0') {
         char *new_str = malloc(max_len + 1);

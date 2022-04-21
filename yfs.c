@@ -37,7 +37,6 @@ int cur_fd;
 int nb;
 int ni;
 
-void *message;
 struct fs_header header;
 struct open_file_list *open_files;
 struct free_fd_list *free_fds;
@@ -69,6 +68,7 @@ int InsertOFDeluxe(short inum);
 void InsertFD(struct free_fd_list **wait, int fd);
 int RemoveOpenFile(struct open_file_list **wait, int fd);
 struct open_file_list *SearchOpenFile(struct open_file_list **wait, short inum);
+struct open_file_list *SearchByFD(struct open_file_list **wait, int fd);
 int EditOpenFile(struct open_file_list **wait, int fd, int blocknum, int position);
 int RemoveMinFD(struct free_fd_list **wait);
 void MakeNewFile(struct inode *inode, bool directory);
@@ -96,18 +96,19 @@ int
 main(int argc, char **argv) 
 {
     (void) argc;
-    TracePrintf(0, "Size of messageSinglePath: %d\n", sizeof(struct messageSinglePath));
-    TracePrintf(0, "Size of messageDoublePath: %d\n", sizeof(struct messageDoublePath));
-    TracePrintf(0, "Size of messageFDSizeBuf: %d\n", sizeof(struct messageFDSizeBuf));
-    TracePrintf(0, "Size of messageSeek: %d\n", sizeof(struct messageSeek));
+    message = malloc(sizeof(struct messageSinglePath));
+    TracePrintf(0, "Message: %p", message);
     cur_fd = 0;
+    read_block = malloc(BLOCKSIZE);
     if (Register(FILE_SERVER) == -1) {
         TracePrintf(0, "Register File Server: Freak the Fuck out\n");
         Exit(-1);
     }
     if (Fork() == 0) {
+        printf("Here\n");
         Exec(argv[1], argv + 1);
     } else {
+        InsertOFDeluxe(1);
         if (ReadFromBlock(1, read_block) < 0) {
             TracePrintf(0, "ReadFromBlock: Freak the Fuck out\n");
             Exit(-1);
@@ -120,13 +121,14 @@ main(int argc, char **argv)
         
         int i;
         //Init free blocks
+        TracePrintf(0, "Initializing Free Blocks\n");
         for (i = 1; i < maxfb; i++) {
             block_bitmap[i] = true;
         }
         
         block_bitmap[0] = false;
 
-        
+        TracePrintf(0, "Initializing Free inodes\n");
         //Init free inodes
         for (i = 2; i < ni; i++) {
             inode_bitmap[i] = true;
@@ -134,42 +136,56 @@ main(int argc, char **argv)
 
         inode_bitmap[0] = false;
         inode_bitmap[1] = false;
-    
         while(1) {
-            
+            TracePrintf(0, "Getting Message\n");
             pid_t pid = Receive(message);
-            struct messageSinglePath *castMsg = (struct messageSinglePath *) message;
-            switch (castMsg->type) {
+            if (pid == 0) {
+                TracePrintf(0, "Receive Call Breaks Deadlock! Fuck!\n");
+                return -1;
+            }
+            TracePrintf(0, "Received Message\n");
+            TracePrintf(0, "Message Type: %d\n", message->type);
+            TracePrintf(0, "Message Pid: %d\n", message->pid);
+            TracePrintf(0, "Message Pathname: %p\n", message->pathname);
+            switch (message->type) {
                 case 0:
                     // open
+                    TracePrintf(0, "0: Open\n");
                     YFSOpen(message);
                     break;  
                 case 1:
                     // close 
+                    TracePrintf(0, "1: Close\n");
                     YFSClose(message);
                     break;
                 case 2: 
                     // create
+                    TracePrintf(0, "2: Create\n");
                     YFSCreate(message);
                     break;
                 case 3:
                     // read
+                    TracePrintf(0, "3: Read\n");
                     YFSRead(message);
                     break;
                 case 4:
                     // write
+                    TracePrintf(0, "4: Write\n");
                     YFSWrite(message);
                     break;
                 case 5:
                     // seek
+                    TracePrintf(0, "5: Seek\n");
                     YFSSeek(message);
                     break;
                 case 6:
                     // link
+                    TracePrintf(0, "6: Link\n");
                     YFSLink(message);
                     break;
                 case 7:
                     // unlink
+                    TracePrintf(0, "7: Unlink\n");
                     YFSUnlink(message);
                     break;
                 case 8:
@@ -182,26 +198,32 @@ main(int argc, char **argv)
                     break;
                 case 10:
                     // mkdir
+                    TracePrintf(0, "10: Mkdir\n");
                     YFSMkDir(message);
                     break;
                 case 11:
                     // rmdir
+                    TracePrintf(0, "11: Rmdir\n");
                     YFSRmDir(message);
                     break;
                 case 12:
                     // chdir
+                    TracePrintf(0, "12: Chdir\n");
                     YFSChDir(message);
                     break;
                 case 13:
                     // stat
+                    TracePrintf(0, "13: Stat\n");
                     YFSStat(message);
                     break;
                 case 14:
                     // sync
+                    TracePrintf(0, "14: Sync\n");
                     YFSSync(message);
                     break;
                 case 15:
                     // shutdown
+                    TracePrintf(0, "15: Shutdown\n");
                     YFSShutdown(message);
                     break;
             }
@@ -226,6 +248,7 @@ YFSOpen(void *m)
     char *pathname = GetPathName(msg->pid, msg->pathname); // Free this bitch at some point
     short inum = ParseFileName(pathname, msg->cd);
     struct inode *my_node = GetInodeAt(inum);
+    TracePrintf(0, "Opening INode %d at pathname %s\n", inum, pathname);
     if (my_node->type != INODE_REGULAR) {
         TracePrintf(0, "Tried to use Open on a directory\n");
         msg->retval = ERROR;
@@ -269,6 +292,7 @@ YFSClose(void *m)
 void
 YFSCreate(void *m)
 {
+    TracePrintf(0, "Creating\n");
     YFSCreateMkDir(m, false);
 }
 
@@ -285,8 +309,9 @@ YFSRead(void *m)
     int size = (int) msg->size;
     void *buf = msg->buf;
     //char *buf_contents = GetBufContents(msg->pid, msg->buf, size); // Free this bitch at some point
-    (void) buf_contents;
+    (void) buf;
     (void) fd;
+    (void) size;
     // Check if fd is in the list of free files. If not return error.
     // Read from the file starting at the current position
         // Reads 0 bytes if we're at the end of the file
@@ -303,14 +328,27 @@ YFSRead(void *m)
  * Expected message struct: messageFDSizeBuf
  */
 void
-YFSWrite(struct message*msg)
+YFSWrite(void *m)
 {
     struct messageFDSizeBuf *msg = (struct messageFDSizeBuf *) m;
     int fd = (int) msg->fd;
     int size = (int) msg->size;   
     char *buf_contents = GetBufContents(msg->pid, msg->buf, size); // Free this bitch at some point
+    if (fd == -1) {
+        TracePrintf(0, "YFSWrite: Cannot write to directory\n");
+        msg->retval = ERROR;
+        return;
+    } else {
+        struct open_file_list *file = SearchByFD(&open_files, fd);
+        if (file == NULL) {
+            TracePrintf(0, "YFSWrite: File not in Open list\n");
+            msg->retval = ERROR;
+            return;
+        }
+        AddToBlock(file->inum, buf_contents, size);
+    }
+
     (void) buf_contents;
-    (void) fd;
 }
 
 /**
@@ -325,9 +363,9 @@ YFSSeek(void *m)
 
     int fd = (int) msg->fd;
     int offset = (int) msg->offset;
-    int size = (int) msg->size;
+    int whence = (int) msg->whence;
     (void) fd;
-    (void) size;
+    (void) whence;
     (void) offset;
 }
 
@@ -389,6 +427,7 @@ YFSUnlink(void *m)
 void
 YFSMkDir(void *m)
 {
+    
     YFSCreateMkDir(m, true);
 }
 
@@ -427,7 +466,7 @@ void
 YFSStat(void *m)
 {
     struct messageDoublePath *msg = (struct messageDoublePath *) m;
-    char *pathname = GetPathName(msg->pid, msg->pathname); // Free this bitch at some point
+    char *pathname = GetPathName(msg->pid, msg->pathname1); // Free this bitch at some point
     (void) pathname;
 }
 
@@ -664,6 +703,22 @@ SearchOpenFile(struct open_file_list **wait, short inum)
 	return(q);
 }
 
+struct open_file_list *
+SearchByFD(struct open_file_list **wait, int fd)
+{
+	struct open_file_list *q = (*wait);
+	if (q != NULL && q->fd == fd) {
+		return (q);
+	}
+	while (q != NULL && q->fd != fd){
+		q = q->next;
+	}
+
+	if (q == NULL) {
+		return NULL;
+	}
+	return(q);
+}
 //Gives open file in open file list a given block num and position.
 int
 EditOpenFile(struct open_file_list **wait, int fd, int blocknum, int position) {
@@ -759,19 +814,27 @@ YFSCreateMkDir(void *m, bool dir)
 
     int i;
     int n = strlen(null_path);
-
-
+    TracePrintf(0, "Null Path length: %d\n", n);
+    TracePrintf(0, "Finding Last Slash\n");
+    TracePrintf(0, "pathname: %s\n", null_path);
     for (i = n - 1; i >= 0; i--) {
         if (null_path[i] == '/') {
+            TracePrintf(0, "Loop Entry %d\n", i);
             directory = malloc(i-1);
             new_file = malloc(n-i+1);
-
+            int k;
+            for (k = 0; k < i - 1; k++){
+                directory[k] = null_path[k];
+            }
+            for (k = 0; k < n - i + 1; k++){
+                new_file[k] = null_path[k + i + 1];
+            }
             // the lines below seems sus, copy manually instead?
-            *directory = *null_path;
-            *new_file = *(null_path + i + 1);
             break;
         }
     }
+    TracePrintf(0, "Directory: %s\n", directory);
+    TracePrintf(0, "New File: %s\n", new_file);
 
     short parent_inum = 1;
     if (i > 0) {
@@ -938,7 +1001,12 @@ CreateDirEntry(short inum, char name[])
 int
 ReadFromBlock(int sector_num, void *buf) 
 {
-    return ReadSector(sector_num, buf);
+    TracePrintf(0, "ReadFromBlock Sector Num: %d\n", sector_num);
+    TracePrintf(0, "Reading from Block\n");
+    int r = ReadSector(sector_num, buf);
+    TracePrintf(0, "ReadSector returned %d\n", r);
+    return r;
+
 }
 /**
  * Write to cache. Otherwise, read the disk and write it into the cache.

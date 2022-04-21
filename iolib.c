@@ -8,6 +8,7 @@
 #include <comp421/yalnix.h>
 #include "message.h"
 
+
 int Link(char *oldname, char *newname);
 int Unlink(char *pathname);
 int SymLink(char *oldname, char *newname);
@@ -42,6 +43,7 @@ short cd;
 
 int
 Open(char *pathname) {
+    TracePrintf(0, "Performing an actual open call\n");
     struct messageSinglePath *new_message = malloc(sizeof(struct messageSinglePath));
     new_message->type = 0;
     new_message->pid = GetPid();
@@ -52,7 +54,8 @@ Open(char *pathname) {
     } else {
         new_message->cd = cd;
     }
-    Send(new_message, new_message->pid);
+    // *message = *new_message;
+    Send(new_message, -FILE_SERVER);
     return 0;
 }
 
@@ -62,14 +65,19 @@ Close(int fd) {
     new_message->type = 1;
     new_message->pid = GetPid();
     new_message->fd = fd;
-    Send(new_message, new_message->pid);
+    // *message = * (struct messageSinglePath *) new_message;
+    Send(new_message, -FILE_SERVER);
     return 0;
 }
 
 int
 Create(char *pathname)
 {
+    printf("hi\n");
+    printf("message: %p\n", message);
+    TracePrintf(0, "-------------------------CREATE-----------------------------\n");
     struct messageSinglePath *new_message = malloc(sizeof(struct messageSinglePath));
+    printf("made new message\n");
     new_message->type = 2;
     new_message->pid = GetPid();
     new_message->pathname = pathname;
@@ -79,7 +87,10 @@ Create(char *pathname)
     } else {
         new_message->cd = cd;
     }
-    Send(new_message, new_message->pid);
+    printf("filled new message\n");
+    // *message = *new_message;
+
+    Send(new_message, -FILE_SERVER);
     return 0;
 }
 
@@ -92,7 +103,7 @@ Read(int fd, void *buf, int size)
     new_message->fd = fd;
     new_message->buf = buf;
     new_message->size = size; 
-    Send(new_message, new_message->pid);
+    Send(new_message, -FILE_SERVER);
     return 0;
 }
 
@@ -105,7 +116,8 @@ Write(int fd, void *buf, int size)
     new_message->fd = fd;
     new_message->buf = buf;
     new_message->size = size;
-    Send(new_message, new_message->pid);
+    // *message = * (struct messageSinglePath *) new_message;
+    Send(new_message, -FILE_SERVER);
     return 0;
 }
 
@@ -118,7 +130,8 @@ Seek(int fd, int offset, int whence)
     new_message->fd = fd;
     new_message->offset = offset;
     new_message->whence = whence; 
-    Send(new_message, new_message->pid);
+    // *message = * (struct messageSinglePath *) new_message;
+    Send(new_message, -FILE_SERVER);
     return 0;
 }
 
@@ -146,7 +159,9 @@ Link(char *oldname, char *newname)
         // relative filename
         new_message->cd2 = cd;
     }
-    Send(new_message, new_message->pid);
+    // *message = * (struct messageSinglePath *) new_message;
+    Send(new_message, -FILE_SERVER);
+    return new_message->retval;
 }
 
 int 
@@ -162,18 +177,25 @@ Unlink(char *pathname)
     } else {
         new_message->cd = cd;
     }
-    Send(new_message, new_message->pid);
+    // *message = *new_message;
+    Send(new_message, -FILE_SERVER);
+    return new_message->retval;
 }
 
 int 
 SymLink(char *oldname, char *newname) 
 {
+    (void) oldname;
+    (void) newname;
     return 0;
 }
 
 int 
 ReadLink(char *pathname, char *buf, int len) 
 {
+    (void) pathname;
+    (void) buf;
+    (void) len;
     /* struct message *new_message = malloc(sizeof(struct message));
     new_message->type = 9;
     new_message->pid = GetPid();
@@ -203,7 +225,8 @@ MkDir(char *pathname)
     } else {
         new_message->cd = cd;
     }
-    Send(new_message, new_message->pid);
+    // *message = *new_message;
+    Send(new_message, -FILE_SERVER);
     return 0;
 }
 
@@ -220,7 +243,8 @@ RmDir(char *pathname)
     } else {
         new_message->cd = cd;
     }
-    Send(new_message, new_message->pid);
+    // *message = *new_message;
+    Send(new_message, -FILE_SERVER);
     return 0;
 }
 
@@ -238,7 +262,8 @@ ChDir(char *pathname)
         // relative filename
         new_message->cd = cd;
     }
-    Send(new_message, new_message->pid);
+    // *message = *new_message;
+    Send(new_message, -FILE_SERVER);
     return 0;
 }
 
@@ -256,7 +281,8 @@ Stat(char *pathname, struct Stat *statbuf)
         new_message->cd1 = cd;
     }
     new_message->pathname2 = statbuf;
-    Send(new_message, new_message->pid);
+    // *message = * (struct messageSinglePath *) new_message;
+    Send(new_message, -FILE_SERVER);
     return 0;
 }
 
@@ -266,7 +292,8 @@ Sync(void)
     struct messageSinglePath *new_message = malloc(sizeof(struct messageSinglePath));
     new_message->type = 14;
     new_message->pid = GetPid();
-    Send(new_message, new_message->pid);
+    // *message = *new_message;
+    Send(new_message, -FILE_SERVER);
     return 0;
 }
 
@@ -276,7 +303,8 @@ Shutdown(void)
     struct messageSinglePath *new_message = malloc(sizeof(struct messageSinglePath));
     new_message->type = 15;
     new_message->pid = GetPid();
-    Send(new_message, new_message->pid);
+    // *message = *new_message;
+    Send(new_message, -FILE_SERVER);
     return 0;
 }
 

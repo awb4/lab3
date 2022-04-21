@@ -1,0 +1,5 @@
+** YFS      level 5 tracing enabled **
+YFS      Message: 0x1c128YFS      ReadFromBlock Sector Num: 1
+YFS      Reading from Block
+YFS      ReadSector returned 0
+YFS      InsertNode: Outside loop 1
