@@ -6,12 +6,15 @@
 /* Try tcreate2 before this, or try this just by itself */
 
 int
-main()
+main(int argc, char **argv)
 {
+	(void) argc;
+	(void) argv;
 	printf("\n%d\n\n", Open("/foo"));
 	printf("\n%d\n\n", Open("/bar"));
 	printf("\n%d\n\n", Open("/foo"));
 	printf("\n%d\n\n", Open("/foo/zzz"));
 
 	Shutdown();
+	return 0;
 }
