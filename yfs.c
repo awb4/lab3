@@ -62,7 +62,7 @@ short ParseFileName(char *filename, short dir_inum);
 char *GetPathName(pid_t pid, char *pathname);
 char *GetBufContents(pid_t pid, void *buf, int len);
 short TraverseDirs(char *dir_name, short dir_inum);
-short TraverseDirsHelper(char *dir_name, int curr_block);
+short TraverseDirsHelper(char *dir_name, int curr_block, int num_dir_entries);
 void InsertOpenFile(struct open_file_list **wait, int fd, short inum);
 int InsertOFDeluxe(short inum); 
 void InsertFD(struct free_fd_list **wait, int fd);
@@ -105,7 +105,6 @@ main(int argc, char **argv)
         Exit(-1);
     }
     if (Fork() == 0) {
-        printf("Here\n");
         Exec(argv[1], argv + 1);
     } else {
         InsertOFDeluxe(1);
@@ -137,7 +136,7 @@ main(int argc, char **argv)
         inode_bitmap[0] = false;
         inode_bitmap[1] = false;
         while(1) {
-            TracePrintf(0, "Getting Message\n");
+            TracePrintf(0, "--------------------Getting Message--------------------\n");
             pid_t pid = Receive(message);
             if (pid == 0) {
                 TracePrintf(0, "Receive Call Breaks Deadlock! Fuck!\n");
@@ -146,7 +145,6 @@ main(int argc, char **argv)
             TracePrintf(0, "Received Message\n");
             TracePrintf(0, "Message Type: %d\n", message->type);
             TracePrintf(0, "Message Pid: %d\n", message->pid);
-            TracePrintf(0, "Message Pathname: %p\n", message->pathname);
             switch (message->type) {
                 case 0:
                     // open
@@ -228,7 +226,11 @@ main(int argc, char **argv)
                     break;
             }
             /* Construct and overwrite the message to reply */
-            Reply(message, pid);
+            if (Reply(message, pid) != 0) {
+                TracePrintf(0, "Reply did not return 0, freak the fuck out!\n");
+                Exit(-1);
+            }
+            TracePrintf(0, "--------------------Replied successfully--------------------\n");
         }
     }
     return 0;
@@ -255,7 +257,7 @@ YFSOpen(void *m)
     }
     else {
         struct inode *my_node = GetInodeAt(inum);
-        TracePrintf(0, "Opening INode %d at pathname %s\n", inum, pathname);
+        TracePrintf(0, "Opening Inode %d at pathname %s\n", inum, pathname);
         if (my_node->type != INODE_REGULAR) {
             TracePrintf(0, "Tried to use Open on a directory\n");
             msg->retval = ERROR;
@@ -292,7 +294,8 @@ YFSClose(void *m)
 void
 YFSCreate(void *m)
 {
-    TracePrintf(0, "Creating\n");
+    TracePrintf(0, "YFSCreate \n");
+    TracePrintf(0, "YFSCreate open_files: %p\n", open_files);
     YFSCreateMkDir(m, false);
 }
 
@@ -498,9 +501,10 @@ YFSShutdown(void *m)
 /* ---------------------------------------- YFS Helper Functions ---------------------------------------- */
 char *
 GetPathName(pid_t pid, char *pathname) {
-    TracePrintf(0, "---------GETPATHNAME-------------\n");
+    TracePrintf(0, "GetPathName Entry\n");
     char *name = malloc(MAXPATHNAMELEN);
     CopyFrom(pid, name, pathname, MAXPATHNAMELEN);
+    TracePrintf(0, "GetPathName Exit\n");
     return name;
 }
 
@@ -523,38 +527,34 @@ GetBufContents(pid_t pid, void *buf, int len) {
 short
 ParseFileName(char *filename, short dir_inum) 
 {  
-    TracePrintf(0, "---------PARSEFILENAME-------------\n");
+    TracePrintf(0, "ParseFileName Entry\n");
     char *new_filename = MakeNullTerminated(filename, MAXPATHNAMELEN);
+    TracePrintf(0, "ParseFileName filename: %s\n", new_filename);
+    TracePrintf(0, "ParseFileName dir_inum: %d\n", dir_inum);
     
     char *token = strtok(new_filename, "/");
     short inum;
-    if (!strcmp(token, "")) {
+    if (strcmp(token, "") == 0) {
         inum = 1;
-    } else {
+    }
+    TracePrintf(0, "ParseFileName Entering While loop\n");
+    while (token != NULL) {
         int temp = TraverseDirs(token, dir_inum);
         if (temp < 0) {
-            TracePrintf(0, "PFN couldn't find file in inum\n");
+            TracePrintf(0, "ParseFileName couldn't find file in inum\n");
+            TracePrintf(0, "ParseFileName Exit\n");
             return -1;
         }
         inum = temp;
-    }
-    TracePrintf(0, "PFN: Entering While loop\n");
-    while (strcmp(token, "")) {
         token = strtok(0, "/");
-        int temp = TraverseDirs(token, dir_inum);
-        if (temp < 0) {
-            TracePrintf(0, "PFN couldn't find file in inum\n");
-            return -1;
-        }
-        inum = temp;
     }
-    TracePrintf(0, "PFN: Exiting While loop\n");
     free(new_filename);
+    TracePrintf(0, "ParseFileName Exit\n");
     return inum;
 }
 
 /**
- * @brief 
+ * @brief looks for dir_name in the directory corresponding to inode dir_inum 
  * 
  * @param dir_name a null terminated directory name
  * @param dir_inum an inode number
@@ -563,31 +563,46 @@ ParseFileName(char *filename, short dir_inum)
 short
 TraverseDirs(char *dir_name, short dir_inum)
 {
+    TracePrintf(0, "TraverseDirs Entry\n");
     TracePrintf(0, "Traversing path %s at inum %d\n", dir_name, dir_inum);
+
     int sector_num = GetSectorNum(dir_inum);
     struct inode *first_inodes = malloc(SECTORSIZE);
     if (ReadFromBlock(sector_num, first_inodes) != 0) {
-        TracePrintf(0, "Freak the fuck out\n");
+        TracePrintf(0, "TraverseDirs: ReadFromBlock failed freak the fuck out\n");
         Exit(-1);
     }
 
     // iterate over direct block
     int diff = GetSectorPosition(dir_inum);
     struct inode *root_inode = first_inodes + diff;
+    TracePrintf(0, "TraverseDirs inode type: %d\n", root_inode->type);
+    if (root_inode->type != INODE_DIRECTORY) {
+        TracePrintf(0, "TraverseDirs dir_inum corresponds to a file not a directory\n");
+        return -1;
+    }
+
+    int size_remaining = root_inode->size;
     int i;
     for (i = 0; i < NUM_DIRECT; i++) {
-        TracePrintf(0, "Traversing direct block %d\n", i);
+        TracePrintf(0, "TraverseDirs traversing direct block %d\n", i);
         int curr_block = root_inode->direct[i];
 
         if (curr_block == 0)
             break;
 
-        short inum = TraverseDirsHelper(dir_name, curr_block);
-        TracePrintf(0, "Found inum %d\n", inum);
+        int num_dir_entries = size_remaining;
+        if (size_remaining > BLOCKSIZE)
+            num_dir_entries = BLOCKSIZE;
+        num_dir_entries = num_dir_entries / sizeof(struct dir_entry);
+
+        short inum = TraverseDirsHelper(dir_name, curr_block, num_dir_entries);
+        TracePrintf(0, "TraverseDirs found inum %d\n", inum);
         if (inum > 0) {
             free(first_inodes);
             return inum;
         }
+        size_remaining -= BLOCKSIZE;
     }
 
     // iterate over indirect block
@@ -606,14 +621,24 @@ TraverseDirs(char *dir_name, short dir_inum)
         for (j = 0; j < ints_per_block; j++) {
             if (block[j] == 0)
                 break;
-            short inum = TraverseDirsHelper(dir_name, block[j]);
+
+            int num_dir_entries = size_remaining;
+            if (size_remaining > BLOCKSIZE)
+                num_dir_entries = BLOCKSIZE;
+            num_dir_entries = num_dir_entries / sizeof(struct dir_entry);
+
+            TracePrintf(0, "TraverseDirs num_dir_entries %d\n", num_dir_entries);
+            short inum = TraverseDirsHelper(dir_name, block[j], num_dir_entries);
             if (inum > 0) {
                 free(first_inodes);
+                TracePrintf(0, "TraverseDirs Exit\n");
                 return inum;
             }
+            size_remaining -= BLOCKSIZE;
         }
     }
     free(first_inodes);
+    TracePrintf(0, "TraverseDirs Exit\n");
     return -1;
 }
 
@@ -622,13 +647,19 @@ TraverseDirs(char *dir_name, short dir_inum)
  * with the same name as "dir_name". If a match is found, return the inum in the
  * directory entry. Otherwise return -1.
  * 
- * @param dir_name the directory  name we are looking for
+ * @param dir_name the directory name we are looking for
  * @param curr_block the block in which to search
+ * @param num_dir_entries the number of dir entries to iterate through
  * @return short the inum at the directory entry with name "dir_name"
  */
 short
-TraverseDirsHelper(char *dir_name, int curr_block)
+TraverseDirsHelper(char *dir_name, int curr_block, int num_dir_entries)
 {
+    TracePrintf(0, "TraverseDirsHelper Entry\n");
+    TracePrintf(0, "TraverseDirsHelper dir_name: %s\n", dir_name);
+    TracePrintf(0, "TraverseDirsHelper curr_block: %d\n", curr_block);
+    TracePrintf(0, "TraverseDirsHelper num_dir_entries: %d\n", num_dir_entries);
+
     struct dir_entry *dir_entries = malloc(SECTORSIZE);
     if (curr_block == 0) {
         free(dir_entries);
@@ -636,23 +667,28 @@ TraverseDirsHelper(char *dir_name, int curr_block)
     }    
         
     if (ReadFromBlock(curr_block, dir_entries) != 0) {
-        TracePrintf(0, "Freak the fuck out\n");
+        TracePrintf(0, "TraverseDirsHelper: freak the fuck out\n");
         Exit(-1);
     }
         
     struct dir_entry *curr_entry = dir_entries;
-    int entries_per_block = BLOCKSIZE / sizeof(struct dir_entry);
+    //int entries_per_block = BLOCKSIZE / sizeof(struct dir_entry);
     int j;
-    for (j = 0; j < entries_per_block; j++) {
+    for (j = 0; j < num_dir_entries; j++) {
         char *curr_dir_name = MakeNullTerminated(curr_entry->name, DIRNAMELEN);
-        if (curr_dir_name == dir_name) {
+        TracePrintf(0, "TraverseDirsHelper curr_dir_name: %s\n", curr_dir_name);
+        TracePrintf(0, "TraverseDirsHelper dir_name: %s\n", dir_name);
+        if (strcmp(curr_dir_name, dir_name) == 0) {
+            short inum = curr_entry->inum;
             free(dir_entries);
-            return (curr_entry->inum);
+            TracePrintf(0, "TraverseDirsHelper Exit (success)\n");
+            return (inum);
         }
         curr_entry++;
     }
 
     free(dir_entries);
+    TracePrintf(0, "TraverseDirsHelper Exit (fail)\n");
     return -1;
 }
 
@@ -660,25 +696,59 @@ TraverseDirsHelper(char *dir_name, int curr_block)
 void
 InsertOpenFile(struct open_file_list **wait, int fd, short inum)
 {
+    TracePrintf(0, "InsertOpenFile Entry\n");
+    TracePrintf(0, "    *wait %p\n", *wait);
+    TracePrintf(0, "    open_files: %p\n", open_files);
 	struct open_file_list *new = malloc(sizeof(struct open_file_list));
+
   
 	new->fd = fd;
 	new->inum = inum;
     new->next = NULL;
-    new->blocknum = 0;
-    new->position = 0;
+    if (fd > 0) {
+        new->blocknum = 0;
+        new->position = 0;
+    } else {
+        struct inode dir_inode = GetInodeAt(inum);
+        new->blocknum = dir_inode->direct[0];
+        new->position = 2 * sizeof(struct(dir_entry));
+    }
+    
 
     struct open_file_list *list = *wait;
+    TracePrintf(0, "InsertOpenFile list: %p\n", list);
     if (list == NULL) {
         *wait = new;
+        // *wait = malloc(sizeof(struct open_file_list));
+        // (*wait)->fd = fd;
+        // (*wait)->inum = inum;
+        // (*wait)->next = NULL;
+        // (*wait)->blocknum = 0;
+        // (*wait)->position = 0;
+        
+        //TracePrintf(0, "InsertOpenFile *wait: %p\n", *wait);
+        //TracePrintf(0, "InsertOpenFile open_files: %p\n", open_files);
+        // TracePrintf(0, "    wait->fd: %d\n", (*wait)->fd);
+        // TracePrintf(0, "    *wait->inum: %d\n", (*wait)->inum);
+        // TracePrintf(0, "    *wait->next: %p\n", (*wait)->next);
+        // TracePrintf(0, "    *wait->blocknum: %d\n", (*wait)->blocknum);
+        // TracePrintf(0, "    *wait->position: %d\n", (*wait)->position);
+        // TracePrintf(0, "InsertOpenFile: Creating list from nothing\n");
+        TracePrintf(0, "InsertOpenFile Exit (first one)\n");
         return;
     }
+
     TracePrintf(0, "InsertNode: Outside loop 1\n");
     while (list->next != NULL) {
+        // TracePrintf(1, "InsertOpenFile list: %p\n", list);
+        // TracePrintf(1, "list->fd: %d\n", list->fd);
+        // TracePrintf(1, "list->inum: %d\n", list->inum);
+        // TracePrintf(1, "InsertOpenFile list->next: %p\n", list->next);
+        // TracePrintf(1, "list->blocknum: %d\n", list->blocknum);
+        // TracePrintf(1, "list->position: %d\n", list->position);
         list = list->next;
     }
     TracePrintf(0, "InsertNode: Outside loop 2\n");
-
     list->next = new;
 }
 
@@ -686,6 +756,7 @@ InsertOpenFile(struct open_file_list **wait, int fd, short inum)
 int
 RemoveOpenFile(struct open_file_list **wait, int fd)
 {
+    TracePrintf(0, "RemoveOpenFile Entry\n");
 	struct open_file_list *q = (*wait);
 	struct open_file_list *prev;
     if (fd == -1) {
@@ -695,6 +766,7 @@ RemoveOpenFile(struct open_file_list **wait, int fd)
 	if (q != NULL && q->fd == fd) {
 		(*wait)->next = q->next;
 		free(q);
+        TracePrintf(0, "RemoveOpenFile Exit (first one)\n");
 		return (0);
 	}
 	while (q != NULL && q->fd != fd){
@@ -703,11 +775,13 @@ RemoveOpenFile(struct open_file_list **wait, int fd)
 	}
 
 	if (q == NULL) {
+        TracePrintf(0, "RemoveOpenFile Exit (null one)\n");
 		return (-1);
 	}
 	
 	prev->next = q->next;
 	free(q);
+    TracePrintf(0, "RemoveOpenFile Exit (middle one)\n");
 	return(0);
 }
 
@@ -715,8 +789,10 @@ RemoveOpenFile(struct open_file_list **wait, int fd)
 struct open_file_list *
 SearchOpenFile(struct open_file_list **wait, short inum)
 {
+    TracePrintf(0, "SearchOpenFile Entry\n");
 	struct open_file_list *q = (*wait);
 	if (q != NULL && q->inum == inum) {
+        TracePrintf(0, "SearchOpenFile Exit (first one)\n");
 		return (q);
 	}
 	while (q != NULL && q->inum != inum){
@@ -724,8 +800,10 @@ SearchOpenFile(struct open_file_list **wait, short inum)
 	}
 
 	if (q == NULL) {
+        TracePrintf(0, "SearchOpenFile Exit (null one)\n");
 		return NULL;
 	}
+    TracePrintf(0, "SearchOpenFile Exit (middle one)\n");
 	return(q);
 }
 
@@ -745,18 +823,33 @@ SearchByFD(struct open_file_list **wait, int fd)
 	}
 	return(q);
 }
+
 //Gives open file in open file list a given block num and position.
 int
 EditOpenFile(struct open_file_list **wait, int fd, int blocknum, int position) {
+    TracePrintf(0, "EditOpenFile Entry\n");
     struct open_file_list *q = (*wait);
+    TracePrintf(0, "  open_files: %p\n", open_files);
+    TracePrintf(0, "  *wait: %p\n", *wait);
+    TracePrintf(0, "    q: %p\n", q);
+
+    // First file is the one we want to edit
 	if (q != NULL && q->fd == fd) {
 		q->blocknum = blocknum;
         q->position = position;
-        free(q);
+        TracePrintf(0, "    q != NULL and q->fd == fd\n");
+        TracePrintf(0, "    q->blocknum: %d\n", q->blocknum);
+        TracePrintf(0, "    q->position: %d\n", q->position);
+        //free(q);
+        TracePrintf(0, "EditOpenFile Exit\n");
 		return (0);
 	}
-	while (q != NULL && q->fd != fd){
+
+    // File we want to edit is not first
+	while (q != NULL && q->fd != fd) {
 		q = q->next;
+        TracePrintf(0, "    q != NULL and q->fd != fd\n");
+        TracePrintf(0, "    q->next: %p\n", q->next);
 	}
 
 	if (q == NULL) {
@@ -765,7 +858,10 @@ EditOpenFile(struct open_file_list **wait, int fd, int blocknum, int position) {
 
 	q->blocknum = blocknum;
     q->position = position;
-    free(q);
+    TracePrintf(0, "    q->blocknum: %d\n", q->blocknum);
+    TracePrintf(0, "    q->position: %d\n", q->position);
+    //free(q);
+    TracePrintf(0, "EditOpenFile Exit\n");
 	return(0);
 }
 
@@ -830,11 +926,11 @@ RemoveMinFD(struct free_fd_list **wait)
  * Create/Mkdir hybrid
  * 
  * Expected message struct:
- *     text[0:8] ptr to pathname
  */
 void 
 YFSCreateMkDir(void *m, bool dir) 
 {
+    TracePrintf(0, "----------YFSCreateMkDir Entry----------\n");
     struct messageSinglePath *msg = (struct messageSinglePath *) m;
     struct inode *block;
     char *pathname = GetPathName(msg->pid, msg->pathname); // Free this bitch at some point
@@ -844,18 +940,24 @@ YFSCreateMkDir(void *m, bool dir)
 
     int i;
     int n = strlen(null_path);
-    TracePrintf(0, "Null Path length: %d\n", n);
-    TracePrintf(0, "Finding Last Slash\n");
-    TracePrintf(0, "pathname: %s\n", null_path);
+    TracePrintf(0, "YFSCreateMkDir null path length: %d\n", n);
+    TracePrintf(0, "YFSCreateMkDir finding last slash\n");
+    TracePrintf(0, "YFSCreateMkDir pathname: %s\n", null_path);
     for (i = n - 1; i >= 0; i--) {
         if (null_path[i] == '/') {
-            TracePrintf(0, "Loop Entry %d\n", i);
-            directory = malloc(i-1);
+            TracePrintf(0, "YFSCreateMkDir loop entry %d\n", i);
             new_file = malloc(n-i+1);
             int k;
-            for (k = 0; k < i - 1; k++){
-                directory[k] = null_path[k];
+            if (i > 0) {
+                directory = malloc(i + 1);
+                for (k = 0; k < i; k++){
+                    directory[k] = null_path[k];
+                }
+                directory[i] = '\0';
+            } else {
+                directory = "";
             }
+            
             for (k = 0; k < n - i + 1; k++){
                 new_file[k] = null_path[k + i + 1];
             }
@@ -863,8 +965,8 @@ YFSCreateMkDir(void *m, bool dir)
             break;
         }
     }
-    TracePrintf(0, "Directory: %s\n", directory);
-    TracePrintf(0, "New File: %s\n", new_file);
+    TracePrintf(0, "YFSCreateMkDir directory: %s\n", directory);
+    TracePrintf(0, "YFSCreateMkDir new File: %s\n", new_file);
 
     short parent_inum = 1;
     if (i > 0) {
@@ -881,7 +983,7 @@ YFSCreateMkDir(void *m, bool dir)
     
     block = malloc(BLOCKSIZE);
     if (ReadFromBlock((int) (parent_inum / IPB + 1), block) == -1) {
-        TracePrintf(0, "Freak the Fuck out\n");
+        TracePrintf(0, "YFSCreateMkDir: read from block is wack, freak the Fuck out\n");
         Exit(-1);
     }
     //int sector_num = GetSectorNum((int) parent_inum);
@@ -905,19 +1007,18 @@ YFSCreateMkDir(void *m, bool dir)
             msg->retval = ERROR;
             free(pathname);
             return;
-        } else {
-            new_node = GetInodeAt(child_inum);
         }
+        new_node = GetInodeAt(child_inum);
 
         // making a new directory or "creating" a file (existing or not)
 
         // create dir entry and add it to parent directory
         struct dir_entry *new_file_entry = CreateDirEntry(child_inum, new_file);
-        AddToBlock(parent_inum, new_file_entry, sizeof(struct dir_entry));
-
-        MakeNewFile(new_node, dir); // updates inode
         int openval = InsertOFDeluxe(child_inum);
+        AddToBlock(parent_inum, new_file_entry, sizeof(struct dir_entry));
+        MakeNewFile(new_node, dir); // updates inode
         if (dir) {
+            TracePrintf(0, "YFSCreateMkDir: creating . and ..\n");
             struct dir_entry *dot = CreateDirEntry(child_inum, ".");
             struct dir_entry *dotdot = CreateDirEntry(parent_inum, "..");
             struct dir_entry *blk = malloc(2 * sizeof(struct dir_entry)); //check in office hours, seems sus
@@ -926,6 +1027,7 @@ YFSCreateMkDir(void *m, bool dir)
             AddToBlock(child_inum, blk, 2*sizeof(struct dir_entry));
         }
         WriteINum(child_inum, *new_node);
+
         free(pathname);
         if (dir) {
             msg->retval = 0;
@@ -933,10 +1035,11 @@ YFSCreateMkDir(void *m, bool dir)
             msg->retval = openval;
         }
     } else {
-        TracePrintf(0, "Not Directory Freak the Fuck Out\n");
+        TracePrintf(0, "YFSCreateMkDir: not directory freak the fuck out\n");
         free(pathname);
         msg->retval = ERROR;
     }
+    TracePrintf(0, "----------YFSCreateMkDir Exit----------\n");
 }
 
 // Shoves data into empty inode struct
@@ -1031,8 +1134,6 @@ CreateDirEntry(short inum, char name[])
 int
 ReadFromBlock(int sector_num, void *buf) 
 {
-    TracePrintf(0, "ReadFromBlock Sector Num: %d\n", sector_num);
-    TracePrintf(0, "Reading from Block\n");
     int r = ReadSector(sector_num, buf);
     TracePrintf(0, "ReadSector returned %d\n", r);
     return r;
@@ -1070,27 +1171,43 @@ GetInodeAt(short inum)
     return blk + GetSectorPosition((int) inum);
 }
 
-//Add data to already open file (or directory)'s current block
+// Add data to already open file (or directory)'s current block
+// Assume always write len bytes from buf
 int 
 AddToBlock(short inum, void *buf, int len) 
 {
+    TracePrintf(0, "AddToBlock Entry\n");
+    TracePrintf(0, "AddToBlock inum: %d\n", inum);
+    TracePrintf(0, "AddToBlock len: %d\n", len);
+
+    // Get file from open file list
     struct open_file_list *file = SearchOpenFile(&open_files, inum);
     if (file == NULL) {
-        TracePrintf(0, "Add2Blk: File is not open\n");
+        TracePrintf(0, "AddToBlock: File is not open\n");
+        TracePrintf(0, "AddToBlock Exit\n");
         return (-1);
     }
-    struct inode *node = GetInodeAt(inum);
     int blknum = file->blocknum;
     int pos = file->position;
+
+    // Get inode for the current file
+    struct inode *node = GetInodeAt(inum);
+
     char *edit_blk = malloc(BLOCKSIZE);
+    // If the current file has no direct blocks, get a free block
     if (node->direct[0] == 0) {
         node->direct[0] = GetFreeBlock();
     }
+
+    // Read contents of blknum
     if (ReadFromBlock(node->direct[blknum], edit_blk) < 0) {
-        TracePrintf(0, "Add2Blk: Reading from block Failed\n");
+        TracePrintf(0, "AddToBlock: Reading from block Failed\n");
+        TracePrintf(0, "AddToBlock Exit\n");
         return (-1);
     }
+
     if (pos + len < BLOCKSIZE) {
+        // Case 1: writing will not take us beyond the current block
         int i;
         for (i = pos; i < pos + len; i++) {
             edit_blk[i] = *((char *) (buf + i - pos));
@@ -1098,14 +1215,19 @@ AddToBlock(short inum, void *buf, int len)
 
         int write_num = GetTrueBlock(node, blknum);
         if (write_num <= 0) {
-            TracePrintf(0, "Add2Blk: Wrong Block gotten by GetTrueBlock\n");
+            TracePrintf(0, "AddToBlock: Wrong Block gotten by GetTrueBlock\n");
+            TracePrintf(0, "AddToBlock Exit\n");
             return (-1);
         }
 
         WriteToBlock(write_num, edit_blk);
+        // update position and blocknum
         EditOpenFile(&open_files, file->fd, blknum, pos + len);
-    }
-    else {
+        TracePrintf(0, "AddTOBlock open_files: %p \n", open_files);
+        TracePrintf(0, "AddToBlock len: %d\n", len);
+    } else {
+        // Case 2: writing will take us beyond the current block
+
         int newpos;
         int i = pos;
         int write_num = GetTrueBlock(node, blknum);
@@ -1114,14 +1236,16 @@ AddToBlock(short inum, void *buf, int len)
                 WriteToBlock(write_num, edit_blk);
                 int newblk = GetFreeBlock();
                 if (AddBlockToInode(node, newblk) == -1) {
-                    TracePrintf(0, "Add2Blk: Couldn't add block to inode\n");
+                    TracePrintf(0, "AddToBlock: Couldn't add block to inode\n");
+                    TracePrintf(0, "AddToBlock Exit\n");
                     return (-1);
                 }
                 blknum++;
                 write_num = newblk;
                 i -= BLOCKSIZE;
                 if (i != 0) {
-                    TracePrintf(0, "Add2Blk: Something wrong with newpos loop\n");
+                    TracePrintf(0, "AddToBlock: Something wrong with newpos loop\n");
+                    TracePrintf(0, "AddToBlock Exit\n");
                     return (-1);
                 }
             }
@@ -1129,9 +1253,17 @@ AddToBlock(short inum, void *buf, int len)
             i++;
         }
         WriteToBlock(write_num, edit_blk);
+        // update position and blocknum
         EditOpenFile(&open_files, file->fd, blknum, i);
-        WriteINum(inum, *node);
+        TracePrintf(0, "AddToBlock len: %d\n", len);
     }
+    // update 
+    TracePrintf(0, "AddToBlock old size: %d\n", node->size);
+    TracePrintf(0, "AddToBlock len: %d\n", len);
+    node->size += len;
+    TracePrintf(0, "AddToBlock new size: %d\n", node->size);
+    WriteINum(inum, *node);
+    TracePrintf(0, "AddToBlock Exit\n");
     return 0;
 }
 
@@ -1139,6 +1271,7 @@ AddToBlock(short inum, void *buf, int len)
 int
 AddBlockToInode(struct inode *node, int block_num) 
 {
+    TracePrintf(0, "AddToBlockToInode Entry\n");
     int i;
     for (i = 0; i < NUM_DIRECT; i++) {
         if (node->direct[i] == 0) {
@@ -1161,9 +1294,11 @@ AddBlockToInode(struct inode *node, int block_num)
     }
     if (i == BLOCKSIZE / sizeof(int)) {
         TracePrintf(0, "Add Block to Inode: somehow you've run out of space in the indirect block!\n");
+        TracePrintf(0, "AddToBlockToInode Exit\n");
         return (-1);
     }
     WriteToBlock(node->indirect, ind_block);
+    TracePrintf(0, "AddToBlockToInode Exit\n");
     return(0);
 }
 
@@ -1188,21 +1323,27 @@ GetTrueBlock(struct inode *node, int blocknum)
 int
 InsertOFDeluxe(short inum) 
 {
+    TracePrintf(0, "InsertOFDeluxe Entry\n");
+    TracePrintf(0, "InsertOFDeluxe inum: %d\n", inum);
+
     int new_fd;
     //THIS MEANS INODE IS DIRECTORY
     if (GetInodeAt(inum)->type == INODE_DIRECTORY) {
+        TracePrintf(0, "InsertOFDeluxe we have a directory\n");
         new_fd = -1;
     } else {
+        TracePrintf(0, "InsertOFDeluxe we have a file\n");
         new_fd = RemoveMinFD(&free_fds);
         //THIS MEANS THERE IS NO REUSED FD
         if (new_fd == -2) {
+            TracePrintf(0, "InsertOFDeluxe there is no reused fd\n");
             new_fd = cur_fd;
             cur_fd++;
         }
     }
     
-
     InsertOpenFile(&open_files, new_fd, inum);
+    TracePrintf(0, "InsertOFDeluxe Exit\n");
     return new_fd;
 }
 

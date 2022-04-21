@@ -1,7 +1,8 @@
 #include <stdio.h>
-
+#include <stdlib.h>
 #include <comp421/yalnix.h>
 #include <comp421/iolib.h>
+#include <comp421/filesystem.h>
 
 /* Try tcreate2 before this, or try this just by itself */
 
@@ -13,11 +14,10 @@ main(int argc, char **argv)
 	Create("/foo");
 	Create("/bar");
 	Create("/foo/zzz");
-	printf("\n%d\n\n", Open("/foo"));
-	printf("\n%d\n\n", Open("/bar"));
-	printf("\n%d\n\n", Open("/foo"));
-	printf("\n%d\n\n", Open("/foo/zzz"));
-
+	TracePrintf(0, "topen2: \n%d\n\n", Open("/foo"));
+	TracePrintf(0, "topen2: \n%d\n\n", Open("/bar"));
+	TracePrintf(0, "topen2: \n%d\n\n", Open("/foo"));
+	TracePrintf(0, "topen2: \n%d\n\n", Open("/foo/zzz"));
 	Shutdown();
 	return 0;
 }

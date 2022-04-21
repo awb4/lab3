@@ -1,47 +1,413 @@
+** User     level 3 tracing enabled **
 ** YFS      level 5 tracing enabled **
-YFS      Message: 0x1c128
-YFS      ReadFromBlock Sector Num: 1
-YFS      Reading from Block
+YFS      Message: 0x1d028
+YFS      InsertOFDeluxe Entry
+YFS      InsertOFDeluxe inum: 1
+User     -------------------------CREATE-----------------------------
+User     Filled message
 YFS      ReadSector returned 0
-YFS      ReadFromBlock Sector Num: 1
-YFS      Reading from Block
+YFS      InsertOFDeluxe we have a directory
+YFS      InsertOpenFile Entry
+YFS          *wait (nil)
+YFS          open_files: (nil)
+YFS      InsertOpenFile list: (nil)
+YFS      InsertOpenFile Exit (first one)
+YFS      InsertOFDeluxe Exit
 YFS      ReadSector returned 0
 YFS      Initializing Free Blocks
 YFS      Initializing Free inodes
-YFS      Getting Message
+YFS      --------------------Getting Message--------------------
 YFS      Received Message
 YFS      Message Type: 2
 YFS      Message Pid: 3
-YFS      Message Pathname: 0x17000
 YFS      2: Create
-YFS      Creating
-YFS      ---------GETPATHNAME-------------
-YFS      Null Path length: 4
-YFS      Finding Last Slash
-YFS      pathname: /foo
-YFS      Loop Entry 0
-YFS      Directory: (null)
-YFS      New File: foo
-YFS      ReadFromBlock Sector Num: 1
-YFS      Reading from Block
+YFS      YFSCreate 
+YFS      YFSCreate open_files: 0x1d050
+YFS      ----------YFSCreateMkDir Entry----------
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      YFSCreateMkDir null path length: 4
+YFS      YFSCreateMkDir finding last slash
+YFS      YFSCreateMkDir pathname: /foo
+YFS      YFSCreateMkDir loop entry 0
+YFS      YFSCreateMkDir directory: 
+YFS      YFSCreateMkDir new File: foo
 YFS      ReadSector returned 0
+YFS      TraverseDirs Entry
 YFS      Traversing path foo at inum 1
-YFS      ReadFromBlock Sector Num: 1
-YFS      Reading from Block
 YFS      ReadSector returned 0
-YFS      Traversing direct block 0
-YFS      ReadFromBlock Sector Num: 7
-YFS      Reading from Block
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 2
 YFS      ReadSector returned 0
-YFS      Found inum -1
-YFS      Traversing direct block 1
-YFS      ReadFromBlock Sector Num: 1
-YFS      Reading from Block
+YFS      TraverseDirsHelper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper Exit (fail)
+YFS      TraverseDirs found inum -1
+YFS      TraverseDirs traversing direct block 1
+YFS      TraverseDirs Exit
 YFS      ReadSector returned 0
-YFS      ReadFromBlock Sector Num: 7
-YFS      Reading from Block
+YFS      InsertOFDeluxe Entry
+YFS      InsertOFDeluxe inum: 2
 YFS      ReadSector returned 0
-YFS      ReadFromBlock Sector Num: 1
-YFS      Reading from Block
-YFS      ReadSector returned 0
+YFS      InsertOFDeluxe we have a file
+YFS      InsertOFDeluxe there is no reused fd
+YFS      InsertOpenFile Entry
+YFS          *wait 0x1d050
+YFS          open_files: 0x1d050
+YFS      InsertOpenFile list: 0x1d050
 YFS      InsertNode: Outside loop 1
+YFS      InsertNode: Outside loop 2
+YFS      InsertOFDeluxe Exit
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 1
+YFS      AddToBlock len: 32
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (first one)
+YFS      ReadSector returned 0
+YFS      ReadSector returned 0
+YFS      EditOpenFile Entry
+YFS        open_files: 0x1d050
+YFS        *wait: 0x1d050
+YFS          q: 0x1d050
+YFS          q != NULL and q->fd == fd
+YFS          q->blocknum: 0
+YFS          q->position: 32
+YFS      EditOpenFile Exit
+YFS      AddTOBlock open_files: 0x1d050 
+YFS      AddToBlock len: 32
+YFS      AddToBlock old size: 64
+YFS      AddToBlock len: 32
+YFS      AddToBlock new size: 96
+YFS      ReadSector returned 0
+YFS      AddToBlock Exit
+YFS      ReadSector returned 0
+YFS      ----------YFSCreateMkDir Exit----------
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+User     Message Returned: 0
+User     -------------------------CREATE-----------------------------
+User     Filled message
+YFS      Received Message
+YFS      Message Type: 2
+YFS      Message Pid: 3
+YFS      2: Create
+YFS      YFSCreate 
+YFS      YFSCreate open_files: 0x1d050
+YFS      ----------YFSCreateMkDir Entry----------
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      YFSCreateMkDir null path length: 4
+YFS      YFSCreateMkDir finding last slash
+YFS      YFSCreateMkDir pathname: /bar
+YFS      YFSCreateMkDir loop entry 0
+YFS      YFSCreateMkDir directory: 
+YFS      YFSCreateMkDir new File: bar
+YFS      ReadSector returned 0
+YFS      TraverseDirs Entry
+YFS      Traversing path bar at inum 1
+YFS      ReadSector returned 0
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: bar
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 3
+YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: foo
+YFS      TraverseDirsHelper dir_name: bar
+YFS      TraverseDirsHelper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: bar
+YFS      TraverseDirsHelper curr_dir_name: 
+YFS      TraverseDirsHelper dir_name: bar
+YFS      TraverseDirsHelper Exit (fail)
+YFS      TraverseDirs found inum -1
+YFS      TraverseDirs traversing direct block 1
+YFS      TraverseDirs Exit
+YFS      ReadSector returned 0
+YFS      InsertOFDeluxe Entry
+YFS      InsertOFDeluxe inum: 3
+YFS      ReadSector returned 0
+YFS      InsertOFDeluxe we have a file
+YFS      InsertOFDeluxe there is no reused fd
+YFS      InsertOpenFile Entry
+YFS          *wait 0x1d050
+YFS          open_files: 0x1d050
+YFS      InsertOpenFile list: 0x1d050
+YFS      InsertNode: Outside loop 1
+YFS      InsertNode: Outside loop 2
+YFS      InsertOFDeluxe Exit
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 1
+YFS      AddToBlock len: 32
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (first one)
+YFS      ReadSector returned 0
+YFS      ReadSector returned 0
+YFS      EditOpenFile Entry
+YFS        open_files: 0x1d050
+YFS        *wait: 0x1d050
+YFS          q: 0x1d050
+YFS          q != NULL and q->fd == fd
+YFS          q->blocknum: 0
+YFS          q->position: 64
+YFS      EditOpenFile Exit
+YFS      AddTOBlock open_files: 0x1d050 
+YFS      AddToBlock len: 32
+YFS      AddToBlock old size: 96
+YFS      AddToBlock len: 32
+YFS      AddToBlock new size: 128
+YFS      ReadSector returned 0
+YFS      AddToBlock Exit
+YFS      ReadSector returned 0
+YFS      ----------YFSCreateMkDir Exit----------
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+User     Message Returned: 1
+User     -------------------------CREATE-----------------------------
+User     Filled message
+YFS      Received Message
+YFS      Message Type: 2
+YFS      Message Pid: 3
+YFS      2: Create
+YFS      YFSCreate 
+YFS      YFSCreate open_files: 0x1d050
+YFS      ----------YFSCreateMkDir Entry----------
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      YFSCreateMkDir null path length: 8
+YFS      YFSCreateMkDir finding last slash
+YFS      YFSCreateMkDir pathname: /foo/zzz
+YFS      YFSCreateMkDir loop entry 4
+YFS      YFSCreateMkDir directory: /foo
+YFS      YFSCreateMkDir new File: zzz
+YFS      ParseFileName Entry
+YFS      ParseFileName filename: /foo
+YFS      ParseFileName dir_inum: 1
+YFS      ParseFileName Entering While loop
+YFS      TraverseDirs Entry
+YFS      Traversing path foo at inum 1
+YFS      ReadSector returned 0
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 4
+YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: foo
+YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper Exit (success)
+YFS      TraverseDirs found inum 2
+YFS      ParseFileName Exit
+YFS      ReadSector returned 0
+YFS      YFSCreateMkDir: not directory freak the fuck out
+YFS      ----------YFSCreateMkDir Exit----------
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+User     Message Returned: -1
+User     Performing an actual open call
+YFS      Received Message
+YFS      Message Type: 0
+YFS      Message Pid: 3
+YFS      0: Open
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      Opening Path /foo at cd 1
+YFS      ParseFileName Entry
+YFS      ParseFileName filename: /foo
+YFS      ParseFileName dir_inum: 1
+YFS      ParseFileName Entering While loop
+YFS      TraverseDirs Entry
+YFS      Traversing path foo at inum 1
+YFS      ReadSector returned 0
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 4
+YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: foo
+YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper Exit (success)
+YFS      TraverseDirs found inum 2
+YFS      ParseFileName Exit
+YFS      ReadSector returned 0
+YFS      Opening Inode 2 at pathname /foo
+YFS      InsertOFDeluxe Entry
+YFS      InsertOFDeluxe inum: 2
+YFS      ReadSector returned 0
+YFS      InsertOFDeluxe we have a file
+YFS      InsertOFDeluxe there is no reused fd
+YFS      InsertOpenFile Entry
+YFS          *wait 0x1d050
+YFS          open_files: 0x1d050
+YFS      InsertOpenFile list: 0x1d050
+YFS      InsertNode: Outside loop 1
+YFS      InsertNode: Outside loop 2
+YFS      InsertOFDeluxe Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+User     topen2: 
+0
+
+User     Performing an actual open call
+YFS      Received Message
+YFS      Message Type: 0
+YFS      Message Pid: 3
+YFS      0: Open
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      Opening Path /bar at cd 1
+YFS      ParseFileName Entry
+YFS      ParseFileName filename: /bar
+YFS      ParseFileName dir_inum: 1
+YFS      ParseFileName Entering While loop
+YFS      TraverseDirs Entry
+YFS      Traversing path bar at inum 1
+YFS      ReadSector returned 0
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: bar
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 4
+YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: foo
+YFS      TraverseDirsHelper dir_name: bar
+YFS      TraverseDirsHelper curr_dir_name: bar
+YFS      TraverseDirsHelper dir_name: bar
+YFS      TraverseDirsHelper Exit (success)
+YFS      TraverseDirs found inum 3
+YFS      ParseFileName Exit
+YFS      ReadSector returned 0
+YFS      Opening Inode 3 at pathname ’
+YFS      InsertOFDeluxe Entry
+YFS      InsertOFDeluxe inum: 3
+YFS      ReadSector returned 0
+YFS      InsertOFDeluxe we have a file
+YFS      InsertOFDeluxe there is no reused fd
+YFS      InsertOpenFile Entry
+YFS          *wait 0x1d050
+YFS          open_files: 0x1d050
+YFS      InsertOpenFile list: 0x1d050
+YFS      InsertNode: Outside loop 1
+YFS      InsertNode: Outside loop 2
+YFS      InsertOFDeluxe Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+User     topen2: 
+0
+
+User     Performing an actual open call
+YFS      Received Message
+YFS      Message Type: 0
+YFS      Message Pid: 3
+YFS      0: Open
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      Opening Path /foo at cd 1
+YFS      ParseFileName Entry
+YFS      ParseFileName filename: /foo
+YFS      ParseFileName dir_inum: 1
+YFS      ParseFileName Entering While loop
+YFS      TraverseDirs Entry
+YFS      Traversing path foo at inum 1
+YFS      ReadSector returned 0
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 4
+YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: foo
+YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper Exit (success)
+YFS      TraverseDirs found inum 2
+YFS      ParseFileName Exit
+YFS      ReadSector returned 0
+YFS      Opening Inode 2 at pathname ’
+YFS      InsertOFDeluxe Entry
+YFS      InsertOFDeluxe inum: 2
+YFS      ReadSector returned 0
+YFS      InsertOFDeluxe we have a file
+YFS      InsertOFDeluxe there is no reused fd
+YFS      InsertOpenFile Entry
+YFS          *wait 0x1d050
+YFS          open_files: 0x1d050
+YFS      InsertOpenFile list: 0x1d050
+YFS      InsertNode: Outside loop 1
+YFS      InsertNode: Outside loop 2
+YFS      InsertOFDeluxe Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+User     topen2: 
+0
+
+User     Performing an actual open call
+YFS      Received Message
+YFS      Message Type: 0
+YFS      Message Pid: 3
+YFS      0: Open
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      Opening Path /foo/zzz at cd 1
+YFS      ParseFileName Entry
+YFS      ParseFileName filename: /foo/zzz
+YFS      ParseFileName dir_inum: 1
+YFS      ParseFileName Entering While loop
+YFS      TraverseDirs Entry
+YFS      Traversing path foo at inum 1
+YFS      ReadSector returned 0
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 4
+YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: foo
+YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper Exit (success)
+YFS      TraverseDirs found inum 2
+YFS      TraverseDirs Entry
+YFS      Traversing path zzz at inum 1
+YFS      ReadSector returned 0
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: zzz
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 4
+YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: foo
+YFS      TraverseDirsHelper dir_name: zzz
+YFS      TraverseDirsHelper curr_dir_name: bar
+YFS      TraverseDirsHelper dir_name: zzz
+YFS      TraverseDirsHelper curr_dir_name: 
+YFS      TraverseDirsHelper dir_name: zzz
+YFS      TraverseDirsHelper curr_dir_name: 
+YFS      TraverseDirsHelper dir_name: zzz
+YFS      TraverseDirsHelper Exit (fail)
+YFS      TraverseDirs found inum -1
+YFS      TraverseDirs traversing direct block 1
+YFS      TraverseDirs Exit
+YFS      ParseFileName couldn't find file in inum
+YFS      ParseFileName Exit
+YFS      ParseFilename found bullshit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+User     topen2: 
+0
+
+YFS      Received Message
+YFS      Message Type: 15
+YFS      Message Pid: 3
+YFS      15: Shutdown
