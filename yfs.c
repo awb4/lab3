@@ -709,9 +709,8 @@ InsertOpenFile(struct open_file_list **wait, int fd, short inum)
         new->blocknum = 0;
         new->position = 0;
     } else {
-        struct inode dir_inode = GetInodeAt(inum);
-        new->blocknum = dir_inode->direct[0];
-        new->position = 2 * sizeof(struct(dir_entry));
+        new->blocknum = 0;
+        new->position = 2 * sizeof(struct dir_entry);
     }
     
 
@@ -829,17 +828,17 @@ int
 EditOpenFile(struct open_file_list **wait, int fd, int blocknum, int position) {
     TracePrintf(0, "EditOpenFile Entry\n");
     struct open_file_list *q = (*wait);
-    TracePrintf(0, "  open_files: %p\n", open_files);
-    TracePrintf(0, "  *wait: %p\n", *wait);
-    TracePrintf(0, "    q: %p\n", q);
+    TracePrintf(0, "EditOpenFile open_files: %p\n", open_files);
+    TracePrintf(0, "EditOpenFile *wait: %p\n", *wait);
+    TracePrintf(0, "EditOpenFile q: %p\n", q);
 
     // First file is the one we want to edit
 	if (q != NULL && q->fd == fd) {
 		q->blocknum = blocknum;
         q->position = position;
-        TracePrintf(0, "    q != NULL and q->fd == fd\n");
-        TracePrintf(0, "    q->blocknum: %d\n", q->blocknum);
-        TracePrintf(0, "    q->position: %d\n", q->position);
+        TracePrintf(0, "EditOpenFile q != NULL and q->fd == fd\n");
+        TracePrintf(0, "EditOpenFile q->blocknum: %d\n", q->blocknum);
+        TracePrintf(0, "EditOpenFile q->position: %d\n", q->position);
         //free(q);
         TracePrintf(0, "EditOpenFile Exit\n");
 		return (0);
@@ -848,8 +847,8 @@ EditOpenFile(struct open_file_list **wait, int fd, int blocknum, int position) {
     // File we want to edit is not first
 	while (q != NULL && q->fd != fd) {
 		q = q->next;
-        TracePrintf(0, "    q != NULL and q->fd != fd\n");
-        TracePrintf(0, "    q->next: %p\n", q->next);
+        TracePrintf(0, "EditOpenFile q != NULL and q->fd != fd\n");
+        TracePrintf(0, "EditOpenFile q->next: %p\n", q->next);
 	}
 
 	if (q == NULL) {
@@ -858,8 +857,8 @@ EditOpenFile(struct open_file_list **wait, int fd, int blocknum, int position) {
 
 	q->blocknum = blocknum;
     q->position = position;
-    TracePrintf(0, "    q->blocknum: %d\n", q->blocknum);
-    TracePrintf(0, "    q->position: %d\n", q->position);
+    TracePrintf(0, "EditOpenFile q->blocknum: %d\n", q->blocknum);
+    TracePrintf(0, "EditOpenFile q->position: %d\n", q->position);
     //free(q);
     TracePrintf(0, "EditOpenFile Exit\n");
 	return(0);

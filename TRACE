@@ -72,12 +72,12 @@ YFS      SearchOpenFile Exit (first one)
 YFS      ReadSector returned 0
 YFS      ReadSector returned 0
 YFS      EditOpenFile Entry
-YFS        open_files: 0x1d050
-YFS        *wait: 0x1d050
-YFS          q: 0x1d050
-YFS          q != NULL and q->fd == fd
-YFS          q->blocknum: 0
-YFS          q->position: 32
+YFS      EditOpenFile open_files: 0x1d050
+YFS      EditOpenFile *wait: 0x1d050
+YFS      EditOpenFile q: 0x1d050
+YFS      EditOpenFile q != NULL and q->fd == fd
+YFS      EditOpenFile q->blocknum: 0
+YFS      EditOpenFile q->position: 96
 YFS      EditOpenFile Exit
 YFS      AddTOBlock open_files: 0x1d050 
 YFS      AddToBlock len: 32
@@ -119,11 +119,11 @@ YFS      TraverseDirsHelper dir_name: bar
 YFS      TraverseDirsHelper curr_block: 7
 YFS      TraverseDirsHelper num_dir_entries: 3
 YFS      ReadSector returned 0
-YFS      TraverseDirsHelper curr_dir_name: foo
+YFS      TraverseDirsHelper curr_dir_name: .
 YFS      TraverseDirsHelper dir_name: bar
 YFS      TraverseDirsHelper curr_dir_name: ..
 YFS      TraverseDirsHelper dir_name: bar
-YFS      TraverseDirsHelper curr_dir_name: 
+YFS      TraverseDirsHelper curr_dir_name: foo
 YFS      TraverseDirsHelper dir_name: bar
 YFS      TraverseDirsHelper Exit (fail)
 YFS      TraverseDirs found inum -1
@@ -150,12 +150,12 @@ YFS      SearchOpenFile Exit (first one)
 YFS      ReadSector returned 0
 YFS      ReadSector returned 0
 YFS      EditOpenFile Entry
-YFS        open_files: 0x1d050
-YFS        *wait: 0x1d050
-YFS          q: 0x1d050
-YFS          q != NULL and q->fd == fd
-YFS          q->blocknum: 0
-YFS          q->position: 64
+YFS      EditOpenFile open_files: 0x1d050
+YFS      EditOpenFile *wait: 0x1d050
+YFS      EditOpenFile q: 0x1d050
+YFS      EditOpenFile q != NULL and q->fd == fd
+YFS      EditOpenFile q->blocknum: 0
+YFS      EditOpenFile q->position: 128
 YFS      EditOpenFile Exit
 YFS      AddTOBlock open_files: 0x1d050 
 YFS      AddToBlock len: 32
@@ -200,6 +200,10 @@ YFS      TraverseDirsHelper dir_name: foo
 YFS      TraverseDirsHelper curr_block: 7
 YFS      TraverseDirsHelper num_dir_entries: 4
 YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: foo
 YFS      TraverseDirsHelper curr_dir_name: foo
 YFS      TraverseDirsHelper dir_name: foo
 YFS      TraverseDirsHelper Exit (success)
@@ -233,6 +237,10 @@ YFS      TraverseDirsHelper dir_name: foo
 YFS      TraverseDirsHelper curr_block: 7
 YFS      TraverseDirsHelper num_dir_entries: 4
 YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: foo
 YFS      TraverseDirsHelper curr_dir_name: foo
 YFS      TraverseDirsHelper dir_name: foo
 YFS      TraverseDirsHelper Exit (success)
@@ -279,6 +287,10 @@ YFS      TraverseDirsHelper dir_name: bar
 YFS      TraverseDirsHelper curr_block: 7
 YFS      TraverseDirsHelper num_dir_entries: 4
 YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: bar
+YFS      TraverseDirsHelper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: bar
 YFS      TraverseDirsHelper curr_dir_name: foo
 YFS      TraverseDirsHelper dir_name: bar
 YFS      TraverseDirsHelper curr_dir_name: bar
@@ -327,6 +339,10 @@ YFS      TraverseDirsHelper dir_name: foo
 YFS      TraverseDirsHelper curr_block: 7
 YFS      TraverseDirsHelper num_dir_entries: 4
 YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: foo
 YFS      TraverseDirsHelper curr_dir_name: foo
 YFS      TraverseDirsHelper dir_name: foo
 YFS      TraverseDirsHelper Exit (success)
@@ -373,6 +389,10 @@ YFS      TraverseDirsHelper dir_name: foo
 YFS      TraverseDirsHelper curr_block: 7
 YFS      TraverseDirsHelper num_dir_entries: 4
 YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: foo
 YFS      TraverseDirsHelper curr_dir_name: foo
 YFS      TraverseDirsHelper dir_name: foo
 YFS      TraverseDirsHelper Exit (success)
@@ -387,13 +407,13 @@ YFS      TraverseDirsHelper dir_name: zzz
 YFS      TraverseDirsHelper curr_block: 7
 YFS      TraverseDirsHelper num_dir_entries: 4
 YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: zzz
+YFS      TraverseDirsHelper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: zzz
 YFS      TraverseDirsHelper curr_dir_name: foo
 YFS      TraverseDirsHelper dir_name: zzz
 YFS      TraverseDirsHelper curr_dir_name: bar
-YFS      TraverseDirsHelper dir_name: zzz
-YFS      TraverseDirsHelper curr_dir_name: 
-YFS      TraverseDirsHelper dir_name: zzz
-YFS      TraverseDirsHelper curr_dir_name: 
 YFS      TraverseDirsHelper dir_name: zzz
 YFS      TraverseDirsHelper Exit (fail)
 YFS      TraverseDirs found inum -1
