@@ -10,6 +10,9 @@ main(int argc, char **argv)
 {
 	(void) argc;
 	(void) argv;
+	Create("/foo");
+	Create("/bar");
+	Create("/foo/zzz");
 	printf("\n%d\n\n", Open("/foo"));
 	printf("\n%d\n\n", Open("/bar"));
 	printf("\n%d\n\n", Open("/foo"));

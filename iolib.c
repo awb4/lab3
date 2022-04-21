@@ -48,7 +48,7 @@ Open(char *pathname) {
     new_message->type = 0;
     new_message->pid = GetPid();
     new_message->pathname = pathname;
-    if (pathname[0] != '/') {
+    if (pathname[0] == '/') {
         // absolute filename
         new_message->cd = 1;
     } else {
@@ -81,7 +81,7 @@ Create(char *pathname)
     new_message->type = 2;
     new_message->pid = GetPid();
     new_message->pathname = pathname;
-    if (pathname[0] != '/') {
+    if (pathname[0] == '/') {
         // absolute filename
         new_message->cd = 1;
     } else {
@@ -171,7 +171,7 @@ Unlink(char *pathname)
     new_message->type = 7;
     new_message->pid = GetPid();
     new_message->pathname = pathname;
-    if (pathname[0] != '/') {
+    if (pathname[0] == '/') {
         // absolute filename
         new_message->cd = 1;
     } else {
@@ -219,7 +219,7 @@ MkDir(char *pathname)
     new_message->type = 10;
     new_message->pid = GetPid();
     new_message->pathname = pathname;
-    if (pathname[0] != '/') {
+    if (pathname[0] == '/') {
         // absolute filename
         new_message->cd = 1;
     } else {
@@ -237,7 +237,7 @@ RmDir(char *pathname)
     new_message->type = 11;
     new_message->pid = GetPid();
     new_message->pathname = pathname;
-    if (pathname[0] != '/') {
+    if (pathname[0] == '/') {
         // absolute filename
         new_message->cd = 1;
     } else {
@@ -274,7 +274,7 @@ Stat(char *pathname, struct Stat *statbuf)
     new_message->type = 13;
     new_message->pid = GetPid();
     new_message->pathname1 = pathname;
-    if (pathname[0] != '/') {
+    if (pathname[0] == '/') {
         // absolute filename
         new_message->cd1 = 1;
     } else {

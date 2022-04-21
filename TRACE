@@ -10,17 +10,38 @@ YFS      Initializing Free Blocks
 YFS      Initializing Free inodes
 YFS      Getting Message
 YFS      Received Message
-YFS      Message Type: 0
+YFS      Message Type: 2
 YFS      Message Pid: 3
-YFS      Message Pathname: 0x16fe0
-YFS      0: Open
+YFS      Message Pathname: 0x17000
+YFS      2: Create
+YFS      Creating
+YFS      ---------GETPATHNAME-------------
+YFS      Null Path length: 4
+YFS      Finding Last Slash
+YFS      pathname: /foo
+YFS      Loop Entry 0
+YFS      Directory: (null)
+YFS      New File: foo
 YFS      ReadFromBlock Sector Num: 1
+YFS      Reading from Block
+YFS      ReadSector returned 0
+YFS      Traversing path foo at inum 1
+YFS      ReadFromBlock Sector Num: 1
+YFS      Reading from Block
+YFS      ReadSector returned 0
+YFS      Traversing direct block 0
+YFS      ReadFromBlock Sector Num: 7
+YFS      Reading from Block
+YFS      ReadSector returned 0
+YFS      Found inum -1
+YFS      Traversing direct block 1
+YFS      ReadFromBlock Sector Num: 1
+YFS      Reading from Block
+YFS      ReadSector returned 0
+YFS      ReadFromBlock Sector Num: 7
 YFS      Reading from Block
 YFS      ReadSector returned 0
 YFS      ReadFromBlock Sector Num: 1
 YFS      Reading from Block
 YFS      ReadSector returned 0
-YFS      ReadFromBlock Sector Num: 170535466
-YFS      Reading from Block
-YFS      ReadSector returned -1
-YFS      Freak the fuck out
+YFS      InsertNode: Outside loop 1

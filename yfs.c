@@ -246,21 +246,21 @@ YFSOpen(void *m)
 {
     struct messageSinglePath *msg = (struct messageSinglePath *) m;
     char *pathname = GetPathName(msg->pid, msg->pathname); // Free this bitch at some point
+    TracePrintf(0, "Opening Path %s at cd %d\n", pathname, msg->cd);
     short inum = ParseFileName(pathname, msg->cd);
-    struct inode *my_node = GetInodeAt(inum);
-    TracePrintf(0, "Opening INode %d at pathname %s\n", inum, pathname);
-    if (my_node->type != INODE_REGULAR) {
-        TracePrintf(0, "Tried to use Open on a directory\n");
-        msg->retval = ERROR;
-        return;
-    }
-    
     if (inum <= 0) {
         TracePrintf(0, "ParseFilename found bullshit\n");
         msg->retval = ERROR;
         return;
     }
     else {
+        struct inode *my_node = GetInodeAt(inum);
+        TracePrintf(0, "Opening INode %d at pathname %s\n", inum, pathname);
+        if (my_node->type != INODE_REGULAR) {
+            TracePrintf(0, "Tried to use Open on a directory\n");
+            msg->retval = ERROR;
+            return;
+        }
         msg->retval = InsertOFDeluxe(inum);
     }
 }
@@ -498,6 +498,7 @@ YFSShutdown(void *m)
 /* ---------------------------------------- YFS Helper Functions ---------------------------------------- */
 char *
 GetPathName(pid_t pid, char *pathname) {
+    TracePrintf(0, "---------GETPATHNAME-------------\n");
     char *name = malloc(MAXPATHNAMELEN);
     CopyFrom(pid, name, pathname, MAXPATHNAMELEN);
     return name;
@@ -522,14 +523,32 @@ GetBufContents(pid_t pid, void *buf, int len) {
 short
 ParseFileName(char *filename, short dir_inum) 
 {  
+    TracePrintf(0, "---------PARSEFILENAME-------------\n");
     char *new_filename = MakeNullTerminated(filename, MAXPATHNAMELEN);
     
     char *token = strtok(new_filename, "/");
-    short inum = TraverseDirs(token, dir_inum);
-    while (token != 0) {
-        token = strtok(0, "/");
-        inum = TraverseDirs(token, inum);
+    short inum;
+    if (!strcmp(token, "")) {
+        inum = 1;
+    } else {
+        int temp = TraverseDirs(token, dir_inum);
+        if (temp < 0) {
+            TracePrintf(0, "PFN couldn't find file in inum\n");
+            return -1;
+        }
+        inum = temp;
     }
+    TracePrintf(0, "PFN: Entering While loop\n");
+    while (strcmp(token, "")) {
+        token = strtok(0, "/");
+        int temp = TraverseDirs(token, dir_inum);
+        if (temp < 0) {
+            TracePrintf(0, "PFN couldn't find file in inum\n");
+            return -1;
+        }
+        inum = temp;
+    }
+    TracePrintf(0, "PFN: Exiting While loop\n");
     free(new_filename);
     return inum;
 }
@@ -544,6 +563,7 @@ ParseFileName(char *filename, short dir_inum)
 short
 TraverseDirs(char *dir_name, short dir_inum)
 {
+    TracePrintf(0, "Traversing path %s at inum %d\n", dir_name, dir_inum);
     int sector_num = GetSectorNum(dir_inum);
     struct inode *first_inodes = malloc(SECTORSIZE);
     if (ReadFromBlock(sector_num, first_inodes) != 0) {
@@ -556,12 +576,14 @@ TraverseDirs(char *dir_name, short dir_inum)
     struct inode *root_inode = first_inodes + diff;
     int i;
     for (i = 0; i < NUM_DIRECT; i++) {
+        TracePrintf(0, "Traversing direct block %d\n", i);
         int curr_block = root_inode->direct[i];
 
         if (curr_block == 0)
             break;
 
         short inum = TraverseDirsHelper(dir_name, curr_block);
+        TracePrintf(0, "Found inum %d\n", inum);
         if (inum > 0) {
             free(first_inodes);
             return inum;
