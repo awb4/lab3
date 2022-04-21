@@ -1,5 +1,26 @@
 ** YFS      level 5 tracing enabled **
-YFS      Message: 0x1c128YFS      ReadFromBlock Sector Num: 1
+YFS      Message: 0x1c128
+YFS      ReadFromBlock Sector Num: 1
 YFS      Reading from Block
 YFS      ReadSector returned 0
-YFS      InsertNode: Outside loop 1
+YFS      ReadFromBlock Sector Num: 1
+YFS      Reading from Block
+YFS      ReadSector returned 0
+YFS      Initializing Free Blocks
+YFS      Initializing Free inodes
+YFS      Getting Message
+YFS      Received Message
+YFS      Message Type: 0
+YFS      Message Pid: 3
+YFS      Message Pathname: 0x16fe0
+YFS      0: Open
+YFS      ReadFromBlock Sector Num: 1
+YFS      Reading from Block
+YFS      ReadSector returned 0
+YFS      ReadFromBlock Sector Num: 1
+YFS      Reading from Block
+YFS      ReadSector returned 0
+YFS      ReadFromBlock Sector Num: 170535466
+YFS      Reading from Block
+YFS      ReadSector returned -1
+YFS      Freak the fuck out

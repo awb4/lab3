@@ -97,7 +97,7 @@ main(int argc, char **argv)
 {
     (void) argc;
     message = malloc(sizeof(struct messageSinglePath));
-    TracePrintf(0, "Message: %p", message);
+    TracePrintf(0, "Message: %p\n", message);
     cur_fd = 0;
     read_block = malloc(BLOCKSIZE);
     if (Register(FILE_SERVER) == -1) {
@@ -647,6 +647,10 @@ InsertOpenFile(struct open_file_list **wait, int fd, short inum)
     new->position = 0;
 
     struct open_file_list *list = *wait;
+    if (list == NULL) {
+        *wait = new;
+        return;
+    }
     TracePrintf(0, "InsertNode: Outside loop 1\n");
     while (list->next != NULL) {
         list = list->next;
@@ -753,6 +757,10 @@ InsertFD(struct free_fd_list **wait, int fd)
     new->next = NULL;
 
     struct free_fd_list *list = *wait;
+    if (list == NULL) {
+        *wait = new;
+        return;
+    }
     TracePrintf(0, "InsertNode: Outside loop 1\n");
     while (list->next != NULL) {
         list = list->next;
