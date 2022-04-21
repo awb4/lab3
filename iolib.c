@@ -91,7 +91,7 @@ Create(char *pathname)
     // *message = *new_message;
 
     Send(new_message, -FILE_SERVER);
-    return 0;
+    return new_message->retval;
 }
 
 int
