@@ -628,7 +628,78 @@ YFSUnlink(void *m)
     struct messageSinglePath *msg = (struct messageSinglePath *) m;
 
     char *pathname = GetPathName(msg->pid, msg->pathname); // Free this bitch at some point
-    (void) pathname;
+    char *null_path = MakeNullTerminated(pathname, MAXPATHNAMELEN);
+    char *directory;
+    char *new_file;
+
+    int i;
+    int n = strlen(null_path);
+    TracePrintf(0, "YFSUnlink null path length: %d\n", n);
+    TracePrintf(0, "YFSUnlink finding last slash\n");
+    TracePrintf(0, "YFSUnlink pathname: %s\n", null_path);
+
+    for (i = n - 1; i >= 0; i--) {
+        if (null_path[i] == '/') {
+            TracePrintf(0, "YFSUnlink loop entry %d\n", i);
+            new_file = malloc(n-i+1);
+            int k;
+            if (i > 0) {
+                directory = malloc(i + 1);
+                for (k = 0; k < i; k++){
+                    directory[k] = null_path[k];
+                }
+                directory[i] = '\0';
+            } else {
+                directory = "";
+            }
+            
+            for (k = 0; k < n - i + 1; k++){
+                new_file[k] = null_path[k + i + 1];
+            }
+            // the lines below seems sus, copy manually instead?
+            break;
+        }
+    }
+    
+
+    short parent_inum = 1;
+    if (i > 0) {
+        parent_inum = ParseFileName(directory, msg->cd);
+    } else if (i < 0) {
+        directory = "";
+        parent_inum = msg->cd;
+        new_file = null_path;
+    }
+    
+    if (parent_inum <= 0) {
+        msg->retval = ERROR;
+        return;
+    }
+    TracePrintf(0, "YFSUnlink directory: %s\n", directory);
+    TracePrintf(0, "YFSUnlink new File: %s\n", new_file);
+
+    TracePrintf(0, "YFSUnlink Parent inum: %d\n", parent_inum);
+
+    short child_inum = ParseFileName(new_file, parent_inum);
+    if (child_inum < 0) {
+        TracePrintf(0, "YFSUnlink No child inum\n");
+        msg->retval = ERROR;
+        return;
+    }
+    struct inode *child_node = GetInodeAt(child_inum);
+    if (child_node->type == INODE_DIRECTORY) {
+        TracePrintf(0, "YFSUnlink Cannot Link Directory\n");
+        msg->retval = ERROR;
+        return;
+    }
+    child_node->nlink--;
+    if (child_node->nlink == 0) {
+        inode_bitmap[child_node] = true;
+    }
+
+    //DELETE THIS CHILD NODE WITH TRAVERSE DIRS
+    TraverseDirs(new_file, parent_inum, true);
+    msg->retval = 0;
 }
 
 // void
@@ -765,7 +836,25 @@ YFSStat(void *m)
 {
     struct messageDoublePath *msg = (struct messageDoublePath *) m;
     char *pathname = GetPathName(msg->pid, msg->pathname1); // Free this bitch at some point
-    (void) pathname;
+    short inum = ParseFileName(pathname, msg->cd1);
+    if (inum <= 0) {
+        msg->retval = ERROR;
+        return;
+    }
+    struct inode *my_node = GetInodeAt(inum);
+
+    struct Stat *my_stat = malloc(sizeof(struct Stat));
+    my_stat->inum = inum;
+    my_stat->type = my_node->type;
+    my_stat->size = my_node->size;
+    my_stat->nlink = my_node->nlink;
+
+    if (CopyTo(msg->pid, msg->pathname2, my_stat, sizeof(struct Stat)) < 0) {
+        TracePrintf(0, "YFSStat: Copy To Error\n");
+        msg->retval = ERROR;
+        return;
+    }
+    msg->retval = 0;
 }
 
 /**
