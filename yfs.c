@@ -1483,7 +1483,6 @@ YFSCreateMkDir(void *m, bool dir)
                 return;
             }
         } else if (dir) {
-            // if we are trying to make a directory that alreay exists freak the fuck out
             TracePrintf(0, "YFSCreateMkDir: (ERROR) we are trying to make a directory that already exists\n");
             msg->retval = ERROR;
             free(pathname);
