@@ -282,25 +282,26 @@ main(int argc, char **argv)
 void
 YFSOpen(void *m)
 {
+    TracePrintf(0, "YFSOpen Entry\n");
     struct messageSinglePath *msg = (struct messageSinglePath *) m;
     char *pathname = GetPathName(msg->pid, msg->pathname); // Free this bitch at some point
-    TracePrintf(0, "Opening Path %s at cd %d\n", pathname, msg->cd);
+    TracePrintf(0, "YFSOpen: opening Path %s at cd %d\n", pathname, msg->cd);
     short inum = ParseFileName(pathname, msg->cd);
     if (inum <= 0) {
-        TracePrintf(0, "ParseFilename found bullshit\n");
+        TracePrintf(0, "YFSOpen: (ERROR) parseFilename found bullshit\n");
         msg->retval = ERROR;
         return;
-    }
-    else {
+    } else {
         struct inode *my_node = GetInodeAt(inum);
-        TracePrintf(0, "Opening Inode %d at pathname %s\n", inum, pathname);
+        TracePrintf(0, "YFSOpen: (ERROR) opening Inode %d at pathname %s\n", inum, pathname);
         if (my_node->type != INODE_REGULAR) {
-            TracePrintf(0, "Tried to use Open on a directory\n");
+            TracePrintf(0, "YFSOpen: (ERROR) tried to use Open on a directory\n");
             msg->retval = ERROR;
             return;
         }
         msg->retval = InsertOFDeluxe(inum);
     }
+    TracePrintf(0, "YFSOpen Exit\n");
 }
 
 /**
@@ -311,15 +312,17 @@ YFSOpen(void *m)
 void
 YFSClose(void *m)
 {
+    TracePrintf(0, "YFSClose Entry\n");
     struct messageFDSizeBuf *msg = (struct messageFDSizeBuf *) m;
     int fd = (int) msg->fd; // check if cast is correct
     InsertFD(&free_fds, fd);
     if (RemoveOpenFile(&open_files, fd) == -1) {
+        TracePrintf(0, "YFSClose: (ERROR) RemoveOpenFile failed\n");
         msg->retval = ERROR;
-    } 
-    else {
+    } else {
         msg->retval = 0;
     }
+    TracePrintf(0, "YFSClose Exit\n");
 }
 
 /**
@@ -343,22 +346,19 @@ YFSCreate(void *m)
 void
 YFSRead(void *m)
 {
+    TracePrintf(0, "YFSRead Entry\n");
     struct messageFDSizeBuf *msg = (struct messageFDSizeBuf *) m;
     int fd = (int) msg->fd;
     int size = (int) msg->size;
-    void *buf = msg->buf;
-    //char *buf_contents = GetBufContents(msg->pid, msg->buf, size); // Free this bitch at some point
-    (void) buf;
-    (void) fd;
-    (void) size;
+    //void *buf = msg->buf;
     if (fd == -1) {
-        TracePrintf(0, "YFSRead: Cannot write to directory\n");
+        TracePrintf(0, "YFSRead: (ERROR) cannot write to directory\n");
         msg->retval = ERROR;
         return;
     } else {
         struct open_file_list *file = SearchByFD(&open_files, fd);
         if (file == NULL) {
-            TracePrintf(0, "YFSRead: File not in Open list\n");
+            TracePrintf(0, "YFSRead: (ERROR) file not in open_files list\n");
             msg->retval = ERROR;
             return;
         }
@@ -366,13 +366,13 @@ YFSRead(void *m)
         int gfb = GetFromBlock(file->inum, my_buf, size);
         
         if (CopyTo(msg->pid, msg->buf, my_buf, gfb) < 0) {
-            TracePrintf(0, "YFSRead: Copy To Error\n");
+            TracePrintf(0, "YFSRead: (ERROR) CopyTo failed\n");
             msg->retval = ERROR;
             return;
         }
         msg->retval = gfb;
-
     }
+    TracePrintf(0, "YFSRead Exit\n");
 }
 
 /**
@@ -383,30 +383,31 @@ YFSRead(void *m)
 void
 YFSWrite(void *m)
 {
+    TracePrintf(0, "YFSWrite Entry\n");
     struct messageFDSizeBuf *msg = (struct messageFDSizeBuf *) m;
     int fd = (int) msg->fd;
     int size = (int) msg->size;   
     char *buf_contents = GetBufContents(msg->pid, msg->buf, size); // Free this bitch at some point
     if (fd == -1) {
-        TracePrintf(0, "YFSWrite: Cannot write to directory\n");
+        TracePrintf(0, "YFSWrite: (ERROR) cannot write to directory\n");
         msg->retval = ERROR;
         return;
     } else {
         struct open_file_list *file = SearchByFD(&open_files, fd);
         if (file == NULL) {
-            TracePrintf(0, "YFSWrite: File not in Open list\n");
+            TracePrintf(0, "YFSWrite: (ERROR) file not in open_files list\n");
             msg->retval = ERROR;
             return;
         }
         if (GetInodeAt(file->inum)->type == INODE_DIRECTORY) {
-            TracePrintf(0, "YFSWrite: Can't write to directory\n");
+            TracePrintf(0, "YFSWrite: (ERROR) can't write to directory\n");
             msg->retval = ERROR;
             return;
         }
         msg->retval = AddToBlock(file->inum, buf_contents, size);
         TracePrintf(0, "YFSWrite: returning %d\n", msg->retval);
-
     }
+    TracePrintf(0, "YFSWrite Exit\n");
 }
 
 /**
@@ -417,6 +418,7 @@ YFSWrite(void *m)
 void
 YFSSeek(void *m)
 {
+    TracePrintf(0, "YFSSeek Entry\n");
     struct messageSeek *msg = (struct messageSeek *) m;
 
     int fd = (int) msg->fd;
@@ -428,25 +430,27 @@ YFSSeek(void *m)
     
     int curpos;
     if (whence == SEEK_SET) {
-        TracePrintf(0, "Seek set\n");
+        TracePrintf(0, "YFSSeek set\n");
         curpos = offset;
     } else if (whence == SEEK_CUR) {
-        TracePrintf(0, "Seek cur\n");
+        TracePrintf(0, "YFSSeek cur\n");
         curpos = file->position + BLOCKSIZE * file->blocknum;
         curpos = curpos + offset;
     } else if (whence == SEEK_END) {
-        TracePrintf(0, "Seek end\n");
+        TracePrintf(0, "YFSSeek end\n");
         curpos = offset + size;
     } else {
-        TracePrintf(0, "Seek error\n");
-        file->position = 0;
-        file->blocknum = 0;
+        TracePrintf(0, "YFSSeek: (ERROR) did not get SEEK_SET/SEEK_CUR/SEEK_END\n");
+        //file->position = 0;
+        //file->blocknum = 0;
         msg->retval = ERROR;
+        return;
     }
     if (curpos > 0) {
         if (curpos > size) {
             node->size = curpos;
             if (WriteINum(file->inum, *node) < 0) {
+                TracePrintf(0, "YFSSeek: (ERROR) WriteInum failed\n");
                 msg->retval = ERROR;
                 return;
             }
@@ -457,6 +461,7 @@ YFSSeek(void *m)
         file->position = 0;
         file->blocknum = 0;
     } 
+    TracePrintf(0, "YFSSeek Exit\n");
     msg->retval = 0;
     return;
 }
@@ -469,6 +474,7 @@ YFSSeek(void *m)
 void
 YFSLink(void *m)
 {
+    TracePrintf(0, "YFSLink Entry\n");
     struct messageDoublePath *msg = (struct messageDoublePath *) m;
 
     char *oldname = GetPathName(msg->pid, msg->pathname1); // Free this bitch at some point
@@ -513,6 +519,7 @@ YFSLink(void *m)
     }
     
     if (old_parent_inum <= 0) {
+        TracePrintf(0, "YFSLink: (ERROR) old_parent_inum <= 0\n");
         msg->retval = ERROR;
         return;
     }
@@ -561,6 +568,7 @@ YFSLink(void *m)
     }
     
     if (new_parent_inum <= 0) {
+        TracePrintf(0, "YFSLink: (ERROR) new_parent_inum <= 0\n");
         msg->retval = ERROR;
         return;
     }
@@ -606,8 +614,6 @@ YFSLink(void *m)
         msg->retval = ERROR;
     }
     TracePrintf(0, "YFSLink Exit\n");
-    // CheckDir(GetInodeAt(old_parent_inum));
-    //CheckDir(GetInodeAt(new_parent_inum));
 }
 
 /**
@@ -754,6 +760,7 @@ YFSMkDir(void *m)
 void
 YFSRmDir(void *m)
 {
+    TracePrintf(0, "YFSRmDir Entry\n");
     struct messageSinglePath *msg = (struct messageSinglePath *) m;
     char *pathname = GetPathName(msg->pid, msg->pathname); // Free this bitch at some point
     
@@ -794,10 +801,10 @@ YFSRmDir(void *m)
         child_directory = null_path;
     }
     short child_dir_inum = ParseFileName(child_directory, parent_inum);
-    TracePrintf(0, "YFSUnlink parent_directory: %s\n", parent_directory);
-    TracePrintf(0, "YFSUnlink child_directory: %s\n", child_directory);
-    TracePrintf(0, "YFSUnlink parent_inum: %d\n", parent_inum);
-    TracePrintf(0, "YFSUnlink child_dir_inum: %d\n", child_dir_inum);
+    TracePrintf(0, "YFSRmDir parent_directory: %s\n", parent_directory);
+    TracePrintf(0, "YFSRmDir child_directory: %s\n", child_directory);
+    TracePrintf(0, "YFSRmDir parent_inum: %d\n", parent_inum);
+    TracePrintf(0, "YFSRmDir child_dir_inum: %d\n", child_dir_inum);
 
     if (child_dir_inum <= 0) {
         TracePrintf(0, "YFSRmDir: (ERROR) child_dir_inum <= 0\n");
@@ -907,10 +914,10 @@ YFSStat(void *m)
         file_path = null_path;
     }
     short file_inum = ParseFileName(file_path, parent_inum);
-    TracePrintf(0, "YFSUnlink parent_directory: %s\n", parent_directory);
-    TracePrintf(0, "YFSUnlink child_directory: %s\n", file_path);
-    TracePrintf(0, "YFSUnlink parent_inum: %d\n", parent_inum);
-    TracePrintf(0, "YFSUnlink file_inum: %d\n", file_inum);
+    TracePrintf(0, "YFSStat parent_directory: %s\n", parent_directory);
+    TracePrintf(0, "YFSStat child_directory: %s\n", file_path);
+    TracePrintf(0, "YFSStat parent_inum: %d\n", parent_inum);
+    TracePrintf(0, "YFSStat file_inum: %d\n", file_inum);
     if (file_inum <= 0) {
         TracePrintf(0, "YFSStat: (ERROR) file_inum <= 0");
         msg->retval = ERROR;
