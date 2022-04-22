@@ -4,10 +4,11 @@
 #include <comp421/iolib.h>
 
 int
-main()
+main(int argc, char **argv)
 {
 	int status;
-
+	(void) argc;
+	(void) argv;
 	status = Create("/a");
 	printf("Create status %d\n", status);
 

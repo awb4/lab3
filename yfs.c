@@ -474,8 +474,147 @@ YFSLink(void *m)
 
     char *oldname = GetPathName(msg->pid, msg->pathname1); // Free this bitch at some point
     char *newname = GetPathName(msg->pid, msg->pathname2); // Free this bitch at some point
-    (void) oldname;
-    (void) newname;
+
+    char *old_null_path = MakeNullTerminated(oldname, MAXPATHNAMELEN);
+    char *olddirectory;
+    char *oldfilename;
+    int i;
+    int n = strlen(old_null_path);
+    TracePrintf(0, "YFSLink null path length: %d\n", n);
+    TracePrintf(0, "YFSLink finding last slash\n");
+    TracePrintf(0, "YFSLink pathname: %s\n", old_null_path);
+    for (i = n - 1; i >= 0; i--) {
+        if (old_null_path[i] == '/') {
+            TracePrintf(0, "YFSLink loop entry %d\n", i);
+            oldfilename = malloc(n-i+1);
+            int k;
+            if (i > 0) {
+                olddirectory = malloc(i + 1);
+                for (k = 0; k < i; k++){
+                    olddirectory[k] = old_null_path[k];
+                }
+                olddirectory[i] = '\0';
+            } else {
+                olddirectory = "";
+            }
+            
+            for (k = 0; k < n - i + 1; k++){
+                oldfilename[k] = old_null_path[k + i + 1];
+            }
+            // the lines below seems sus, copy manually instead?
+            break;
+        }
+    }
+    short old_parent_inum = 1;
+    if (i > 0) {
+        old_parent_inum = ParseFileName(olddirectory, msg->cd1);
+    } else if (i < 0) {
+        olddirectory = "";
+        old_parent_inum = msg->cd1;
+        oldfilename = old_null_path;
+    }
+    
+    if (old_parent_inum <= 0) {
+        msg->retval = ERROR;
+        return;
+    }
+    short oldfile_inum = ParseFileName(oldfilename, old_parent_inum);
+    TracePrintf(0, "YFSLink directory: %s\n", olddirectory);
+    TracePrintf(0, "YFSLink oldfilename: %s\n", oldfilename);
+    TracePrintf(0, "YFSLink Parent inum: %d\n", old_parent_inum);
+    TracePrintf(0, "YFSLink oldfile_inum inum: %d\n", oldfile_inum);
+
+ 
+    char *new_null_path = MakeNullTerminated(newname, MAXPATHNAMELEN);
+    char *newdirectory;
+    char *newfilename;
+    n = strlen(new_null_path);
+    TracePrintf(0, "YFSLink null path length: %d\n", n);
+    TracePrintf(0, "YFSLink finding last slash\n");
+    TracePrintf(0, "YFSLink pathname: %s\n", new_null_path);
+    for (i = n - 1; i >= 0; i--) {
+        if (new_null_path[i] == '/') {
+            TracePrintf(0, "YFSLink loop entry %d\n", i);
+            newfilename = malloc(n-i+1);
+            int k;
+            if (i > 0) {
+                newdirectory = malloc(i + 1);
+                for (k = 0; k < i; k++){
+                    newdirectory[k] = new_null_path[k];
+                }
+                newdirectory[i] = '\0';
+            } else {
+                newdirectory = "";
+            }
+            
+            for (k = 0; k < n - i + 1; k++){
+                newfilename[k] = new_null_path[k + i + 1];
+            }
+            // the lines below seems sus, copy manually instead?
+            break;
+        }
+    }
+    short new_parent_inum = 1;
+    if (i > 0) {
+        new_parent_inum = ParseFileName(newdirectory, msg->cd2);
+    } else if (i < 0) {
+        newdirectory = "";
+        new_parent_inum = msg->cd2;
+        newfilename = new_null_path;
+    }
+    
+    if (new_parent_inum <= 0) {
+        msg->retval = ERROR;
+        return;
+    }
+    short newfile_inum = ParseFileName(newfilename, new_parent_inum);
+    TracePrintf(0, "YFSLink directory: %s\n", newdirectory);
+    TracePrintf(0, "YFSLink oldfilename: %s\n", newfilename);
+    TracePrintf(0, "YFSLink Parent inum: %d\n", new_parent_inum);
+    TracePrintf(0, "YFSLink oldfile_inum inum: %d\n", newfile_inum);
+    
+    struct inode *cur_node = GetInodeAt(new_parent_inum);
+    TracePrintf(0, "Parent type: %d\n", cur_node->type);
+    if (cur_node->type == INODE_DIRECTORY) {
+        //make new file
+        struct inode *new_node;
+        short child_inum;
+        if ((child_inum = TraverseDirs(newfilename, new_parent_inum, false)) <= 0) {
+            // file we're creating does not have an inode yet
+            child_inum = oldfile_inum;
+            if (child_inum < 0) {
+                msg->retval = ERROR;
+                return;
+            }
+        } else {
+            // if new file already exists freak the fuck out
+            msg->retval = ERROR;
+            return;
+        }
+        new_node = GetInodeAt(child_inum);
+        // create dir entry and add it to parent directory
+        TracePrintf(0, "YFSLink child_inum: %d\n", child_inum);
+        TracePrintf(0, "YFSLink old_parent_inum: %d\n", old_parent_inum);
+        TracePrintf(0, "YFSLink new filename: %s\n", newfilename);
+        struct dir_entry *new_file_entry = CreateDirEntry(child_inum, newfilename);
+        // AddToBlock(old_parent_inum, new_file_entry, sizeof(struct dir_entry));
+        AddToBlock(new_parent_inum, new_file_entry, sizeof(struct dir_entry));
+        if (GetInodeAt(oldfile_inum)->type == INODE_DIRECTORY) {
+            MakeNewFile(new_node, true); // updates inode
+        } else {
+            MakeNewFile(new_node, false); // updates inode
+        }
+        new_node->nlink++;
+        TracePrintf(0, "YFSLink new_node link: %d\n", new_node->nlink);
+        WriteINum(child_inum, *new_node);
+        msg->retval = 0;
+    } else {
+        TracePrintf(0, "YFSLink: not directory freak the fuck out\n");
+        msg->retval = ERROR;
+    }
+    TracePrintf(0, "YFSLink Exit\n");
+    // CheckDir(GetInodeAt(old_parent_inum));
+    CheckDir(GetInodeAt(new_parent_inum));
 }
 
 /**
@@ -1701,9 +1840,13 @@ CheckDirHelper(int curr_block, int num_dir_entries)
     struct dir_entry *curr_entry = dir_entries;
     int j;
     for (j = 0; j < num_dir_entries; j++) {
+        TracePrintf(0, "CheckDirs string: %s\n", MakeNullTerminated(curr_entry->name, DIRNAMELEN));
+        TracePrintf(0, "CheckDirs inum: %d\n", curr_entry->inum);
         if (strcmp(MakeNullTerminated(curr_entry->name, DIRNAMELEN), ".") == 0) {
+            curr_entry++;
             continue;
         } else if (strcmp(MakeNullTerminated(curr_entry->name, DIRNAMELEN), "..") == 0) {
+            curr_entry++;
             continue;
         }
         if (curr_entry->inum != 0) {

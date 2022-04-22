@@ -15,36 +15,38 @@ YFS      Initializing Free Blocks
 YFS      Initializing Free inodes
 YFS      --------------------Getting Message--------------------
 YFS      Received Message
-YFS      Message Type: 10
+YFS      Message Type: 2
 YFS      Message Pid: 3
-YFS      10: Mkdir
+YFS      2: Create
+YFS      YFSCreate 
+YFS      YFSCreate open_files: 0x1f050
 YFS      ----------YFSCreateMkDir Entry----------
 YFS      GetPathName Entry
 YFS      GetPathName Exit
-YFS      CreateMkdir: Dir is 1
-YFS      YFSCreateMkDir null path length: 4
+YFS      CreateMkdir: Dir is 0
+YFS      YFSCreateMkDir null path length: 2
 YFS      YFSCreateMkDir finding last slash
-YFS      YFSCreateMkDir pathname: /foo
+YFS      YFSCreateMkDir pathname: /a
 YFS      YFSCreateMkDir loop entry 0
 YFS      YFSCreateMkDir directory: 
-YFS      YFSCreateMkDir new File: foo
+YFS      YFSCreateMkDir new File: a
 YFS      Parent inum: 1
 YFS      ReadSector returned 0
 YFS      Parent type: 1
 YFS      TraverseDirs Entry
-YFS      Traversing path foo at inum 1
+YFS      Traversing path a at inum 1
 YFS      ReadSector returned 0
 YFS      TraverseDirs inode type: 1
 YFS      TraverseDirs traversing direct block 0
 YFS      TraverseDirsHelper Entry
-YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper dir_name: a
 YFS      TraverseDirsHelper curr_block: 7
 YFS      TraverseDirsHelper num_dir_entries: 2
 YFS      ReadSector returned 0
 YFS      TraverseDirsHelper curr_dir_name: .
-YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper dir_name: a
 YFS      TraverseDirsHelper curr_dir_name: ..
-YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper dir_name: a
 YFS      TraverseDirsHelper Exit (fail)
 YFS      TraverseDirs found inum -1
 YFS      TraverseDirs traversing direct block 1
@@ -87,328 +89,159 @@ YFS      AddToBlock len: 32
 YFS      AddToBlock new size: 96
 YFS      ReadSector returned 0
 YFS      AddToBlock Exit
-YFS      CreateMkdir: Dir is 1
-YFS      MNF: Dir is 1
+YFS      CreateMkdir: Dir is 0
+YFS      MNF: Dir is 0
 YFS      ReadSector returned 0
-YFS      YFSCreateMkDir: creating . and ..
-YFS      AddToBlock Entry
-YFS      AddToBlock inum: 2
-YFS      AddToBlock len: 64
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
+YFS      Returning 1
 YFS      ReadSector returned 0
-YFS      Getting a free block for inum 2
-YFS      Got block 8
+YFS      YFSCreateMkDir: new node type 2
 YFS      ReadSector returned 0
-YFS      Writing to block 8 at position 0
-YFS      Writing to block 8
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1f050
-YFS      EditOpenFile *wait: 0x1f050
-YFS      EditOpenFile q: 0x1f050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 64
-YFS      EditOpenFile Exit
-YFS      AddTOBlock open_files: 0x1f050 
-YFS      AddToBlock len: 64
-YFS      AddToBlock old size: 0
-YFS      AddToBlock len: 64
-YFS      AddToBlock new size: 64
-YFS      ReadSector returned 0
-YFS      AddToBlock Exit
-YFS      Returning 0
-YFS      ReadSector returned 0
-YFS      YFSCreateMkDir: new node type 1
-YFS      ReadSector returned 0
-YFS      YFSCreateMkDir: new node size 64
+YFS      YFSCreateMkDir: new node size 0
 YFS      ----------YFSCreateMkDir Exit----------
 YFS      --------------------Replied successfully--------------------
 YFS      --------------------Getting Message--------------------
 YFS      Received Message
-YFS      Message Type: 10
+YFS      Message Type: 6
 YFS      Message Pid: 3
-YFS      10: Mkdir
-YFS      ----------YFSCreateMkDir Entry----------
+YFS      6: Link
 YFS      GetPathName Entry
 YFS      GetPathName Exit
-YFS      CreateMkdir: Dir is 1
-YFS      YFSCreateMkDir null path length: 8
-YFS      YFSCreateMkDir finding last slash
-YFS      YFSCreateMkDir pathname: /foo/bar
-YFS      YFSCreateMkDir loop entry 4
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      YFSLink null path length: 2
+YFS      YFSLink finding last slash
+YFS      YFSLink pathname: /a
+YFS      YFSLink loop entry 0
 YFS      ParseFileName Entry
-YFS      ParseFileName filename: /foo
+YFS      ParseFileName filename: a
 YFS      ParseFileName dir_inum: 1
 YFS      ParseFileName Entering While loop
 YFS      TraverseDirs Entry
-YFS      Traversing path foo at inum 1
+YFS      Traversing path a at inum 1
 YFS      ReadSector returned 0
 YFS      TraverseDirs inode type: 1
 YFS      TraverseDirs traversing direct block 0
 YFS      TraverseDirsHelper Entry
-YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper dir_name: a
 YFS      TraverseDirsHelper curr_block: 7
 YFS      TraverseDirsHelper num_dir_entries: 3
 YFS      ReadSector returned 0
 YFS      TraverseDirsHelper curr_dir_name: .
-YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper dir_name: a
 YFS      TraverseDirsHelper curr_dir_name: ..
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper curr_dir_name: foo
-YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper dir_name: a
+YFS      TraverseDirsHelper curr_dir_name: a
+YFS      TraverseDirsHelper dir_name: a
 YFS      TraverseDirsHelper Exit (success)
 YFS      TraverseDirs found inum 2
 YFS      ParseFileName Exit
-YFS      YFSCreateMkDir directory: è_
-YFS      YFSCreateMkDir new File: bar
-YFS      Parent inum: 2
-YFS      ReadSector returned 0
-YFS      Parent type: 1
-YFS      TraverseDirs Entry
-YFS      Traversing path bar at inum 2
-YFS      ReadSector returned 0
-YFS      TraverseDirs inode type: 1
-YFS      TraverseDirs traversing direct block 0
-YFS      TraverseDirsHelper Entry
-YFS      TraverseDirsHelper dir_name: bar
-YFS      TraverseDirsHelper curr_block: 8
-YFS      TraverseDirsHelper num_dir_entries: 2
-YFS      ReadSector returned 0
-YFS      TraverseDirsHelper curr_dir_name: .
-YFS      TraverseDirsHelper dir_name: bar
-YFS      TraverseDirsHelper curr_dir_name: ..
-YFS      TraverseDirsHelper dir_name: bar
-YFS      TraverseDirsHelper Exit (fail)
-YFS      TraverseDirs found inum -1
-YFS      TraverseDirs traversing direct block 1
-YFS      TraverseDirs Exit
-YFS      ReadSector returned 0
-YFS      InsertOFDeluxe Entry
-YFS      InsertOFDeluxe inum: 3
-YFS      ReadSector returned 0
-YFS      InsertOFDeluxe we have a file
-YFS      New fd: -2
-YFS      InsertOFDeluxe there is no reused fd
-YFS      InsertOpenFile Entry
-YFS          *wait 0x1f050
-YFS          open_files: 0x1f050
-YFS      InsertOpenFile list: 0x1f050
-YFS      InsertNode: Outside loop 1
-YFS      InsertNode: Outside loop 2
-YFS      InsertOFDeluxe Exit
-YFS      AddToBlock Entry
-YFS      AddToBlock inum: 2
-YFS      AddToBlock len: 32
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      ReadSector returned 0
-YFS      Writing to block 8 at position 64
-YFS      Writing to block 8
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1f050
-YFS      EditOpenFile *wait: 0x1f050
-YFS      EditOpenFile q: 0x1f050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: 0x26040
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 96
-YFS      EditOpenFile Exit
-YFS      AddTOBlock open_files: 0x1f050 
-YFS      AddToBlock len: 32
-YFS      AddToBlock old size: 64
-YFS      AddToBlock len: 32
-YFS      AddToBlock new size: 96
-YFS      ReadSector returned 0
-YFS      AddToBlock Exit
-YFS      CreateMkdir: Dir is 1
-YFS      MNF: Dir is 1
-YFS      ReadSector returned 0
-YFS      YFSCreateMkDir: creating . and ..
-YFS      AddToBlock Entry
-YFS      AddToBlock inum: 3
-YFS      AddToBlock len: 64
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Getting a free block for inum 3
-YFS      Got block 9
-YFS      ReadSector returned 0
-YFS      Writing to block 9 at position 0
-YFS      Writing to block 9
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1f050
-YFS      EditOpenFile *wait: 0x1f050
-YFS      EditOpenFile q: 0x1f050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: 0x26040
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 64
-YFS      EditOpenFile Exit
-YFS      AddTOBlock open_files: 0x1f050 
-YFS      AddToBlock len: 64
-YFS      AddToBlock old size: 0
-YFS      AddToBlock len: 64
-YFS      AddToBlock new size: 64
-YFS      ReadSector returned 0
-YFS      AddToBlock Exit
-YFS      Returning 0
-YFS      ReadSector returned 0
-YFS      YFSCreateMkDir: new node type 1
-YFS      ReadSector returned 0
-YFS      YFSCreateMkDir: new node size 64
-YFS      ----------YFSCreateMkDir Exit----------
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 12
-YFS      Message Pid: 3
-YFS      12: Chdir
-YFS      GetPathName Entry
-YFS      GetPathName Exit
+YFS      YFSLink directory: 
+YFS      YFSLink oldfilename: ï¿½_
+YFS      YFSLink Parent inum: 1
+YFS      YFSLink oldfile_inum inum: 2
+YFS      YFSLink null path length: 2
+YFS      YFSLink finding last slash
+YFS      YFSLink pathname: /b
+YFS      YFSLink loop entry 0
 YFS      ParseFileName Entry
-YFS      ParseFileName filename: /foo
+YFS      ParseFileName filename: b
 YFS      ParseFileName dir_inum: 1
 YFS      ParseFileName Entering While loop
 YFS      TraverseDirs Entry
-YFS      Traversing path foo at inum 1
+YFS      Traversing path b at inum 1
 YFS      ReadSector returned 0
 YFS      TraverseDirs inode type: 1
 YFS      TraverseDirs traversing direct block 0
 YFS      TraverseDirsHelper Entry
-YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper dir_name: b
 YFS      TraverseDirsHelper curr_block: 7
 YFS      TraverseDirsHelper num_dir_entries: 3
 YFS      ReadSector returned 0
 YFS      TraverseDirsHelper curr_dir_name: .
-YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper dir_name: b
 YFS      TraverseDirsHelper curr_dir_name: ..
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper curr_dir_name: foo
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper Exit (success)
-YFS      TraverseDirs found inum 2
-YFS      ParseFileName Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 11
-YFS      Message Pid: 3
-YFS      11: Rmdir
-YFS      GetPathName Entry
-YFS      GetPathName Exit
-YFS      ParseFileName Entry
-YFS      ParseFileName filename: bar
-YFS      ParseFileName dir_inum: 2
-YFS      ParseFileName Entering While loop
-YFS      TraverseDirs Entry
-YFS      Traversing path bar at inum 2
-YFS      ReadSector returned 0
-YFS      TraverseDirs inode type: 1
-YFS      TraverseDirs traversing direct block 0
-YFS      TraverseDirsHelper Entry
-YFS      TraverseDirsHelper dir_name: bar
-YFS      TraverseDirsHelper curr_block: 8
-YFS      TraverseDirsHelper num_dir_entries: 3
-YFS      ReadSector returned 0
-YFS      TraverseDirsHelper curr_dir_name: .
-YFS      TraverseDirsHelper dir_name: bar
-YFS      TraverseDirsHelper curr_dir_name: ..
-YFS      TraverseDirsHelper dir_name: bar
-YFS      TraverseDirsHelper curr_dir_name: bar
-YFS      TraverseDirsHelper dir_name: bar
-YFS      TraverseDirsHelper Exit (success)
-YFS      TraverseDirs found inum 3
-YFS      ParseFileName Exit
-YFS      ReadSector returned 0
-YFS      CheckDir traversing direct block 0
-YFS      ReadSector returned 0
-YFS      CheckDirHelper Exit (true)
-YFS      CheckDir traversing direct block 1
-YFS      TraverseDirs Entry
-YFS      Traversing path bar at inum 2
-YFS      ReadSector returned 0
-YFS      TraverseDirs inode type: 1
-YFS      TraverseDirs traversing direct block 0
-YFS      TraverseDirsHelper Entry
-YFS      TraverseDirsHelper dir_name: bar
-YFS      TraverseDirsHelper curr_block: 8
-YFS      TraverseDirsHelper num_dir_entries: 3
-YFS      ReadSector returned 0
-YFS      TraverseDirsHelper curr_dir_name: .
-YFS      TraverseDirsHelper dir_name: bar
-YFS      TraverseDirsHelper curr_dir_name: ..
-YFS      TraverseDirsHelper dir_name: bar
-YFS      TraverseDirsHelper curr_dir_name: bar
-YFS      TraverseDirsHelper dir_name: bar
-YFS      TraverseDirsHelper Exit (success)
-YFS      TraverseDirs found inum 3
-YFS      CheckDir traversing direct block 0
-YFS      CheckDir traversing direct block 1
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 0
-YFS      Message Pid: 3
-YFS      0: Open
-YFS      GetPathName Entry
-YFS      GetPathName Exit
-YFS      Opening Path /foo/zzz at cd 1
-YFS      ParseFileName Entry
-YFS      ParseFileName filename: /foo/zzz
-YFS      ParseFileName dir_inum: 1
-YFS      ParseFileName Entering While loop
-YFS      TraverseDirs Entry
-YFS      Traversing path foo at inum 1
-YFS      ReadSector returned 0
-YFS      TraverseDirs inode type: 1
-YFS      TraverseDirs traversing direct block 0
-YFS      TraverseDirsHelper Entry
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper curr_block: 7
-YFS      TraverseDirsHelper num_dir_entries: 3
-YFS      ReadSector returned 0
-YFS      TraverseDirsHelper curr_dir_name: .
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper curr_dir_name: ..
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper curr_dir_name: foo
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper Exit (success)
-YFS      TraverseDirs found inum 2
-YFS      TraverseDirs Entry
-YFS      Traversing path zzz at inum 1
-YFS      ReadSector returned 0
-YFS      TraverseDirs inode type: 1
-YFS      TraverseDirs traversing direct block 0
-YFS      TraverseDirsHelper Entry
-YFS      TraverseDirsHelper dir_name: zzz
-YFS      TraverseDirsHelper curr_block: 7
-YFS      TraverseDirsHelper num_dir_entries: 3
-YFS      ReadSector returned 0
-YFS      TraverseDirsHelper curr_dir_name: .
-YFS      TraverseDirsHelper dir_name: zzz
-YFS      TraverseDirsHelper curr_dir_name: ..
-YFS      TraverseDirsHelper dir_name: zzz
-YFS      TraverseDirsHelper curr_dir_name: foo
-YFS      TraverseDirsHelper dir_name: zzz
+YFS      TraverseDirsHelper dir_name: b
+YFS      TraverseDirsHelper curr_dir_name: a
+YFS      TraverseDirsHelper dir_name: b
 YFS      TraverseDirsHelper Exit (fail)
 YFS      TraverseDirs found inum -1
 YFS      TraverseDirs traversing direct block 1
 YFS      TraverseDirs Exit
 YFS      ParseFileName couldn't find file in inum
 YFS      ParseFileName Exit
-YFS      ParseFilename found bullshit
+YFS      YFSLink directory: 
+YFS      YFSLink oldfilename: b
+YFS      YFSLink Parent inum: 1
+YFS      YFSLink oldfile_inum inum: -1
+YFS      ReadSector returned 0
+YFS      Parent type: 1
+YFS      TraverseDirs Entry
+YFS      Traversing path b at inum 1
+YFS      ReadSector returned 0
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: b
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 3
+YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: b
+YFS      TraverseDirsHelper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: b
+YFS      TraverseDirsHelper curr_dir_name: a
+YFS      TraverseDirsHelper dir_name: b
+YFS      TraverseDirsHelper Exit (fail)
+YFS      TraverseDirs found inum -1
+YFS      TraverseDirs traversing direct block 1
+YFS      TraverseDirs Exit
+YFS      ReadSector returned 0
+YFS      YFSLink child_inum: 2
+YFS      YFSLink old_parent_inum: 1
+YFS      YFSLink new filename: b
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 1
+YFS      AddToBlock len: 32
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (first one)
+YFS      ReadSector returned 0
+YFS      ReadSector returned 0
+YFS      Writing to block 7 at position 96
+YFS      Writing to block 7
+YFS      EditOpenFile Entry
+YFS      EditOpenFile open_files: 0x1f050
+YFS      EditOpenFile *wait: 0x1f050
+YFS      EditOpenFile q: 0x1f050
+YFS      EditOpenFile q != NULL and q->fd == fd
+YFS      EditOpenFile q->blocknum: 0
+YFS      EditOpenFile q->position: 128
+YFS      EditOpenFile Exit
+YFS      AddTOBlock open_files: 0x1f050 
+YFS      AddToBlock len: 32
+YFS      AddToBlock old size: 96
+YFS      AddToBlock len: 32
+YFS      AddToBlock new size: 128
+YFS      ReadSector returned 0
+YFS      AddToBlock Exit
+YFS      ReadSector returned 0
+YFS      MNF: Dir is 0
+YFS      YFSLink new_node link: 2
+YFS      ReadSector returned 0
+YFS      YFSLink Exit
+YFS      ReadSector returned 0
+YFS      CheckDir traversing direct block 0
+YFS      ReadSector returned 0
+YFS      CheckDirs string: .
+YFS      CheckDirs inum: 1
+YFS      CheckDirs string: ..
+YFS      CheckDirs inum: 1
+YFS      CheckDirs string: a
+YFS      CheckDirs inum: 2
+YFS      CheckDirHelper Exit (false)
+YFS      CheckDir Exit (false)
 YFS      --------------------Replied successfully--------------------
 YFS      --------------------Getting Message--------------------
 YFS      Received Message
-YFS      Message Type: 14
+YFS      Message Type: 15
 YFS      Message Pid: 3
-YFS      14: Sync
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Receive Call Breaks Deadlock! Fuck!
+YFS      15: Shutdown

@@ -8,12 +8,15 @@
 int
 main(int argc, char **argv)
 {
+	int status;
 	(void) argc;
 	(void) argv;
-	printf("\n%d\n\n", Create("/foo"));
-	printf("\n%d\n\n", Create("/bar"));
-	printf("\n%d\n\n", Create("/foo"));
-	printf("\n%d\n\n", Create("/foo/zzz"));
+	status = Create("/a");
+	printf("Create status %d\n", status);
+
+	status = Link("/a", "/b");
+	printf("Link status %d\n", status);
+
 
 	Shutdown();
 	return 0;

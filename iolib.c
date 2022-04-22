@@ -73,6 +73,7 @@ Close(int fd) {
 int
 Create(char *pathname)
 {
+    printf("Here");
     TracePrintf(0, "-------------------------CREATE-----------------------------\n");
     struct messageSinglePath *new_message = malloc(sizeof(struct messageSinglePath));
     new_message->type = 2;
@@ -85,7 +86,7 @@ Create(char *pathname)
         new_message->cd = cd;
     }
     // *message = *new_message;
-    TracePrintf(0, "Filled message\n");
+    printf("Filled message\n");
     Send(new_message, -FILE_SERVER);
     TracePrintf(0, "Message Returned: %d\n", new_message->retval);
     return new_message->retval;
