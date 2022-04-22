@@ -13,11 +13,16 @@ main(int argc, char **argv)
     (void) argc;
     (void) argv;
     int err;
+    int err2;
     printf("Tcreate\n");
     write(2, "A\n", 2);
     TracePrintf(0, "Written\n");
-    err = Create("/foo");
+    MkDir("/foo");
+    err = Create("/foo/bar");
     fprintf(stderr, "Create returned %d\n", err);
+    err2 = Create("/foo/zzz");
+    fprintf(stderr, "Create returned %d\n", err2);
+    fprintf(stderr, "%d", Open("/foo/zzz"));
 
     Sync();
     Delay(3);

@@ -114,18 +114,20 @@ main(int argc, char **argv)
         }
         nb = read_block->head.num_blocks;
         ni = read_block->head.num_inodes;
-        int maxfb =  nb - CeilDiv(ni + 1, IPB); 
-        block_bitmap = malloc(sizeof(bool) * maxfb);
+        // int maxfb =  nb - CeilDiv(ni + 1, IPB); 
+        block_bitmap = malloc(sizeof(bool) * nb);
         inode_bitmap = malloc(sizeof(bool) * ni);
         
         int i;
         //Init free blocks
         TracePrintf(0, "Initializing Free Blocks\n");
-        for (i = 1; i < maxfb; i++) {
+        for (i = 0; i < CeilDiv(ni + 1, IPB) + 2; i++) {
+            block_bitmap[i] = false;
+        }
+        for (i = CeilDiv(ni + 1, IPB) + 2; i < nb; i++) {
             block_bitmap[i] = true;
         }
-        
-        block_bitmap[0] = false;
+
 
         TracePrintf(0, "Initializing Free inodes\n");
         //Init free inodes
@@ -566,16 +568,8 @@ TraverseDirs(char *dir_name, short dir_inum)
     TracePrintf(0, "TraverseDirs Entry\n");
     TracePrintf(0, "Traversing path %s at inum %d\n", dir_name, dir_inum);
 
-    int sector_num = GetSectorNum(dir_inum);
-    struct inode *first_inodes = malloc(SECTORSIZE);
-    if (ReadFromBlock(sector_num, first_inodes) != 0) {
-        TracePrintf(0, "TraverseDirs: ReadFromBlock failed freak the fuck out\n");
-        Exit(-1);
-    }
 
-    // iterate over direct block
-    int diff = GetSectorPosition(dir_inum);
-    struct inode *root_inode = first_inodes + diff;
+    struct inode *root_inode = GetInodeAt(dir_inum);
     TracePrintf(0, "TraverseDirs inode type: %d\n", root_inode->type);
     if (root_inode->type != INODE_DIRECTORY) {
         TracePrintf(0, "TraverseDirs dir_inum corresponds to a file not a directory\n");
@@ -599,7 +593,6 @@ TraverseDirs(char *dir_name, short dir_inum)
         short inum = TraverseDirsHelper(dir_name, curr_block, num_dir_entries);
         TracePrintf(0, "TraverseDirs found inum %d\n", inum);
         if (inum > 0) {
-            free(first_inodes);
             return inum;
         }
         size_remaining -= BLOCKSIZE;
@@ -630,14 +623,12 @@ TraverseDirs(char *dir_name, short dir_inum)
             TracePrintf(0, "TraverseDirs num_dir_entries %d\n", num_dir_entries);
             short inum = TraverseDirsHelper(dir_name, block[j], num_dir_entries);
             if (inum > 0) {
-                free(first_inodes);
                 TracePrintf(0, "TraverseDirs Exit\n");
                 return inum;
             }
             size_remaining -= BLOCKSIZE;
         }
     }
-    free(first_inodes);
     TracePrintf(0, "TraverseDirs Exit\n");
     return -1;
 }
@@ -931,7 +922,7 @@ YFSCreateMkDir(void *m, bool dir)
 {
     TracePrintf(0, "----------YFSCreateMkDir Entry----------\n");
     struct messageSinglePath *msg = (struct messageSinglePath *) m;
-    struct inode *block;
+    // struct inode *block;
     char *pathname = GetPathName(msg->pid, msg->pathname); // Free this bitch at some point
     char *null_path = MakeNullTerminated(pathname, MAXPATHNAMELEN);
     char *directory;
@@ -939,6 +930,7 @@ YFSCreateMkDir(void *m, bool dir)
 
     int i;
     int n = strlen(null_path);
+    TracePrintf(0, "CreateMkdir: Dir is %d\n", dir);
     TracePrintf(0, "YFSCreateMkDir null path length: %d\n", n);
     TracePrintf(0, "YFSCreateMkDir finding last slash\n");
     TracePrintf(0, "YFSCreateMkDir pathname: %s\n", null_path);
@@ -978,21 +970,23 @@ YFSCreateMkDir(void *m, bool dir)
     
     if (parent_inum <= 0) {
         msg->retval = ERROR;
+        return;
     }
+
+    TracePrintf(0, "Parent inum: %d\n", parent_inum);
     
-    block = malloc(BLOCKSIZE);
-    if (ReadFromBlock((int) (parent_inum / IPB + 1), block) == -1) {
-        TracePrintf(0, "YFSCreateMkDir: read from block is wack, freak the Fuck out\n");
-        Exit(-1);
-    }
+    
+    // if (ReadFromBlock((int) (parent_inum / IPB + 1), block) == -1) {
+    //     TracePrintf(0, "YFSCreateMkDir: read from block is wack, freak the Fuck out\n");
+    //     Exit(-1);
+    // }
     //int sector_num = GetSectorNum((int) parent_inum);
-    int diff = GetSectorPosition((int) parent_inum);
-    struct inode *cur_node = block + diff;
+    struct inode *cur_node = GetInodeAt(parent_inum);
+    TracePrintf(0, "Parent type: %d\n", cur_node->type);
     if (cur_node->type == INODE_DIRECTORY) {
         //make new file
         struct inode *new_node;
         short child_inum;
-
         if ((child_inum = TraverseDirs(new_file, parent_inum)) <= 0) {
             // file we're creating does not have an inode yet
             child_inum = GetFreeInode();
@@ -1015,7 +1009,12 @@ YFSCreateMkDir(void *m, bool dir)
         struct dir_entry *new_file_entry = CreateDirEntry(child_inum, new_file);
         int openval = InsertOFDeluxe(child_inum);
         AddToBlock(parent_inum, new_file_entry, sizeof(struct dir_entry));
+        TracePrintf(0, "CreateMkdir: Dir is %d\n", dir);
         MakeNewFile(new_node, dir); // updates inode
+
+        WriteINum(child_inum, *new_node);
+        
+
         if (dir) {
             TracePrintf(0, "YFSCreateMkDir: creating . and ..\n");
             struct dir_entry *dot = CreateDirEntry(child_inum, ".");
@@ -1025,7 +1024,7 @@ YFSCreateMkDir(void *m, bool dir)
             blk[1] = *dotdot;
             AddToBlock(child_inum, blk, 2*sizeof(struct dir_entry));
         }
-        WriteINum(child_inum, *new_node);
+        
 
         free(pathname);
         if (dir) {
@@ -1033,11 +1032,15 @@ YFSCreateMkDir(void *m, bool dir)
         } else {
             msg->retval = openval;
         }
+
+        TracePrintf(0, "YFSCreateMkDir: new node type %d\n", GetInodeAt(child_inum)->type);
+        TracePrintf(0, "YFSCreateMkDir: new node size %d\n", GetInodeAt(child_inum)->size);
     } else {
         TracePrintf(0, "YFSCreateMkDir: not directory freak the fuck out\n");
         free(pathname);
         msg->retval = ERROR;
     }
+    
     TracePrintf(0, "----------YFSCreateMkDir Exit----------\n");
 }
 
@@ -1045,7 +1048,8 @@ YFSCreateMkDir(void *m, bool dir)
 void
 MakeNewFile(struct inode *node, bool directory) 
 {
-   
+    TracePrintf(0, "MNF: Dir is %d\n", directory);
+
     if (directory) {
         node->type = INODE_DIRECTORY;
     } else {
@@ -1191,11 +1195,12 @@ AddToBlock(short inum, void *buf, int len)
 
     // Get inode for the current file
     struct inode *node = GetInodeAt(inum);
-
     char *edit_blk = malloc(BLOCKSIZE);
     // If the current file has no direct blocks, get a free block
     if (node->direct[0] == 0) {
+        TracePrintf(0, "Getting a free block for inum %d\n", inum);
         node->direct[0] = GetFreeBlock();
+        TracePrintf(0, "Got block %d\n", node->direct[0]);
     }
 
     // Read contents of blknum
@@ -1204,7 +1209,6 @@ AddToBlock(short inum, void *buf, int len)
         TracePrintf(0, "AddToBlock Exit\n");
         return (-1);
     }
-
     if (pos + len < BLOCKSIZE) {
         // Case 1: writing will not take us beyond the current block
         int i;
@@ -1218,10 +1222,13 @@ AddToBlock(short inum, void *buf, int len)
             TracePrintf(0, "AddToBlock Exit\n");
             return (-1);
         }
+        TracePrintf(0, "Writing to block %d\n", write_num);
 
         WriteToBlock(write_num, edit_blk);
+
         // update position and blocknum
         EditOpenFile(&open_files, file->fd, blknum, pos + len);
+
         TracePrintf(0, "AddTOBlock open_files: %p \n", open_files);
         TracePrintf(0, "AddToBlock len: %d\n", len);
     } else {
@@ -1239,6 +1246,7 @@ AddToBlock(short inum, void *buf, int len)
                     TracePrintf(0, "AddToBlock Exit\n");
                     return (-1);
                 }
+
                 blknum++;
                 write_num = newblk;
                 i -= BLOCKSIZE;
@@ -1261,7 +1269,9 @@ AddToBlock(short inum, void *buf, int len)
     TracePrintf(0, "AddToBlock len: %d\n", len);
     node->size += len;
     TracePrintf(0, "AddToBlock new size: %d\n", node->size);
+
     WriteINum(inum, *node);
+
     TracePrintf(0, "AddToBlock Exit\n");
     return 0;
 }
