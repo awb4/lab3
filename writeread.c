@@ -4,8 +4,10 @@
 #include <comp421/iolib.h>
 
 int
-main()
+main(int argc, char **argv)
 {
+    (void) argc;
+    (void) argv;
     int fd;
     int nch;
     int status;
@@ -40,4 +42,5 @@ main()
     printf("Close status %d\n", status);
 
     Shutdown();
+    return 0;
 }

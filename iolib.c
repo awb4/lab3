@@ -56,7 +56,7 @@ Open(char *pathname) {
     }
     // *message = *new_message;
     Send(new_message, -FILE_SERVER);
-    return 0;
+    return new_message->retval;
 }
 
 int
@@ -67,7 +67,7 @@ Close(int fd) {
     new_message->fd = fd;
     // *message = * (struct messageSinglePath *) new_message;
     Send(new_message, -FILE_SERVER);
-    return 0;
+    return new_message->retval;
 }
 
 int
@@ -101,7 +101,7 @@ Read(int fd, void *buf, int size)
     new_message->buf = buf;
     new_message->size = size; 
     Send(new_message, -FILE_SERVER);
-    return 0;
+    return new_message->retval;
 }
 
 int
@@ -115,7 +115,7 @@ Write(int fd, void *buf, int size)
     new_message->size = size;
     // *message = * (struct messageSinglePath *) new_message;
     Send(new_message, -FILE_SERVER);
-    return 0;
+    return new_message->retval;
 }
 
 int
@@ -129,7 +129,7 @@ Seek(int fd, int offset, int whence)
     new_message->whence = whence; 
     // *message = * (struct messageSinglePath *) new_message;
     Send(new_message, -FILE_SERVER);
-    return 0;
+    return new_message->retval;
 }
 
 int 
@@ -224,7 +224,7 @@ MkDir(char *pathname)
     }
     // *message = *new_message;
     Send(new_message, -FILE_SERVER);
-    return 0;
+    return new_message->retval;
 }
 
 int 
@@ -242,7 +242,7 @@ RmDir(char *pathname)
     }
     // *message = *new_message;
     Send(new_message, -FILE_SERVER);
-    return 0;
+    return new_message->retval;
 }
 
 int 
@@ -261,7 +261,7 @@ ChDir(char *pathname)
     }
     // *message = *new_message;
     Send(new_message, -FILE_SERVER);
-    return 0;
+    return new_message->retval;
 }
 
 int 
@@ -280,7 +280,7 @@ Stat(char *pathname, struct Stat *statbuf)
     new_message->pathname2 = statbuf;
     // *message = * (struct messageSinglePath *) new_message;
     Send(new_message, -FILE_SERVER);
-    return 0;
+    return new_message->retval;
 }
 
 int 
@@ -291,7 +291,7 @@ Sync(void)
     new_message->pid = GetPid();
     // *message = *new_message;
     Send(new_message, -FILE_SERVER);
-    return 0;
+    return new_message->retval;
 }
 
 int 
@@ -302,6 +302,6 @@ Shutdown(void)
     new_message->pid = GetPid();
     // *message = *new_message;
     Send(new_message, -FILE_SERVER);
-    return 0;
+    return new_message->retval;
 }
 

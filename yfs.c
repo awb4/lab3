@@ -86,6 +86,7 @@ int GetSectorPosition(int inum);
 struct inode *GetInodeAt(short inum);
 
 int AddToBlock(short inum, void *buf, int len);
+int GetFromBlock(short inum, void *buf, int len);
 int AddBlockToInode(struct inode *node, int block_num);
 
 int GetTrueBlock(struct inode *node, int blocknum);
@@ -98,7 +99,7 @@ main(int argc, char **argv)
     (void) argc;
     message = malloc(sizeof(struct messageSinglePath));
     TracePrintf(0, "Message: %p\n", message);
-    cur_fd = 0;
+    cur_fd = 1;
     read_block = malloc(BLOCKSIZE);
     if (Register(FILE_SERVER) == -1) {
         TracePrintf(0, "Register File Server: Freak the Fuck out\n");
@@ -317,6 +318,28 @@ YFSRead(void *m)
     (void) buf;
     (void) fd;
     (void) size;
+    if (fd == -1) {
+        TracePrintf(0, "YFSRead: Cannot write to directory\n");
+        msg->retval = ERROR;
+        return;
+    } else {
+        struct open_file_list *file = SearchByFD(&open_files, fd);
+        if (file == NULL) {
+            TracePrintf(0, "YFSRead: File not in Open list\n");
+            msg->retval = ERROR;
+            return;
+        }
+        char *my_buf = malloc(size);
+        int gfb = GetFromBlock(file->inum, my_buf, size);
+        
+        if (CopyTo(msg->pid, msg->buf, my_buf, gfb) < 0) {
+            TracePrintf(0, "YFSRead: Copy To Error\n");
+            msg->retval = ERROR;
+            return;
+        }
+        msg->retval = gfb;
+
+    }
     // Check if fd is in the list of free files. If not return error.
     // Read from the file starting at the current position
         // Reads 0 bytes if we're at the end of the file
@@ -350,10 +373,15 @@ YFSWrite(void *m)
             msg->retval = ERROR;
             return;
         }
-        AddToBlock(file->inum, buf_contents, size);
-    }
+        if (GetInodeAt(file->inum)->type == INODE_DIRECTORY) {
+            TracePrintf(0, "YFSWrite: Can't write to directory\n");
+            msg->retval = ERROR;
+            return;
+        }
+        msg->retval = AddToBlock(file->inum, buf_contents, size);
+        TracePrintf(0, "YFSWrite: returning %d\n", msg->retval);
 
-    (void) buf_contents;
+    }
 }
 
 /**
@@ -369,9 +397,8 @@ YFSSeek(void *m)
     int fd = (int) msg->fd;
     int offset = (int) msg->offset;
     int whence = (int) msg->whence;
-    (void) fd;
-    (void) whence;
-    (void) offset;
+    // SearchByFD
+    
 }
 
 /**
@@ -896,7 +923,7 @@ RemoveMinFD(struct free_fd_list **wait)
 	if (q != NULL && q->fd == min) {
 		(*wait)->next = q->next;
 		free(q);
-		return (0);
+		return (min);
 	}
 	while (q != NULL && q->fd != min){
 		prev = q;
@@ -1032,6 +1059,7 @@ YFSCreateMkDir(void *m, bool dir)
         } else {
             msg->retval = openval;
         }
+        TracePrintf(0, "Returning %d\n", msg->retval);
 
         TracePrintf(0, "YFSCreateMkDir: new node type %d\n", GetInodeAt(child_inum)->type);
         TracePrintf(0, "YFSCreateMkDir: new node size %d\n", GetInodeAt(child_inum)->size);
@@ -1204,7 +1232,7 @@ AddToBlock(short inum, void *buf, int len)
     }
 
     // Read contents of blknum
-    if (ReadFromBlock(node->direct[blknum], edit_blk) < 0) {
+    if (ReadFromBlock(GetTrueBlock(node, blknum), edit_blk) < 0) {
         TracePrintf(0, "AddToBlock: Reading from block Failed\n");
         TracePrintf(0, "AddToBlock Exit\n");
         return (-1);
@@ -1212,16 +1240,18 @@ AddToBlock(short inum, void *buf, int len)
     if (pos + len < BLOCKSIZE) {
         // Case 1: writing will not take us beyond the current block
         int i;
-        for (i = pos; i < pos + len; i++) {
-            edit_blk[i] = *((char *) (buf + i - pos));
-        }
-
         int write_num = GetTrueBlock(node, blknum);
         if (write_num <= 0) {
             TracePrintf(0, "AddToBlock: Wrong Block gotten by GetTrueBlock\n");
             TracePrintf(0, "AddToBlock Exit\n");
             return (-1);
         }
+        TracePrintf(0, "Writing to block %d at position %d\n", write_num, pos);
+        for (i = pos; i < pos + len; i++) {
+            edit_blk[i] = *((char *) (buf + i - pos));
+        }
+
+        
         TracePrintf(0, "Writing to block %d\n", write_num);
 
         WriteToBlock(write_num, edit_blk);
@@ -1237,6 +1267,7 @@ AddToBlock(short inum, void *buf, int len)
         int newpos;
         int i = pos;
         int write_num = GetTrueBlock(node, blknum);
+        TracePrintf(0, "Writing to block %d at position %d\n", write_num, pos);
         for (newpos = pos; newpos < pos + len; newpos++) {
             if (i >= BLOCKSIZE) {
                 WriteToBlock(write_num, edit_blk);
@@ -1273,7 +1304,97 @@ AddToBlock(short inum, void *buf, int len)
     WriteINum(inum, *node);
 
     TracePrintf(0, "AddToBlock Exit\n");
-    return 0;
+    return len;
+}
+
+
+int 
+GetFromBlock(short inum, void *buf, int len) 
+{
+    TracePrintf(0, "ReadBlock Entry\n");
+    TracePrintf(0, "ReadBlock inum: %d\n", inum);
+    TracePrintf(0, "ReadBlock len: %d\n", len);
+
+    // Get file from open file list
+    struct open_file_list *file = SearchOpenFile(&open_files, inum);
+    if (file == NULL) {
+        TracePrintf(0, "AddToBlock: File is not open\n");
+        TracePrintf(0, "AddToBlock Exit\n");
+        return (-1);
+    }
+    int blknum = file->blocknum;
+    int pos = file->position;
+
+    // Get inode for the current file
+    struct inode *node = GetInodeAt(inum);
+    char *read_blk = malloc(BLOCKSIZE);
+    // If the current file has no direct blocks, get a free block
+    if (node->direct[0] == 0 || node->size == 0) {
+        TracePrintf(0, "Reading from a nonexistent block\n");
+        return -1;
+    }
+    int read_num = GetTrueBlock(node, blknum);
+    TracePrintf(0, "Reading from block %d at position %d\n", read_num, pos);
+    if (read_num <= 0) {
+        TracePrintf(0, "GetFromBlock: Wrong Block gotten by GetTrueBlock\n");
+        TracePrintf(0, "GetFromBlock Exit\n");
+        return (-1);
+    }
+    // Read contents of blknum
+    if (ReadFromBlock(read_num, read_blk) < 0) {
+        TracePrintf(0, "GetFromBlock: Reading from block Failed\n");
+        TracePrintf(0, "GetFromBlock Exit\n");
+        return (-1);
+    }
+    if (pos + len < BLOCKSIZE) {
+        // Case 1: reading will not take us beyond the current block
+        int i;
+        for (i = pos; i < pos + len; i++) {
+            if (i + blknum * BLOCKSIZE == node->size) {
+                break;
+            }
+            TracePrintf(0, "Reading Character %d\n", read_blk[i]);
+
+            * ((char *) buf + i - pos) = read_blk[i];
+        }
+
+        // update position and blocknum
+        EditOpenFile(&open_files, file->fd, blknum, i);
+        return i - pos;
+        
+    } else {
+        // Case 2: reading will take us beyond the current block
+
+        int newpos;
+        int i = pos;
+        for (newpos = pos; newpos < pos + len; newpos++) {
+            if (newpos + blknum * BLOCKSIZE == node->size) {
+                break;
+            }
+            if (i >= BLOCKSIZE) {
+                blknum++;
+                read_num = GetTrueBlock(node, blknum);
+                if (ReadFromBlock(read_num, read_blk) < 0) {
+                    TracePrintf(0, "GetFromBlock: Couldn't read into additional block\n");
+                    return (-1);
+                }
+                i -= BLOCKSIZE;
+                if (i != 0) {
+                    TracePrintf(0, "GetFromBlock: Something wrong with newpos loop\n");
+                    TracePrintf(0, "GetFromBlock: Exit\n");
+                    return (-1);
+                }
+            }
+            TracePrintf(0, "Reading Character %s\n", read_blk[i]);
+            ((char *) buf)[newpos - pos] = read_blk[i];
+            i++;
+        }
+        // update position and blocknum
+        EditOpenFile(&open_files, file->fd, blknum, i);
+        TracePrintf(0, "AddToBlock len: %d\n", len);
+        TracePrintf(0, "GetFromBlock Exit\n");
+        return newpos - pos;
+    }
 }
 
 //Add a new block to an inode
@@ -1343,12 +1464,16 @@ InsertOFDeluxe(short inum)
     } else {
         TracePrintf(0, "InsertOFDeluxe we have a file\n");
         new_fd = RemoveMinFD(&free_fds);
+        TracePrintf(0, "New fd: %d\n", new_fd);
         //THIS MEANS THERE IS NO REUSED FD
         if (new_fd == -2) {
             TracePrintf(0, "InsertOFDeluxe there is no reused fd\n");
             new_fd = cur_fd;
             cur_fd++;
         }
+    }
+    if (new_fd >= MAX_OPEN_FILES) {
+        return ERROR;
     }
     
     InsertOpenFile(&open_files, new_fd, inum);
