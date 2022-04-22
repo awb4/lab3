@@ -599,6 +599,7 @@ YFSRmDir(void *m)
         TraverseDirs(new_file, parent_inum, true);
         FreeFileBlocks(node);
         inode_bitmap[inum] = 1;
+        msg->retval = 0;
     }
 }
 
@@ -612,7 +613,7 @@ YFSChDir(void *m)
 {
     struct messageSinglePath *msg = (struct messageSinglePath *) m;
     char *pathname = GetPathName(msg->pid, msg->pathname); // Free this bitch at some point
-    msg->retval = ParseFileName(pathname);
+    msg->retval = ParseFileName(pathname, msg->cd);
 }
 
 /**
@@ -1721,7 +1722,6 @@ CheckDirHelper(int curr_block, int num_dir_entries)
 void
 FreeFileBlocks(struct inode *node)
 {
-    int size_remaining = node->size;
     int i;
     for (i = 0; i < NUM_DIRECT; i++) {
         TracePrintf(0, "CheckDir traversing direct block %d\n", i);

@@ -261,8 +261,8 @@ ChDir(char *pathname)
     }
     // *message = *new_message;
     Send(new_message, -FILE_SERVER);
-    if (msg->retval > 0) {
-        cd = msg->retval;
+    if (new_message->retval > 0) {
+        cd = new_message->retval;
         return 0;
     } else {
         return ERROR;

@@ -18,9 +18,10 @@ main(int argc, char **argv)
     write(2, "A\n", 2);
     TracePrintf(0, "Written\n");
     MkDir("/foo");
-    err = Create("/foo/bar");
+    err = MkDir("/foo/bar");
+    ChDir("/foo");
+    err2 = RmDir("bar");
     fprintf(stderr, "Create returned %d\n", err);
-    err2 = Create("/foo/zzz");
     fprintf(stderr, "Create returned %d\n", err2);
     fprintf(stderr, "%d", Open("/foo/zzz"));
 
