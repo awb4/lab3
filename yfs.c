@@ -26,7 +26,8 @@ struct open_file_list {
 };
 
 struct block_cache {
-    int num_full;
+    int counter;
+    int lru[BLOCK_CACHESIZE];
     bool dirty_bits[BLOCK_CACHESIZE];
     short nums[BLOCK_CACHESIZE];
     union {
@@ -38,7 +39,8 @@ struct block_cache {
 
 
 struct inode_cache {
-    int num_full;
+    int counter;
+    int lru[BLOCK_CACHESIZE];
     bool dirty_bits[INODE_CACHESIZE];
     short nums[INODE_CACHESIZE];
     struct inode nodes[INODE_CACHESIZE];
@@ -121,10 +123,10 @@ bool CheckDir(struct inode *node);
 bool CheckDirHelper(int curr_block, int num_dir_entries);
 void FreeFileBlocks(struct inode *node);
 
-int InsertBlockCache(short idx, void *block);
-int InsertInodeCache(short idx, struct inode *node);
-int GetBlockCache(short index, bool remove);
-int GetInodeCache(short index, bool remove);
+int InsertBlockCache(short idx, void *block, bool dirty);
+int InsertInodeCache(short idx, struct inode node, bool dirty);
+int GetBlockCache(short index, void *buf);
+int GetInodeCache(short index, struct inode *buf);
 
 int 
 main(int argc, char **argv) 
@@ -1649,7 +1651,10 @@ WriteINum(int inum, struct inode node)
     int sector = GetSectorNum(inum);
     int position = GetSectorPosition(inum);
     struct inode *nodes = malloc(BLOCKSIZE);
-    ReadFromBlock(sector, nodes);
+    if (ReadFromBlock(sector, nodes) < 0) {
+        TracePrintf(0, "Writing inum can't read block\n");
+        return -1;
+    }
     nodes[position] = node;
     return WriteToBlock(sector, nodes);
 }
@@ -2110,70 +2115,190 @@ FreeFileBlocks(struct inode *node)
 }
 
 int
-InsertBlockCache(short blknum, void *block)
+InsertBlockCache(short blknum, void *block, bool dirty)
 {
-    short hash = blknum % BLOCK_CACHESIZE;
-    if (b_cache.num_full == BLOCK_CACHESIZE) {
-        //write back algo
-    }
-    else {
-        while (b_cache.nums[hash]) {
-            hash++;
-            hash %= BLOCK_CACHESIZE;
-        }
-        b_cache.nums[hash] = blknum;
+    short oghash = blknum % BLOCK_CACHESIZE;
+    
 
-        char *curr_blocks = (char *) &(b_cache.blocks[hash]);
-        int i;
-        char *curr_entry = (char *) block;
-        for (i = 0; i < BLOCKSIZE; i++) {
-            curr_blocks = curr_entry;
-            curr_entry++;
-            curr_blocks++;
+    short hash;
+    bool found = false;
+    TracePrintf(0, "Block cache OG hash is %d\n", oghash);
+    TracePrintf(0, "Block cache counter is %d\n", b_cache.counter);
+    int i;
+    for (i = 0; i < BLOCK_CACHESIZE; i++) {
+        hash = (oghash + i) % BLOCK_CACHESIZE;
+        if (b_cache.nums[hash] && b_cache.nums[hash] == blknum) {
+            TracePrintf(0, "Found Block in cache\n");
+            found = true;
+            break;
         }
     }
+
+    if (!found) {
+        //write back algo
+        //write back algo
+        TracePrintf(0, "LRU Replacement\n");
+
+        int min = INT_MAX;
+        int i;
+        for (i = 0; i < BLOCK_CACHESIZE; i++) {
+            int test = i_cache.lru[hash];
+            if (test < min) {
+                min = test;
+                hash = i;
+            }
+        }
+        TracePrintf(0, "min lru is %d\n", min);
+
+    }
+    
+    TracePrintf(0, "Inserting at position %d\n", hash);
+
+    if (b_cache.dirty_bits[hash]) {
+        WriteSector(b_cache.nums[hash], &(b_cache.blocks[hash]));
+    }
+
+    // copy from block into cache
+    b_cache.nums[hash] = blknum;
+    char *curr_cache_entry = (char *) &(b_cache.blocks[hash]);
+    char *curr_block_entry = (char *) block;
+    for (i = 0; i < BLOCKSIZE; i++) {
+        curr_cache_entry = curr_block_entry;
+        curr_block_entry++;
+        curr_cache_entry++;
+    }
+    b_cache.lru[hash] = b_cache.counter;
+    b_cache.dirty_bits[hash] = dirty;
+    b_cache.counter++;
+   
+    TracePrintf(0, "InsertBlockCache counter is %d\n", b_cache.counter);
+
+    TracePrintf(0, "InsertBlockoCache Exit\n");
     return 0;
 }
 
 int
-InsertInodeCache(short inum, struct inode *node)
+InsertInodeCache(short inum, struct inode node, bool dirty)
 {
-    short hash = inum % INODE_CACHESIZE;
-
-    if (i_cache.num_full == INODE_CACHESIZE) {
+    short oghash = inum % INODE_CACHESIZE;
+    short hash;
+    bool found = false;
+    TracePrintf(0, "Inode OG hash is %d\n", oghash);
+    TracePrintf(0, "Inode cache counter is %d\n", i_cache.counter);
+    int i;
+    for (i = 0; i < INODE_CACHESIZE; i++) {
+        hash = (oghash + i) % INODE_CACHESIZE;
+        if (i_cache.nums[hash] && i_cache.nums[hash] == inum) {
+            found = true;
+            TracePrintf(0, "Found Inode in cache\n");
+            break;
+        }
+    }
+    if (!found) {
         //write back algo
+        int min = INT_MAX;
+        int i;
+        for (i = 0; i < INODE_CACHESIZE; i++) {
+            int test = i_cache.lru[hash];
+            if (test < min) {
+                min = test;
+                hash = i;
+            }
+        }
+        TracePrintf(0, "min lru is %d\n", min);
     }
     else {
-        while (i_cache.nums[hash]) {
+        int j = 0;
+        while (i_cache.nums[hash] && i_cache.nums[hash] == inum) {
             hash++;
             hash %= INODE_CACHESIZE;
+            if (j > INODE_CACHESIZE) {
+                TracePrintf(0, "InsertInodeCache Freak the fuck out\n");
+                return -1;
+            }
+            j++;
+            
         }
-        i_cache.nums[hash] = inum;
-        i_cache.nodes[hash] = *node;
     }
+    TracePrintf(0, "Inserting at position %d\n", hash);
+    if (i_cache.dirty_bits[hash]) {
+        TracePrintf(0, "Dirty is true\n", hash);
+        int removenum = i_cache.nums[hash];
+        int sector = GetSectorNum(removenum);
+        int position = GetSectorPosition(removenum);
+        TracePrintf(0, "Writing inum %d to block %d at position %d\n", removenum, sector, position);
+        struct inode *nodes = malloc(BLOCKSIZE);
+        if (ReadFromBlock(sector, nodes) < 0) {
+            TracePrintf(0, "Writing inum can't read block\n");
+            return -1;
+        }
+        nodes[position] = node;
+        return WriteSector(sector, nodes);
+    }
+    i_cache.nums[hash] = inum;
+    i_cache.dirty_bits[hash] = dirty;
+    i_cache.nodes[hash] = node;
+    i_cache.lru[hash] = i_cache.counter;
+    i_cache.counter++;
+    
+    TracePrintf(0, "InsertInodeCache counter is %d\n", i_cache.counter);
+
+    TracePrintf(0, "InsertInodeCache Exit\n");
     return 0;
 }
 
 int
-GetBlockCache(short index, bool remove)
+GetBlockCache(short index, void *buf)
 {
     int hash = index % BLOCK_CACHESIZE;
+    int j = 0;
     while (b_cache.nums[hash] != index) {
+        if (b_cache.nums[hash] == 0) {
+            return -1;
+        }
         hash++;
         hash %= BLOCK_CACHESIZE;
+        if (j > BLOCK_CACHESIZE) {
+            return -1;
+        }
+        j++;
     }
-    (void) remove;
-    (void) hash;
-    return 0;
+
+    // copy data from block cache into buf
+    int i;
+    char *curr_block_entry = (char *) &(b_cache.blocks[hash]);
+    char *curr_buf_entry = (char *) buf;
+    for (i = 0; i < BLOCKSIZE; i++) {
+        curr_buf_entry = curr_block_entry;
+        curr_buf_entry++;
+        curr_block_entry++;
+    }
+    b_cache.lru[hash] = b_cache.counter;
+    b_cache.counter++;
+    return b_cache.dirty_bits[hash];
 
 }
 
 int
-GetInodeCache(short index, bool remove)
+GetInodeCache(short index,  struct inode *buf)
 {
-    short hash = index % INODE_CACHESIZE;
-    (void) remove;
-    (void) hash;
-    return 0;
+    int hash = index % INODE_CACHESIZE;
+    int j = 0;
+    while (i_cache.nums[hash] != index) {
+        if (i_cache.nums[hash] == 0) {
+            return -1;
+        }
+        hash++;
+        hash %= INODE_CACHESIZE;
+        if (j > INODE_CACHESIZE) {
+            return -1;
+        }
+        j++;
+    }
 
+    // copy data from block cache into buf
+    *buf = i_cache.nodes[hash];
+    i_cache.lru[hash] = b_cache.counter;
+    i_cache.counter++;
+    return i_cache.dirty_bits[hash];
 }
