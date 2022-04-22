@@ -1628,6 +1628,18 @@ CreateDirEntry(short inum, char name[])
 int
 ReadFromBlock(int sector_num, void *buf) 
 {
+    int gbc = GetBlockCache((short) sector_num, buf);
+    if (gbc > 0) {
+        return gbc;
+    } else {
+        int r = ReadSector(sector_num, buf);
+        if (r < 0) {
+            TracePrintf(0, "ReadFromBlock readSector error\n");
+            return ERROR;
+        }
+        InsertBlockCache(sector_num, buf, 0);
+        return 0;
+    }
     int r = ReadSector(sector_num, buf);
     TracePrintf(0, "ReadFromBlock readSector returned %d\n", r);
     return r;
@@ -1640,7 +1652,7 @@ ReadFromBlock(int sector_num, void *buf)
 int
 WriteToBlock(int sector_num, void *buf) 
 {
-    return WriteSector(sector_num, buf);
+    return InsertBlockCache(sector_num, buf, true);
 }
 
 //Write to cache given only an inum and its inode
