@@ -2,10 +2,11 @@
 #include <comp421/iolib.h>
 
 int
-main()
+main(int argc, char **argv)
 {
 	int fd;
-
+	(void) argc;
+	(void) argv;
 	fd = Create("a");
 	Write(fd, "aaaaaaaaaaaaaaaa", 16);
 	Close(fd);

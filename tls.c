@@ -16,6 +16,9 @@
 int
 main(int argc, char **argv)
 {
+	(void) argc;
+	(void) argv;
+
     int fd;
     int nch;
     struct dir_entry entry;
@@ -91,4 +94,5 @@ main(int argc, char **argv)
     }
 
     Shutdown();
+	return 0;
 }

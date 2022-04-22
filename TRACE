@@ -24,29 +24,28 @@ YFS      ----------YFSCreateMkDir Entry----------
 YFS      GetPathName Entry
 YFS      GetPathName Exit
 YFS      CreateMkdir: Dir is 0
-YFS      YFSCreateMkDir null path length: 7
+YFS      YFSCreateMkDir null path length: 1
 YFS      YFSCreateMkDir finding last slash
-YFS      YFSCreateMkDir pathname: /xxxxxx
-YFS      YFSCreateMkDir loop entry 0
+YFS      YFSCreateMkDir pathname: a
 YFS      YFSCreateMkDir directory: 
-YFS      YFSCreateMkDir new File: xxxxxx
+YFS      YFSCreateMkDir new File: a
 YFS      Parent inum: 1
 YFS      ReadSector returned 0
 YFS      Parent type: 1
 YFS      TraverseDirs Entry
-YFS      Traversing path xxxxxx at inum 1
+YFS      Traversing path a at inum 1
 YFS      ReadSector returned 0
 YFS      TraverseDirs inode type: 1
 YFS      TraverseDirs traversing direct block 0
 YFS      TraverseDirsHelper Entry
-YFS      TraverseDirsHelper dir_name: xxxxxx
+YFS      TraverseDirsHelper dir_name: a
 YFS      TraverseDirsHelper curr_block: 7
 YFS      TraverseDirsHelper num_dir_entries: 2
 YFS      ReadSector returned 0
 YFS      TraverseDirsHelper curr_dir_name: .
-YFS      TraverseDirsHelper dir_name: xxxxxx
+YFS      TraverseDirsHelper dir_name: a
 YFS      TraverseDirsHelper curr_dir_name: ..
-YFS      TraverseDirsHelper dir_name: xxxxxx
+YFS      TraverseDirsHelper dir_name: a
 YFS      TraverseDirsHelper Exit (fail)
 YFS      TraverseDirs found inum -1
 YFS      TraverseDirs traversing direct block 1
@@ -107,7 +106,7 @@ YFS      4: Write
 YFS      ReadSector returned 0
 YFS      AddToBlock Entry
 YFS      AddToBlock inum: 2
-YFS      AddToBlock len: 26
+YFS      AddToBlock len: 16
 YFS      SearchOpenFile Entry
 YFS      SearchOpenFile Exit (middle one)
 YFS      ReadSector returned 0
@@ -123,99 +122,71 @@ YFS      EditOpenFile q: 0x1e050
 YFS      EditOpenFile q != NULL and q->fd != fd
 YFS      EditOpenFile q->next: (nil)
 YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 26
+YFS      EditOpenFile q->position: 16
 YFS      EditOpenFile Exit
 YFS      AddTOBlock open_files: 0x1e050 
-YFS      AddToBlock len: 26
+YFS      AddToBlock len: 16
 YFS      AddToBlock old size: 0
-YFS      AddToBlock len: 26
-YFS      AddToBlock new size: 26
+YFS      AddToBlock len: 16
+YFS      AddToBlock new size: 16
 YFS      ReadSector returned 0
 YFS      AddToBlock Exit
-YFS      YFSWrite: returning 26
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 4
-YFS      Message Pid: 3
-YFS      4: Write
-YFS      ReadSector returned 0
-YFS      AddToBlock Entry
-YFS      AddToBlock inum: 2
-YFS      AddToBlock len: 10
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      ReadSector returned 0
-YFS      Writing to block 8 at position 26
-YFS      Writing to block 8
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 36
-YFS      EditOpenFile Exit
-YFS      AddTOBlock open_files: 0x1e050 
-YFS      AddToBlock len: 10
-YFS      AddToBlock old size: 26
-YFS      AddToBlock len: 10
-YFS      AddToBlock new size: 36
-YFS      ReadSector returned 0
-YFS      AddToBlock Exit
-YFS      YFSWrite: returning 10
+YFS      YFSWrite: returning 16
 YFS      --------------------Replied successfully--------------------
 YFS      --------------------Getting Message--------------------
 YFS      Received Message
 YFS      Message Type: 1
 YFS      Message Pid: 3
 YFS      1: Close
+YFS      InsertFD free_fds: (nil)
+YFS      InsertFD wait: (nil)
+YFS      InsertFD new->fd: 1 
+YFS      InsertFD list is null 
 YFS      RemoveOpenFile Entry
 YFS      RemoveOpenFile Exit (middle one)
 YFS      --------------------Replied successfully--------------------
 YFS      --------------------Getting Message--------------------
 YFS      Received Message
-YFS      Message Type: 14
+YFS      Message Type: 2
 YFS      Message Pid: 3
-YFS      14: Sync
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 0
-YFS      Message Pid: 3
-YFS      0: Open
+YFS      2: Create
+YFS      YFSCreate 
+YFS      YFSCreate open_files: 0x1e050
+YFS      ----------YFSCreateMkDir Entry----------
 YFS      GetPathName Entry
 YFS      GetPathName Exit
-YFS      Opening Path /xxxxxx at cd 1
-YFS      ParseFileName Entry
-YFS      ParseFileName filename: /xxxxxx
-YFS      ParseFileName dir_inum: 1
-YFS      ParseFileName Entering While loop
+YFS      CreateMkdir: Dir is 0
+YFS      YFSCreateMkDir null path length: 1
+YFS      YFSCreateMkDir finding last slash
+YFS      YFSCreateMkDir pathname: b
+YFS      YFSCreateMkDir directory: 
+YFS      YFSCreateMkDir new File: b
+YFS      Parent inum: 1
+YFS      ReadSector returned 0
+YFS      Parent type: 1
 YFS      TraverseDirs Entry
-YFS      Traversing path xxxxxx at inum 1
+YFS      Traversing path b at inum 1
 YFS      ReadSector returned 0
 YFS      TraverseDirs inode type: 1
 YFS      TraverseDirs traversing direct block 0
 YFS      TraverseDirsHelper Entry
-YFS      TraverseDirsHelper dir_name: xxxxxx
+YFS      TraverseDirsHelper dir_name: b
 YFS      TraverseDirsHelper curr_block: 7
 YFS      TraverseDirsHelper num_dir_entries: 3
 YFS      ReadSector returned 0
 YFS      TraverseDirsHelper curr_dir_name: .
-YFS      TraverseDirsHelper dir_name: xxxxxx
+YFS      TraverseDirsHelper dir_name: b
 YFS      TraverseDirsHelper curr_dir_name: ..
-YFS      TraverseDirsHelper dir_name: xxxxxx
-YFS      TraverseDirsHelper curr_dir_name: xxxxxx
-YFS      TraverseDirsHelper dir_name: xxxxxx
-YFS      TraverseDirsHelper Exit (success)
-YFS      TraverseDirs found inum 2
-YFS      ParseFileName Exit
+YFS      TraverseDirsHelper dir_name: b
+YFS      TraverseDirsHelper curr_dir_name: a
+YFS      TraverseDirsHelper dir_name: b
+YFS      TraverseDirsHelper Exit (fail)
+YFS      TraverseDirs found inum -1
+YFS      TraverseDirs traversing direct block 1
+YFS      TraverseDirs Exit
 YFS      ReadSector returned 0
-YFS      Opening Inode 2 at pathname /xxxxxx
 YFS      InsertOFDeluxe Entry
-YFS      InsertOFDeluxe inum: 2
+YFS      InsertOFDeluxe inum: 3
 YFS      ReadSector returned 0
 YFS      InsertOFDeluxe we have a file
 YFS      New fd: 1
@@ -226,381 +197,57 @@ YFS      InsertOpenFile list: 0x1e050
 YFS      InsertNode: Outside loop 1
 YFS      InsertNode: Outside loop 2
 YFS      InsertOFDeluxe Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 1
+YFS      AddToBlock len: 32
 YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
+YFS      SearchOpenFile Exit (first one)
 YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 0
 YFS      ReadSector returned 0
-YFS      Reading Character 97
+YFS      Writing to block 7 at position 96
+YFS      Writing to block 7
 YFS      EditOpenFile Entry
 YFS      EditOpenFile open_files: 0x1e050
 YFS      EditOpenFile *wait: 0x1e050
 YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
+YFS      EditOpenFile q != NULL and q->fd == fd
 YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 1
+YFS      EditOpenFile q->position: 128
 YFS      EditOpenFile Exit
+YFS      AddTOBlock open_files: 0x1e050 
+YFS      AddToBlock len: 32
+YFS      AddToBlock old size: 96
+YFS      AddToBlock len: 32
+YFS      AddToBlock new size: 128
+YFS      ReadSector returned 0
+YFS      AddToBlock Exit
+YFS      CreateMkdir: Dir is 0
+YFS      MNF: Dir is 0
+YFS      ReadSector returned 0
+YFS      Returning 1
+YFS      ReadSector returned 0
+YFS      YFSCreateMkDir: new node type 2
+YFS      ReadSector returned 0
+YFS      YFSCreateMkDir: new node size 0
+YFS      ----------YFSCreateMkDir Exit----------
 YFS      --------------------Replied successfully--------------------
 YFS      --------------------Getting Message--------------------
 YFS      Received Message
-YFS      Message Type: 3
+YFS      Message Type: 4
 YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
+YFS      4: Write
+YFS      ReadSector returned 0
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 3
+YFS      AddToBlock len: 16
 YFS      SearchOpenFile Entry
 YFS      SearchOpenFile Exit (middle one)
 YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 1
+YFS      Getting a free block for inum 3
+YFS      Got block 9
 YFS      ReadSector returned 0
-YFS      Reading Character 98
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 2
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 2
-YFS      ReadSector returned 0
-YFS      Reading Character 99
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 3
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 3
-YFS      ReadSector returned 0
-YFS      Reading Character 100
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 4
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 4
-YFS      ReadSector returned 0
-YFS      Reading Character 101
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 5
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 5
-YFS      ReadSector returned 0
-YFS      Reading Character 102
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 6
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 6
-YFS      ReadSector returned 0
-YFS      Reading Character 103
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 7
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 7
-YFS      ReadSector returned 0
-YFS      Reading Character 104
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 8
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 8
-YFS      ReadSector returned 0
-YFS      Reading Character 105
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 9
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 9
-YFS      ReadSector returned 0
-YFS      Reading Character 106
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 10
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 10
-YFS      ReadSector returned 0
-YFS      Reading Character 107
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 11
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 11
-YFS      ReadSector returned 0
-YFS      Reading Character 108
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 12
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 12
-YFS      ReadSector returned 0
-YFS      Reading Character 109
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 13
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 13
-YFS      ReadSector returned 0
-YFS      Reading Character 110
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 14
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 14
-YFS      ReadSector returned 0
-YFS      Reading Character 111
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 15
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 15
-YFS      ReadSector returned 0
-YFS      Reading Character 112
+YFS      Writing to block 9 at position 0
+YFS      Writing to block 9
 YFS      EditOpenFile Entry
 YFS      EditOpenFile open_files: 0x1e050
 YFS      EditOpenFile *wait: 0x1e050
@@ -610,516 +257,726 @@ YFS      EditOpenFile q->next: (nil)
 YFS      EditOpenFile q->blocknum: 0
 YFS      EditOpenFile q->position: 16
 YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
+YFS      AddTOBlock open_files: 0x1e050 
+YFS      AddToBlock len: 16
+YFS      AddToBlock old size: 0
+YFS      AddToBlock len: 16
+YFS      AddToBlock new size: 16
 YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 16
-YFS      ReadSector returned 0
-YFS      Reading Character 113
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 17
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 17
-YFS      ReadSector returned 0
-YFS      Reading Character 114
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 18
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 18
-YFS      ReadSector returned 0
-YFS      Reading Character 115
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 19
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 19
-YFS      ReadSector returned 0
-YFS      Reading Character 116
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 20
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 20
-YFS      ReadSector returned 0
-YFS      Reading Character 117
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 21
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 21
-YFS      ReadSector returned 0
-YFS      Reading Character 118
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 22
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 22
-YFS      ReadSector returned 0
-YFS      Reading Character 119
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 23
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 23
-YFS      ReadSector returned 0
-YFS      Reading Character 120
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 24
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 24
-YFS      ReadSector returned 0
-YFS      Reading Character 121
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 25
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 25
-YFS      ReadSector returned 0
-YFS      Reading Character 122
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 26
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 26
-YFS      ReadSector returned 0
-YFS      Reading Character 48
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 27
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 27
-YFS      ReadSector returned 0
-YFS      Reading Character 49
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 28
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 28
-YFS      ReadSector returned 0
-YFS      Reading Character 50
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 29
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 29
-YFS      ReadSector returned 0
-YFS      Reading Character 51
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 30
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 30
-YFS      ReadSector returned 0
-YFS      Reading Character 52
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 31
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 31
-YFS      ReadSector returned 0
-YFS      Reading Character 53
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 32
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 32
-YFS      ReadSector returned 0
-YFS      Reading Character 54
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 33
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 33
-YFS      ReadSector returned 0
-YFS      Reading Character 55
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 34
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 34
-YFS      ReadSector returned 0
-YFS      Reading Character 56
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 35
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 35
-YFS      ReadSector returned 0
-YFS      Reading Character 57
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 36
-YFS      EditOpenFile Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 3
-YFS      Message Pid: 3
-YFS      3: Read
-YFS      ReadBlock Entry
-YFS      ReadBlock inum: 2
-YFS      ReadBlock len: 1
-YFS      SearchOpenFile Entry
-YFS      SearchOpenFile Exit (middle one)
-YFS      ReadSector returned 0
-YFS      Reading from block 8 at position 36
-YFS      ReadSector returned 0
-YFS      EditOpenFile Entry
-YFS      EditOpenFile open_files: 0x1e050
-YFS      EditOpenFile *wait: 0x1e050
-YFS      EditOpenFile q: 0x1e050
-YFS      EditOpenFile q != NULL and q->fd != fd
-YFS      EditOpenFile q->next: (nil)
-YFS      EditOpenFile q->blocknum: 0
-YFS      EditOpenFile q->position: 36
-YFS      EditOpenFile Exit
+YFS      AddToBlock Exit
+YFS      YFSWrite: returning 16
 YFS      --------------------Replied successfully--------------------
 YFS      --------------------Getting Message--------------------
 YFS      Received Message
 YFS      Message Type: 1
 YFS      Message Pid: 3
 YFS      1: Close
+YFS      InsertFD free_fds: 0x229b8
+YFS      InsertFD wait: 0x229b8
+YFS      InsertFD new->fd: 1 
 YFS      InsertNode: Outside loop 1
+YFS      InsertNode: Outside loop 2
+YFS      RemoveOpenFile Entry
+YFS      RemoveOpenFile Exit (middle one)
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 2
+YFS      Message Pid: 3
+YFS      2: Create
+YFS      YFSCreate 
+YFS      YFSCreate open_files: 0x1e050
+YFS      ----------YFSCreateMkDir Entry----------
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      CreateMkdir: Dir is 0
+YFS      YFSCreateMkDir null path length: 1
+YFS      YFSCreateMkDir finding last slash
+YFS      YFSCreateMkDir pathname: c
+YFS      YFSCreateMkDir directory: 
+YFS      YFSCreateMkDir new File: c
+YFS      Parent inum: 1
+YFS      ReadSector returned 0
+YFS      Parent type: 1
+YFS      TraverseDirs Entry
+YFS      Traversing path c at inum 1
+YFS      ReadSector returned 0
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: c
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 4
+YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: c
+YFS      TraverseDirsHelper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: c
+YFS      TraverseDirsHelper curr_dir_name: a
+YFS      TraverseDirsHelper dir_name: c
+YFS      TraverseDirsHelper curr_dir_name: b
+YFS      TraverseDirsHelper dir_name: c
+YFS      TraverseDirsHelper Exit (fail)
+YFS      TraverseDirs found inum -1
+YFS      TraverseDirs traversing direct block 1
+YFS      TraverseDirs Exit
+YFS      ReadSector returned 0
+YFS      InsertOFDeluxe Entry
+YFS      InsertOFDeluxe inum: 4
+YFS      ReadSector returned 0
+YFS      InsertOFDeluxe we have a file
+YFS      New fd: 1
+YFS      InsertOpenFile Entry
+YFS          *wait 0x1e050
+YFS          open_files: 0x1e050
+YFS      InsertOpenFile list: 0x1e050
+YFS      InsertNode: Outside loop 1
+YFS      InsertNode: Outside loop 2
+YFS      InsertOFDeluxe Exit
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 1
+YFS      AddToBlock len: 32
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (first one)
+YFS      ReadSector returned 0
+YFS      ReadSector returned 0
+YFS      Writing to block 7 at position 128
+YFS      Writing to block 7
+YFS      EditOpenFile Entry
+YFS      EditOpenFile open_files: 0x1e050
+YFS      EditOpenFile *wait: 0x1e050
+YFS      EditOpenFile q: 0x1e050
+YFS      EditOpenFile q != NULL and q->fd == fd
+YFS      EditOpenFile q->blocknum: 0
+YFS      EditOpenFile q->position: 160
+YFS      EditOpenFile Exit
+YFS      AddTOBlock open_files: 0x1e050 
+YFS      AddToBlock len: 32
+YFS      AddToBlock old size: 128
+YFS      AddToBlock len: 32
+YFS      AddToBlock new size: 160
+YFS      ReadSector returned 0
+YFS      AddToBlock Exit
+YFS      CreateMkdir: Dir is 0
+YFS      MNF: Dir is 0
+YFS      ReadSector returned 0
+YFS      Returning 1
+YFS      ReadSector returned 0
+YFS      YFSCreateMkDir: new node type 2
+YFS      ReadSector returned 0
+YFS      YFSCreateMkDir: new node size 0
+YFS      ----------YFSCreateMkDir Exit----------
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 4
+YFS      Message Pid: 3
+YFS      4: Write
+YFS      ReadSector returned 0
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 4
+YFS      AddToBlock len: 16
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      ReadSector returned 0
+YFS      Getting a free block for inum 4
+YFS      Got block 10
+YFS      ReadSector returned 0
+YFS      Writing to block 10 at position 0
+YFS      Writing to block 10
+YFS      EditOpenFile Entry
+YFS      EditOpenFile open_files: 0x1e050
+YFS      EditOpenFile *wait: 0x1e050
+YFS      EditOpenFile q: 0x1e050
+YFS      EditOpenFile q != NULL and q->fd != fd
+YFS      EditOpenFile q->next: (nil)
+YFS      EditOpenFile q->blocknum: 0
+YFS      EditOpenFile q->position: 16
+YFS      EditOpenFile Exit
+YFS      AddTOBlock open_files: 0x1e050 
+YFS      AddToBlock len: 16
+YFS      AddToBlock old size: 0
+YFS      AddToBlock len: 16
+YFS      AddToBlock new size: 16
+YFS      ReadSector returned 0
+YFS      AddToBlock Exit
+YFS      YFSWrite: returning 16
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 1
+YFS      Message Pid: 3
+YFS      1: Close
+YFS      InsertFD free_fds: 0x229b8
+YFS      InsertFD wait: 0x229b8
+YFS      InsertFD new->fd: 1 
+YFS      InsertNode: Outside loop 1
+YFS      InsertFD list: 0x229b8
+YFS      InsertFD next: 0x22a10
+YFS      InsertNode: Outside loop 2
+YFS      RemoveOpenFile Entry
+YFS      RemoveOpenFile Exit (middle one)
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 10
+YFS      Message Pid: 3
+YFS      10: Mkdir
+YFS      ----------YFSCreateMkDir Entry----------
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      CreateMkdir: Dir is 1
+YFS      YFSCreateMkDir null path length: 3
+YFS      YFSCreateMkDir finding last slash
+YFS      YFSCreateMkDir pathname: dir
+YFS      YFSCreateMkDir directory: 
+YFS      YFSCreateMkDir new File: dir
+YFS      Parent inum: 1
+YFS      ReadSector returned 0
+YFS      Parent type: 1
+YFS      TraverseDirs Entry
+YFS      Traversing path dir at inum 1
+YFS      ReadSector returned 0
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 5
+YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_dir_name: a
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_dir_name: b
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_dir_name: c
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper Exit (fail)
+YFS      TraverseDirs found inum -1
+YFS      TraverseDirs traversing direct block 1
+YFS      TraverseDirs Exit
+YFS      ReadSector returned 0
+YFS      InsertOFDeluxe Entry
+YFS      InsertOFDeluxe inum: 5
+YFS      ReadSector returned 0
+YFS      InsertOFDeluxe we have a file
+YFS      New fd: 1
+YFS      InsertOpenFile Entry
+YFS          *wait 0x1e050
+YFS          open_files: 0x1e050
+YFS      InsertOpenFile list: 0x1e050
+YFS      InsertNode: Outside loop 1
+YFS      InsertNode: Outside loop 2
+YFS      InsertOFDeluxe Exit
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 1
+YFS      AddToBlock len: 32
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (first one)
+YFS      ReadSector returned 0
+YFS      ReadSector returned 0
+YFS      Writing to block 7 at position 160
+YFS      Writing to block 7
+YFS      EditOpenFile Entry
+YFS      EditOpenFile open_files: 0x1e050
+YFS      EditOpenFile *wait: 0x1e050
+YFS      EditOpenFile q: 0x1e050
+YFS      EditOpenFile q != NULL and q->fd == fd
+YFS      EditOpenFile q->blocknum: 0
+YFS      EditOpenFile q->position: 192
+YFS      EditOpenFile Exit
+YFS      AddTOBlock open_files: 0x1e050 
+YFS      AddToBlock len: 32
+YFS      AddToBlock old size: 160
+YFS      AddToBlock len: 32
+YFS      AddToBlock new size: 192
+YFS      ReadSector returned 0
+YFS      AddToBlock Exit
+YFS      CreateMkdir: Dir is 1
+YFS      MNF: Dir is 1
+YFS      ReadSector returned 0
+YFS      YFSCreateMkDir: creating . and ..
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 5
+YFS      AddToBlock len: 64
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      ReadSector returned 0
+YFS      Getting a free block for inum 5
+YFS      Got block 11
+YFS      ReadSector returned 0
+YFS      Writing to block 11 at position 0
+YFS      Writing to block 11
+YFS      EditOpenFile Entry
+YFS      EditOpenFile open_files: 0x1e050
+YFS      EditOpenFile *wait: 0x1e050
+YFS      EditOpenFile q: 0x1e050
+YFS      EditOpenFile q != NULL and q->fd != fd
+YFS      EditOpenFile q->next: (nil)
+YFS      EditOpenFile q->blocknum: 0
+YFS      EditOpenFile q->position: 64
+YFS      EditOpenFile Exit
+YFS      AddTOBlock open_files: 0x1e050 
+YFS      AddToBlock len: 64
+YFS      AddToBlock old size: 0
+YFS      AddToBlock len: 64
+YFS      AddToBlock new size: 64
+YFS      ReadSector returned 0
+YFS      AddToBlock Exit
+YFS      Returning 0
+YFS      ReadSector returned 0
+YFS      YFSCreateMkDir: new node type 1
+YFS      ReadSector returned 0
+YFS      YFSCreateMkDir: new node size 64
+YFS      ----------YFSCreateMkDir Exit----------
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 2
+YFS      Message Pid: 3
+YFS      2: Create
+YFS      YFSCreate 
+YFS      YFSCreate open_files: 0x1e050
+YFS      ----------YFSCreateMkDir Entry----------
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      CreateMkdir: Dir is 0
+YFS      YFSCreateMkDir null path length: 6
+YFS      YFSCreateMkDir finding last slash
+YFS      YFSCreateMkDir pathname: /dir/x
+YFS      YFSCreateMkDir loop entry 4
+YFS      ParseFileName Entry
+YFS      ParseFileName filename: /dir
+YFS      ParseFileName dir_inum: 1
+YFS      ParseFileName Entering While loop
+YFS      TraverseDirs Entry
+YFS      Traversing path dir at inum 1
+YFS      ReadSector returned 0
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 6
+YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_dir_name: a
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_dir_name: b
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_dir_name: c
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_dir_name: dir
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper Exit (success)
+YFS      TraverseDirs found inum 5
+YFS      ParseFileName Exit
+YFS      YFSCreateMkDir directory: è¯
+YFS      YFSCreateMkDir new File: x
+YFS      Parent inum: 5
+YFS      ReadSector returned 0
+YFS      Parent type: 1
+YFS      TraverseDirs Entry
+YFS      Traversing path x at inum 5
+YFS      ReadSector returned 0
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: x
+YFS      TraverseDirsHelper curr_block: 11
+YFS      TraverseDirsHelper num_dir_entries: 2
+YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: x
+YFS      TraverseDirsHelper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: x
+YFS      TraverseDirsHelper Exit (fail)
+YFS      TraverseDirs found inum -1
+YFS      TraverseDirs traversing direct block 1
+YFS      TraverseDirs Exit
+YFS      ReadSector returned 0
+YFS      InsertOFDeluxe Entry
+YFS      InsertOFDeluxe inum: 6
+YFS      ReadSector returned 0
+YFS      InsertOFDeluxe we have a file
+YFS      New fd: 1
+YFS      InsertOpenFile Entry
+YFS          *wait 0x1e050
+YFS          open_files: 0x1e050
+YFS      InsertOpenFile list: 0x1e050
+YFS      InsertNode: Outside loop 1
+YFS      InsertNode: Outside loop 2
+YFS      InsertOFDeluxe Exit
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 5
+YFS      AddToBlock len: 32
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      ReadSector returned 0
+YFS      ReadSector returned 0
+YFS      Writing to block 11 at position 64
+YFS      Writing to block 11
+YFS      EditOpenFile Entry
+YFS      EditOpenFile open_files: 0x1e050
+YFS      EditOpenFile *wait: 0x1e050
+YFS      EditOpenFile q: 0x1e050
+YFS      EditOpenFile q != NULL and q->fd != fd
+YFS      EditOpenFile q->next: 0x2a698
+YFS      EditOpenFile q->blocknum: 0
+YFS      EditOpenFile q->position: 96
+YFS      EditOpenFile Exit
+YFS      AddTOBlock open_files: 0x1e050 
+YFS      AddToBlock len: 32
+YFS      AddToBlock old size: 64
+YFS      AddToBlock len: 32
+YFS      AddToBlock new size: 96
+YFS      ReadSector returned 0
+YFS      AddToBlock Exit
+YFS      CreateMkdir: Dir is 0
+YFS      MNF: Dir is 0
+YFS      ReadSector returned 0
+YFS      Returning 1
+YFS      ReadSector returned 0
+YFS      YFSCreateMkDir: new node type 2
+YFS      ReadSector returned 0
+YFS      YFSCreateMkDir: new node size 0
+YFS      ----------YFSCreateMkDir Exit----------
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 4
+YFS      Message Pid: 3
+YFS      4: Write
+YFS      ReadSector returned 0
+YFS      YFSWrite: Can't write to directory
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 1
+YFS      Message Pid: 3
+YFS      1: Close
+YFS      InsertFD free_fds: 0x229b8
+YFS      InsertFD wait: 0x229b8
+YFS      InsertFD new->fd: 1 
+YFS      InsertNode: Outside loop 1
+YFS      InsertFD list: 0x229b8
+YFS      InsertFD next: 0x22a10
+YFS      InsertFD list: 0x22a10
+YFS      InsertFD next: 0x22a68
+YFS      InsertNode: Outside loop 2
+YFS      RemoveOpenFile Entry
+YFS      RemoveOpenFile Exit (middle one)
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 2
+YFS      Message Pid: 3
+YFS      2: Create
+YFS      YFSCreate 
+YFS      YFSCreate open_files: 0x1e050
+YFS      ----------YFSCreateMkDir Entry----------
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      CreateMkdir: Dir is 0
+YFS      YFSCreateMkDir null path length: 6
+YFS      YFSCreateMkDir finding last slash
+YFS      YFSCreateMkDir pathname: /dir/y
+YFS      YFSCreateMkDir loop entry 4
+YFS      ParseFileName Entry
+YFS      ParseFileName filename: /dir
+YFS      ParseFileName dir_inum: 1
+YFS      ParseFileName Entering While loop
+YFS      TraverseDirs Entry
+YFS      Traversing path dir at inum 1
+YFS      ReadSector returned 0
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 6
+YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_dir_name: a
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_dir_name: b
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_dir_name: c
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_dir_name: dir
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper Exit (success)
+YFS      TraverseDirs found inum 5
+YFS      ParseFileName Exit
+YFS      YFSCreateMkDir directory: /dir
+YFS      YFSCreateMkDir new File: y
+YFS      Parent inum: 5
+YFS      ReadSector returned 0
+YFS      Parent type: 1
+YFS      TraverseDirs Entry
+YFS      Traversing path y at inum 5
+YFS      ReadSector returned 0
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: y
+YFS      TraverseDirsHelper curr_block: 11
+YFS      TraverseDirsHelper num_dir_entries: 3
+YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: y
+YFS      TraverseDirsHelper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: y
+YFS      TraverseDirsHelper curr_dir_name: x
+YFS      TraverseDirsHelper dir_name: y
+YFS      TraverseDirsHelper Exit (fail)
+YFS      TraverseDirs found inum -1
+YFS      TraverseDirs traversing direct block 1
+YFS      TraverseDirs Exit
+YFS      ReadSector returned 0
+YFS      InsertOFDeluxe Entry
+YFS      InsertOFDeluxe inum: 7
+YFS      ReadSector returned 0
+YFS      InsertOFDeluxe we have a file
+YFS      New fd: 1
+YFS      InsertOpenFile Entry
+YFS          *wait 0x1e050
+YFS          open_files: 0x1e050
+YFS      InsertOpenFile list: 0x1e050
+YFS      InsertNode: Outside loop 1
+YFS      InsertNode: Outside loop 2
+YFS      InsertOFDeluxe Exit
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 5
+YFS      AddToBlock len: 32
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (null one)
+YFS      AddToBlock: File is not open
+YFS      AddToBlock Exit
+YFS      CreateMkdir: Dir is 0
+YFS      MNF: Dir is 0
+YFS      ReadSector returned 0
+YFS      Returning 1
+YFS      ReadSector returned 0
+YFS      YFSCreateMkDir: new node type 2
+YFS      ReadSector returned 0
+YFS      YFSCreateMkDir: new node size 0
+YFS      ----------YFSCreateMkDir Exit----------
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 4
+YFS      Message Pid: 3
+YFS      4: Write
+YFS      ReadSector returned 0
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 6
+YFS      AddToBlock len: 16
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      ReadSector returned 0
+YFS      Getting a free block for inum 6
+YFS      Got block 12
+YFS      ReadSector returned 0
+YFS      Writing to block 12 at position 0
+YFS      Writing to block 12
+YFS      EditOpenFile Entry
+YFS      EditOpenFile open_files: 0x1e050
+YFS      EditOpenFile *wait: 0x1e050
+YFS      EditOpenFile q: 0x1e050
+YFS      EditOpenFile q != NULL and q->fd != fd
+YFS      EditOpenFile q->next: 0x24788
+YFS      EditOpenFile q->blocknum: 0
+YFS      EditOpenFile q->position: 16
+YFS      EditOpenFile Exit
+YFS      AddTOBlock open_files: 0x1e050 
+YFS      AddToBlock len: 16
+YFS      AddToBlock old size: 0
+YFS      AddToBlock len: 16
+YFS      AddToBlock new size: 16
+YFS      ReadSector returned 0
+YFS      AddToBlock Exit
+YFS      YFSWrite: returning 16
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 1
+YFS      Message Pid: 3
+YFS      1: Close
+YFS      InsertFD free_fds: 0x229b8
+YFS      InsertFD wait: 0x229b8
+YFS      InsertFD new->fd: 1 
+YFS      InsertNode: Outside loop 1
+YFS      InsertFD list: 0x229b8
+YFS      InsertFD next: 0x22a10
+YFS      InsertFD list: 0x22a10
+YFS      InsertFD next: 0x22a68
+YFS      InsertFD list: 0x22a68
+YFS      InsertFD next: 0x24748
+YFS      InsertNode: Outside loop 2
+YFS      RemoveOpenFile Entry
+YFS      RemoveOpenFile Exit (middle one)
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 2
+YFS      Message Pid: 3
+YFS      2: Create
+YFS      YFSCreate 
+YFS      YFSCreate open_files: 0x1e050
+YFS      ----------YFSCreateMkDir Entry----------
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      CreateMkdir: Dir is 0
+YFS      YFSCreateMkDir null path length: 6
+YFS      YFSCreateMkDir finding last slash
+YFS      YFSCreateMkDir pathname: /dir/z
+YFS      YFSCreateMkDir loop entry 4
+YFS      ParseFileName Entry
+YFS      ParseFileName filename: /dir
+YFS      ParseFileName dir_inum: 1
+YFS      ParseFileName Entering While loop
+YFS      TraverseDirs Entry
+YFS      Traversing path dir at inum 1
+YFS      ReadSector returned 0
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 6
+YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_dir_name: a
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_dir_name: b
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_dir_name: c
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper curr_dir_name: dir
+YFS      TraverseDirsHelper dir_name: dir
+YFS      TraverseDirsHelper Exit (success)
+YFS      TraverseDirs found inum 5
+YFS      ParseFileName Exit
+YFS      YFSCreateMkDir directory: /dir
+YFS      YFSCreateMkDir new File: z
+YFS      Parent inum: 5
+YFS      ReadSector returned 0
+YFS      Parent type: 1
+YFS      TraverseDirs Entry
+YFS      Traversing path z at inum 5
+YFS      ReadSector returned 0
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: z
+YFS      TraverseDirsHelper curr_block: 11
+YFS      TraverseDirsHelper num_dir_entries: 3
+YFS      ReadSector returned 0
+YFS      TraverseDirsHelper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: z
+YFS      TraverseDirsHelper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: z
+YFS      TraverseDirsHelper curr_dir_name: x
+YFS      TraverseDirsHelper dir_name: z
+YFS      TraverseDirsHelper Exit (fail)
+YFS      TraverseDirs found inum -1
+YFS      TraverseDirs traversing direct block 1
+YFS      TraverseDirs Exit
+YFS      ReadSector returned 0
+YFS      InsertOFDeluxe Entry
+YFS      InsertOFDeluxe inum: 8
+YFS      ReadSector returned 0
+YFS      InsertOFDeluxe we have a file
+YFS      New fd: 1
+YFS      InsertOpenFile Entry
+YFS          *wait 0x1e050
+YFS          open_files: 0x1e050
+YFS      InsertOpenFile list: 0x1e050
+YFS      InsertNode: Outside loop 1
+YFS      InsertNode: Outside loop 2
+YFS      InsertOFDeluxe Exit
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 5
+YFS      AddToBlock len: 32
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (null one)
+YFS      AddToBlock: File is not open
+YFS      AddToBlock Exit
+YFS      CreateMkdir: Dir is 0
+YFS      MNF: Dir is 0
+YFS      ReadSector returned 0
+YFS      Returning 1
+YFS      ReadSector returned 0
+YFS      YFSCreateMkDir: new node type 0
+YFS      ReadSector returned 0
+YFS      YFSCreateMkDir: new node size 0
+YFS      ----------YFSCreateMkDir Exit----------
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 4
+YFS      Message Pid: 3
+YFS      4: Write
+YFS      ReadSector returned 0
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 7
+YFS      AddToBlock len: 16
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      ReadSector returned 0
+YFS      Getting a free block for inum 7
+YFS      Got block 13
+YFS      ReadSector returned 0
+YFS      Writing to block 13 at position 0
+YFS      Writing to block 13
+YFS      EditOpenFile Entry
+YFS      EditOpenFile open_files: 0x1e050
+YFS      EditOpenFile *wait: 0x1e050
+YFS      EditOpenFile q: 0x1e050
+YFS      EditOpenFile q != NULL and q->fd != fd
+YFS      EditOpenFile q->next: 0x2a698
+YFS      EditOpenFile q->blocknum: 0
+YFS      EditOpenFile q->position: 16
+YFS      EditOpenFile Exit
+YFS      AddTOBlock open_files: 0x1e050 
+YFS      AddToBlock len: 16
+YFS      AddToBlock old size: 0
+YFS      AddToBlock len: 16
+YFS      AddToBlock new size: 16
+YFS      ReadSector returned 0
+YFS      AddToBlock Exit
+YFS      YFSWrite: returning 16
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 1
+YFS      Message Pid: 3
+YFS      1: Close
+YFS      InsertFD free_fds: 0x229b8
+YFS      InsertFD wait: 0x229b8
+YFS      InsertFD new->fd: 1 
+YFS      InsertNode: Outside loop 1
+YFS      InsertFD list: 0x229b8
+YFS      InsertFD next: 0x22a10
+YFS      InsertFD list: 0x22a10
+YFS      InsertFD next: 0x22a68
+YFS      InsertFD list: 0x22a68
+YFS      InsertFD next: 0x24748
+YFS      InsertFD list: 0x24748
+YFS      InsertFD next: 0x247c0
 YFS      InsertNode: Outside loop 2
 YFS      RemoveOpenFile Entry
 YFS      RemoveOpenFile Exit (middle one)

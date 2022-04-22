@@ -7,8 +7,10 @@
  * Create empty files named "file00" through "file31" in "/".
  */
 int
-main()
+main(int argc, char **argv)
 {
+	(void) argc;
+	(void) argv;
 	int fd;
 	int i;
 	char name[7];

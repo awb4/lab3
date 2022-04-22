@@ -25,7 +25,7 @@ int Shutdown(void);
 // struct file_tree *ParsePathName(char *pathname);
 
 struct inode open_files[MAX_OPEN_FILES];
-short cd;
+short cd = 1;
 // struct file_tree *root;
 // struct file_tree *cd;
 
@@ -261,7 +261,12 @@ ChDir(char *pathname)
     }
     // *message = *new_message;
     Send(new_message, -FILE_SERVER);
-    return new_message->retval;
+    if (msg->retval > 0) {
+        cd = msg->retval;
+        return 0;
+    } else {
+        return ERROR;
+    }
 }
 
 int 
