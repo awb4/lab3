@@ -1,6 +1,6 @@
 #!/bin/sh
 make
 /clear/courses/comp421/pub/bin/mkyfs
-/clear/courses/comp421/pub/bin/yalnix -n -ly 5 yfs tcreate2
+/clear/courses/comp421/pub/bin/yalnix -n -ly 5 yfs tlink
 nano TRACE
 

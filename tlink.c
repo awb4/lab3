@@ -15,5 +15,9 @@ main(int argc, char **argv)
 	status = Link("/a", "/b");
 	printf("Link status %d\n", status);
 
+	status = Unlink("/b");
+	printf("Unlink status %d\n", status);
+
 	Shutdown();
+	return 0;
 }
