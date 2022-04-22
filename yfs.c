@@ -25,6 +25,26 @@ struct open_file_list {
     struct open_file_list *next;
 };
 
+struct block_cache {
+    int num_full;
+    bool dirty_bits[BLOCK_CACHESIZE];
+    short nums[BLOCK_CACHESIZE];
+    union {
+        struct fs_header head;
+        struct inode inode[IPB];
+        char buf[BLOCKSIZE];
+    } blocks[BLOCK_CACHESIZE];
+};
+
+
+struct inode_cache {
+    int num_full;
+    bool dirty_bits[INODE_CACHESIZE];
+    short nums[INODE_CACHESIZE];
+    struct inode nodes[INODE_CACHESIZE];
+};
+
+
 struct free_fd_list {
     int fd;
     struct free_fd_list *next;
@@ -40,6 +60,10 @@ int ni;
 struct fs_header header;
 struct open_file_list *open_files;
 struct free_fd_list *free_fds;
+
+struct block_cache b_cache;
+struct inode_cache i_cache;
+
 
 void YFSOpen(void *m);
 void YFSClose(void *m);
@@ -96,6 +120,11 @@ int CeilDiv(int a, int b);
 bool CheckDir(struct inode *node);
 bool CheckDirHelper(int curr_block, int num_dir_entries);
 void FreeFileBlocks(struct inode *node);
+
+int InsertBlockCache(short idx, void *block);
+int InsertInodeCache(short idx, struct inode *node);
+int GetBlockCache(short index, bool remove);
+int GetInodeCache(short index, bool remove);
 
 int 
 main(int argc, char **argv) 
@@ -879,7 +908,9 @@ YFSShutdown(void *m)
 {
     struct messageSinglePath *msg = (struct messageSinglePath *) m;
     (void) msg;
-    Exit(-1);
+    //DO DIRTY BIT SHIT
+    printf("System is shutting down due to user request\n");
+    Exit(0);
 }
 
 /* ---------------------------------------- YFS Helper Functions ---------------------------------------- */
@@ -1471,6 +1502,7 @@ GetFreeInode()
     for (i = 0; i < ni + 1; i++) {
         if (inode_bitmap[i]) {
             inode_bitmap[i] = false;
+            GetInodeAt(i)->reuse++;
             return i;
         }
     }
@@ -1986,4 +2018,51 @@ FreeFileBlocks(struct inode *node)
             block_bitmap[block[j]] = 1;
         }
     }
+}
+
+int InsertBlockCache(short blknum, void *block) {
+    short hash = blknum % BLOCK_CACHESIZE;
+    if (b_cache.num_full == BLOCK_CACHESIZE) {
+        //write back algo
+    }
+    else {
+        while (b_cache.nums[hash]) {
+            hash++;
+            hash %= BLOCK_CACHESIZE;
+        }
+        b_cache.nums[hash] = blknum;
+        b_cache.blocks[hash] = *block;
+    }
+    return 0;
+}
+int InsertInodeCache(short inum, struct inode *node) {
+    short hash = inum % INODE_CACHESIZE;
+
+    if (i_cache.num_full == INODE_CACHESIZE) {
+        //write back algo
+    }
+    else {
+        while (i_cache.nums[hash]) {
+            hash++;
+            hash %= INODE_CACHESIZE;
+        }
+        i_cache.nums[hash] = blknum;
+        i_cache.nodes[hash] = *block;
+    }
+    return 0;
+}
+int GetBlockCache(short index, bool remove) {
+    int hash = index % BLOCK_CACHESIZE;
+    while (b_cache.nums[hash] != index) {
+        hash++;
+        hash %= BLOCK_CACHESIZE;
+    }
+    return 0;
+
+}
+int GetInodeCache(short index, bool remove) {
+    short hash = inum % INODE_CACHESIZE;
+
+    return 0;
+
 }
