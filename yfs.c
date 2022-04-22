@@ -1655,29 +1655,26 @@ WriteToBlock(int sector_num, void *buf)
     return InsertBlockCache(sector_num, buf, true);
 }
 
-//Write to cache given only an inum and its inode
 int
 WriteINum(int inum, struct inode node) 
 {
-    int sector = GetSectorNum(inum);
-    int position = GetSectorPosition(inum);
-    struct inode *nodes = malloc(BLOCKSIZE);
-    if (ReadFromBlock(sector, nodes) < 0) {
-        TracePrintf(0, "Writing inum can't read block\n");
-        return -1;
-    }
-    nodes[position] = node;
-    return WriteToBlock(sector, nodes);
+    return InsertInodeCache(inum, node, true);
 }
 
 //Get an inode from an inum
 struct inode *
 GetInodeAt(short inum) 
 {
+    struct inode *node = malloc(sizeof(struct inode));
+    if (GetInodeCache(inum, node) >= 0) {
+        return node;
+    }
     struct inode *blk = malloc(BLOCKSIZE);
     int sector = GetSectorNum((int) inum);
     ReadFromBlock(sector, blk);
-    return blk + GetSectorPosition((int) inum);
+    struct inode *read_node = (struct inode *) blk + GetSectorPosition((int) inum);
+    InsertInodeCache(inum, read_node, false);
+    return read_node;
 }
 
 // Add data to already open file (or directory)'s current block
