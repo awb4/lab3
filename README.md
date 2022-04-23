@@ -1,18 +1,18 @@
 # COMP 421 Lab 3 - File System
 
-### Team Info
+## Team Info
 - Alex Berlaga - awb4
 - Eduardo Landin - eal9
 
-### Implementation Details
+## Implementation Details
 
-##### `iolib.a`
-
-
-##### `yfs`
+### `iolib.a`
 
 
-### Testing
+### `yfs`
+
+
+## Testing
 
 Tested using the test files in `clear/courses/comp421/pub/samples-lab3`. We also used the tests in the following GitHub repos: 
 - https://github.com/pjgranahan/yfs-tests 
