@@ -41,12 +41,27 @@ Helper methods: there's a lot of these
   - `ParseFileName` takes in a pathname to a file and returns corresponding inum
     - `TraverseDirs` and `TraverseDirsHelper` help this function by going through the directory entries in the parent directory and searching for the child file.
   - `GetPathName` and `GetBufContents` are helper functions that help unpack the contents of the messages passed to the `YFS` message processing methods.
-  - `InsertOpenFile` and `InsertOFDeluxe`
+  - `InsertOpenFile` and `InsertOFDeluxe` open file helper functions
   - `InsertFD` and `RemoveOpenFile` manipulate the open file list.
   - `SearchOpenFile` and `SearchByFD` look for files in the open file list.
   - `EditOpenFile` edits open file nodes
   - `RemoveMinFD` gets the minimum available `fd`
-  - `MakeNewFile` initializes an inode structure for a new file/directory   
+  - `MakeNewFile` initializes an inode structure for a new file/directory
+  - `ReadFromBlock` reads a block and interacts with the block cache appropriately
+  - `WriteToBlock` writes to a block and interacts with the block cache appropriately
+  - `WriteINum` writes to an inode and interacts with the block and inode cache appropriately
+  - `GetInodeAt` reads and returns an inode. Interacts with the block and inode cache appropriately
+  - `GetFreeInode` and `GetFreeBlock` return free inodes and free blocks from the inode_bitmap and block_bitmap
+  - `CreateDirEntry` creates a directory entry
+  - `GetSectorNum` and `GetSectorPosition` help with getting the position of an inode on disk
+  - `AddToBlock` adds data to a block `GetFromBlock` gets data from block
+  - `AddBlockToInode` gives a block to an inode
+  - `GetTrueBlock` gets a block from the `direct` field in an inode.
+  - `CeilDiv` ceiling function
+  - `CheckDir` checks that a directory contains no entries but `.` and `..`. Helped by `CheckDirHelper`
+  - `FreeFileBlocks` frees the block associated with an `inode`.
+  - `InsertBlockCache`, `GetBlockCache` block cache helper functions
+  - `InsertInodeCache`, `GetInodeCache` inode cache helper functions 
 
 ## Testing
 
