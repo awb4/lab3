@@ -958,7 +958,37 @@ void
 YFSSync(void *m)
 {
     struct messageSinglePath *msg = (struct messageSinglePath *) m;
-    (void) msg;
+    (void) m;
+    int i;
+    for (i = 0; i < INODE_CACHESIZE; i++) {
+        if (i_cache.dirty_bits[i]) {
+            int inum = i_cache.nums[i];
+            struct inode *blk = malloc(BLOCKSIZE);
+            int sector = GetSectorNum((int) inum);
+            if (ReadFromBlock(sector, blk) < 0) {
+                TracePrintf("YFSSync inode readfromblock failed\n");
+                msg->retval = ERROR;
+                return;
+            }
+            blk[GetSectorPosition(inum)] = i_cache.nodes[i];
+            if (WriteSector(sector, blk) < 0) {
+                TracePrintf("YFSSync inode writesector failed\n");
+                msg->retval = ERROR;
+                return;
+            }
+        }
+    }
+    for (i = 0; i < BLOCK_CACHESIZE; i++) {
+        if (b_cache.dirty_bits[i]) {
+            if (WriteSector(b_cache.nums[i], b_cache.blocks[i]) < 0) {
+                TracePrintf("YFSSync block writesector failed\n");
+                msg->retval = ERROR;
+                return;
+            }
+        }
+    }
+    msg->retval = 0;
+    TracePrintf(0, "Take that, bitch! Sync!\n");
 }
 
 /**
@@ -1739,7 +1769,10 @@ GetInodeAt(short inum)
     }
     struct inode *blk = malloc(BLOCKSIZE);
     int sector = GetSectorNum((int) inum);
-    ReadFromBlock(sector, blk);
+    if (ReadFromBlock(sector, blk) < 0) {
+        TracePrintf("GetInodeAt readfromblock failed\n");
+        return NULL;
+    }
     struct inode *read_node = (struct inode *) blk + GetSectorPosition((int) inum);
     TracePrintf(0, "GetInodeAt inserting into inode cache\n");
     TracePrintf(0, "GetInodeAt inum: %d\n", inum);
