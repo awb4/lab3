@@ -3,13 +3,17 @@ YFS      Message: 0x22128
 YFS      InsertOFDeluxe Entry
 YFS      InsertOFDeluxe inum: 1
 YFS      GetInodeAt Entry
+YFS      Inum is 1
+YFS      IPB is 8
+YFS      Math is 1
+YFS      Sector num is 1
 YFS      ---------------ReadFromBlock------------------
 YFS      Reading from block 1
 YFS      Buf's current contents: 172560
 YFS      Inserting block 1 into cache
 YFS      inserting 172560 into cache
 YFS      Block cache OG hash is 1
-YFS      Block cache counter is 0
+YFS      Block cache counter is 2
 YFS      Found Block in cache
 YFS      Inserting at position 1
 YFS      In insert pre-memcpy block 8 position 0, entry 
@@ -21,27 +25,34 @@ YFS      In insert post-memcpy block 8 position 0, entry
 YFS      In insert post-memcpy block 8 position 1, entry 
 YFS      In insert post-memcpy block 8 position 2, entry 
 YFS      b_cache.blocks[hash] contents: ’
-YFS      InsertBlockCache counter is 1
+YFS      InsertBlockCache counter is 2
 YFS      InsertBlockoCache Exit
 YFS      ParseFileName Exit
 YFS      GetInodeAt inserting into inode cache
+YFS      GetInodeAt node: 0x2a250
 YFS      GetInodeAt inum: 1
 YFS      GetInodeAt node->size: 64
 YFS      InsertInodeCache Entry
 YFS      InsertInodeCache inum: 1
 YFS      Inserting node of size 64
 YFS      Inode OG hash is 1
-YFS      Inode cache counter is 0
+YFS      Inode cache counter is 2
 YFS      InsertInodeCache found Inode in cache
 YFS      InsertInodeCache inserting at position 1
 YFS      InsertInodeCache node hash 1
 YFS      GetInodeCache Nodes 2 size: 0
-YFS      InsertInodeCache counter is 1
+YFS      InsertInodeCache counter is 2
 YFS      InsertInodeCache Exit
 YFS      InsertOFDeluxe: we have a directory
 YFS      InsertOpenFile Entry
 YFS          *wait (nil)
 YFS          open_files: (nil)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 0
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 64
+YFS      GetInodeAt node->type: 1
 YFS      InsertOpenFile list: (nil)
 YFS      InsertOpenFile Exit (first one)
 YFS      InsertOFDeluxe Exit
@@ -57,7 +68,7 @@ YFS      Buf's current contents: 172040
 YFS      Inserting block 1 into cache
 YFS      inserting 172040 into cache
 YFS      Block cache OG hash is 1
-YFS      Block cache counter is 2
+YFS      Block cache counter is 4
 YFS      Found Block in cache
 YFS      Inserting at position 1
 YFS      In insert pre-memcpy block 8 position 0, entry 
@@ -69,7 +80,7 @@ YFS      In insert post-memcpy block 8 position 0, entry
 YFS      In insert post-memcpy block 8 position 1, entry 
 YFS      In insert post-memcpy block 8 position 2, entry 
 YFS      b_cache.blocks[hash] contents: ’
-YFS      InsertBlockCache counter is 3
+YFS      InsertBlockCache counter is 4
 YFS      InsertBlockoCache Exit
 YFS      ParseFileName Exit
 YFS      Initializing Free Blocks
@@ -85,12 +96,11 @@ YFS      ----------YFSCreateMkDir Entry----------
 YFS      GetPathName Entry
 YFS      GetPathName Exit
 YFS      YFSCreateMkDir: Dir is 0
-YFS      YFSCreateMkDir null path length: 4
+YFS      YFSCreateMkDir null path length: 1
 YFS      YFSCreateMkDir finding last slash
-YFS      YFSCreateMkDir pathname: /foo
-YFS      YFSCreateMkDir loop entry 0
+YFS      YFSCreateMkDir pathname: 0
 YFS      YFSCreateMkDir directory: 
-YFS      YFSCreateMkDir new_file: foo
+YFS      YFSCreateMkDir new_file: 0
 YFS      YFSCreateMkDir parent_inum: 1
 YFS      GetInodeAt Entry
 YFS      GetInodeCache Nodes 2 size: 0
@@ -100,7 +110,7 @@ YFS      GetInodeAt node->size: 64
 YFS      GetInodeAt node->type: 1
 YFS      YFSCreateMkDir parent type: 1
 YFS      TraverseDirs Entry
-YFS      Traversing path foo at inum 1
+YFS      Traversing path 0 at inum 1
 YFS      ParseFileName Exit
 YFS      GetInodeAt Entry
 YFS      GetInodeCache Nodes 2 size: 0
@@ -112,16 +122,16 @@ YFS      TraverseDirs inode type: 1
 YFS      TraverseDirs traversing direct block 0
 YFS      Size Remaining :64
 YFS      TraverseDirsHelper Entry
-YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper dir_name: 0
 YFS      TraverseDirsHelper curr_block: 7
 YFS      TraverseDirsHelper num_dir_entries: 2
 YFS      ---------------ReadFromBlock------------------
 YFS      Reading from block 7
-YFS      Buf's current contents: 174928
+YFS      Buf's current contents: 175504
 YFS      Inserting block 7 into cache
-YFS      inserting 174928 into cache
+YFS      inserting 175504 into cache
 YFS      Block cache OG hash is 7
-YFS      Block cache counter is 3
+YFS      Block cache counter is 6
 YFS      Found Block in cache
 YFS      Inserting at position 7
 YFS      In insert pre-memcpy block 8 position 0, entry 
@@ -133,31 +143,35 @@ YFS      In insert post-memcpy block 8 position 0, entry
 YFS      In insert post-memcpy block 8 position 1, entry 
 YFS      In insert post-memcpy block 8 position 2, entry 
 YFS      b_cache.blocks[hash] contents: 
-YFS      InsertBlockCache counter is 4
+YFS      InsertBlockCache counter is 6
 YFS      InsertBlockoCache Exit
 YFS      ParseFileName Exit
-YFS      TraverseDirsHelper curr_dir_name: .
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper curr_dir_name: ..
-YFS      TraverseDirsHelper dir_name: foo
+YFS      Helper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: 0
+YFS      Helper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: 0
 YFS      TraverseDirsHelper Exit (fail)
 YFS      TraverseDirs found inum -1
 YFS      TraverseDirs traversing direct block 1
 YFS      TraverseDirs Exit
 YFS      GetInodeAt Entry
+YFS      Inum is 2
+YFS      IPB is 8
+YFS      Math is 1
+YFS      Sector num is 1
 YFS      ---------------ReadFromBlock------------------
 YFS      Reading from block 1
-YFS      Buf now contains 
+YFS      Buf now contains èHƒ}è
 YFS      Shoving in ’
 YFS      Shoving into 0x25a64
 YFS      ptr 7 is 0x26664
 YFS      Buf now contains ’
 YFS      Filled buf at hash index 1
-YFS      Buf's current contents: 175520
+YFS      Buf's current contents: 176136
 YFS      Inserting block 1 into cache
-YFS      inserting 175520 into cache
+YFS      inserting 176136 into cache
 YFS      Block cache OG hash is 1
-YFS      Block cache counter is 5
+YFS      Block cache counter is 8
 YFS      Found Block in cache
 YFS      Inserting at position 1
 YFS      In insert pre-memcpy block 8 position 0, entry 
@@ -169,22 +183,23 @@ YFS      In insert post-memcpy block 8 position 0, entry
 YFS      In insert post-memcpy block 8 position 1, entry 
 YFS      In insert post-memcpy block 8 position 2, entry 
 YFS      b_cache.blocks[hash] contents: ’
-YFS      InsertBlockCache counter is 6
+YFS      InsertBlockCache counter is 8
 YFS      InsertBlockoCache Exit
 YFS      ParseFileName Exit
 YFS      GetInodeAt inserting into inode cache
+YFS      GetInodeAt node: 0x2b088
 YFS      GetInodeAt inum: 2
 YFS      GetInodeAt node->size: 0
 YFS      InsertInodeCache Entry
 YFS      InsertInodeCache inum: 2
 YFS      Inserting node of size 0
 YFS      Inode OG hash is 2
-YFS      Inode cache counter is 3
+YFS      Inode cache counter is 7
 YFS      InsertInodeCache found Inode in cache
 YFS      InsertInodeCache inserting at position 2
 YFS      InsertInodeCache node hash 2
 YFS      GetInodeCache Nodes 2 size: 0
-YFS      InsertInodeCache counter is 4
+YFS      InsertInodeCache counter is 7
 YFS      InsertInodeCache Exit
 YFS      GetInodeAt Entry
 YFS      GetInodeCache Nodes 2 size: 0
@@ -206,6 +221,12 @@ YFS      InsertOFDeluxe: there is no reused fd
 YFS      InsertOpenFile Entry
 YFS          *wait 0x22198
 YFS          open_files: 0x22198
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 0
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 2
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
 YFS      InsertOpenFile list: 0x22198
 YFS      InsertNode: Outside loop 1
 YFS      InsertNode: Outside loop 2
@@ -224,17 +245,17 @@ YFS      GetInodeAt node->size: 64
 YFS      GetInodeAt node->type: 1
 YFS      ---------------ReadFromBlock------------------
 YFS      Reading from block 7
-YFS      Buf now contains H¸ÿþþþþþþ~H‰Eà¶Eï¶UïÁâ	ÐH˜H‰EØH‹EØHÁàH	EØH‹EØHÁà H	EØH‹EðHPH‰UðH‹
+YFS      Buf now contains tH‹E°÷Ø‰
 YFS      Shoving in 
 YFS      Shoving into 0x26664
 YFS      ptr 7 is 0x26664
 YFS      Buf now contains 
 YFS      Filled buf at hash index 7
-YFS      Buf's current contents: 176352
+YFS      Buf's current contents: 177024
 YFS      Inserting block 7 into cache
-YFS      inserting 176352 into cache
+YFS      inserting 177024 into cache
 YFS      Block cache OG hash is 7
-YFS      Block cache counter is 7
+YFS      Block cache counter is 10
 YFS      Found Block in cache
 YFS      Inserting at position 7
 YFS      In insert pre-memcpy block 8 position 0, entry 
@@ -246,14 +267,14 @@ YFS      In insert post-memcpy block 8 position 0, entry
 YFS      In insert post-memcpy block 8 position 1, entry 
 YFS      In insert post-memcpy block 8 position 2, entry 
 YFS      b_cache.blocks[hash] contents: 
-YFS      InsertBlockCache counter is 8
+YFS      InsertBlockCache counter is 10
 YFS      InsertBlockoCache Exit
 YFS      ParseFileName Exit
 YFS      AddToBlock: writing to block 7 at position 64
 YFS      AddToBlock: writing to block 7
-YFS      inserting 176352 into cache
+YFS      inserting 177024 into cache
 YFS      Block cache OG hash is 7
-YFS      Block cache counter is 8
+YFS      Block cache counter is 11
 YFS      Found Block in cache
 YFS      Inserting at position 7
 YFS      In insert pre-memcpy block 8 position 0, entry 
@@ -265,7 +286,7 @@ YFS      In insert post-memcpy block 8 position 0, entry
 YFS      In insert post-memcpy block 8 position 1, entry 
 YFS      In insert post-memcpy block 8 position 2, entry 
 YFS      b_cache.blocks[hash] contents: 
-YFS      InsertBlockCache counter is 9
+YFS      InsertBlockCache counter is 11
 YFS      InsertBlockoCache Exit
 YFS      AddToBlock open_files: 0x22198 
 YFS      AddToBlock len: 32
@@ -275,7 +296,7 @@ YFS      AddToBlock new size: 96
 YFS      WriteINum Entry
 YFS      WriteInum inum: 1
 YFS      WriteInum node->size: 96
-YFS      Buf now contains H‰EøH‹EøH‰EðH‹Eð]ÃUH‰åHƒì‰}üH‰uð‰Uø‹UøH‹Mð‹EüH‰Î‰Çè
+YFS      Buf now contains tˆŠHHƒÀˆ„ÉuÕHBüHƒÀŠ8t!ŠH8tŠH8tŠH8uÝHÿÀHÿÀHÿÀHÄ
 YFS      Shoving in ’
 YFS      Shoving into 0x25a64
 YFS      ptr 7 is 0x26664
@@ -285,12 +306,12 @@ YFS      InsertInodeCache Entry
 YFS      InsertInodeCache inum: 1
 YFS      Inserting node of size 96
 YFS      Inode OG hash is 1
-YFS      Inode cache counter is 7
+YFS      Inode cache counter is 12
 YFS      InsertInodeCache found Inode in cache
 YFS      InsertInodeCache inserting at position 1
 YFS      InsertInodeCache node hash 1
 YFS      GetInodeCache Nodes 2 size: 0
-YFS      InsertInodeCache counter is 8
+YFS      InsertInodeCache counter is 12
 YFS      InsertInodeCache Exit
 YFS      AddToBlock Exit
 YFS      MakeNewFile Entry
@@ -312,8 +333,8 @@ YFS      YFSCreateMkDir: Parent node size: 64
 YFS      WriteINum Entry
 YFS      WriteInum inum: 2
 YFS      WriteInum node->size: 0
-YFS      Buf now contains 
-
+YFS      Buf now contains ïu
+H‹EÈHƒÀëmH‹EÈHƒÀ¶
 YFS      Shoving in ’
 YFS      Shoving into 0x25a64
 YFS      ptr 7 is 0x26664
@@ -323,17 +344,204 @@ YFS      InsertInodeCache Entry
 YFS      InsertInodeCache inum: 2
 YFS      Inserting node of size 0
 YFS      Inode OG hash is 2
-YFS      Inode cache counter is 8
+YFS      Inode cache counter is 13
 YFS      InsertInodeCache found Inode in cache
 YFS      InsertInodeCache inserting at position 2
 YFS      InsertInodeCache node hash 2
 YFS      GetInodeCache Nodes 2 size: 0
-YFS      InsertInodeCache counter is 9
+YFS      InsertInodeCache counter is 13
 YFS      InsertInodeCache Exit
 YFS      YFSCreateMkDir: Dir is 0
 YFS      YFSCreateMkDir (after adding ., ..) child node->size: 0
 YFS      YFSCreateMkDir msg->retval 1
 YFS      ----------YFSCreateMkDir Exit----------
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 4
+YFS      Message Pid: 3
+YFS      4: Write
+YFS      YFSWrite Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 0
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 2
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 0
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 2
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 2
+YFS      AddToBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 0
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 2
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock: getting a free block for inum 2
+YFS      AddToBlock: got block 8
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 8
+YFS      Buf's current contents: 178824
+YFS      Inserting block 8 into cache
+YFS      inserting 178824 into cache
+YFS      Block cache OG hash is 8
+YFS      Block cache counter is 15
+YFS      Found Block in cache
+YFS      Inserting at position 8
+YFS      In insert pre-memcpy block 8 position 0, entry 
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry 
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 15
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock: writing to block 8 at position 0
+YFS      AddToBlock: writing to block 8
+YFS      inserting 178824 into cache
+YFS      Block cache OG hash is 8
+YFS      Block cache counter is 16
+YFS      Found Block in cache
+YFS      Inserting at position 8
+YFS      In insert pre-memcpy block 8 position 0, entry 
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: Hello world
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: Hello world
+YFS      InsertBlockCache counter is 16
+YFS      InsertBlockoCache Exit
+YFS      AddToBlock open_files: 0x22198 
+YFS      AddToBlock len: 11
+YFS      AddToBlock old size: 0
+YFS      AddToBlock len: 11
+YFS      AddToBlock new size: 11
+YFS      WriteINum Entry
+YFS      WriteInum inum: 2
+YFS      WriteInum node->size: 11
+YFS      Buf now contains  Path %s at cd %d
+
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 2
+YFS      Inserting node of size 11
+YFS      Inode OG hash is 2
+YFS      Inode cache counter is 17
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 2
+YFS      InsertInodeCache Dirty is true
+YFS      InsertInodeCache writing inum 2 to block 1 at position 2
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 1
+YFS      Buf now contains SWrite Entry
+
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      Buf's current contents: 179864
+YFS      Inserting block 1 into cache
+YFS      inserting 179864 into cache
+YFS      Block cache OG hash is 1
+YFS      Block cache counter is 19
+YFS      Found Block in cache
+YFS      Inserting at position 1
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: ’
+YFS      initial block hash contents: ’
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: ’
+YFS      InsertBlockCache counter is 19
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock Exit
+YFS      YFSWrite: returning 11
+YFS      YFSWrite Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 5
+YFS      Message Pid: 3
+YFS      5: Seek
+YFS      YFSSeek Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 2
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      YFSSeek set
+YFS      YFSSeek Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 3
+YFS      Message Pid: 3
+YFS      3: Read
+YFS      YFSRead Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 2
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock Entry
+YFS      GetFromBlock inum: 2
+YFS      GetFromBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 2
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock: reading from block 8 at position 0
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 8
+YFS      Buf now contains PH‹E˜H‰HƒEÐH‹EÐH‰EÈH…ÀþÿÿHƒÀ H‰EÐ‹UðH‹EÐH‹
+YFS      Shoving in Hello world
+YFS      Shoving into 0x26864
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains Hello world
+YFS      Filled buf at hash index 8
+YFS      Returning dirty bit 1
+YFS      GetFromBlock character 72
+YFS      GetFromBlock character 101
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 32
+YFS      GetFromBlock character 119
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 114
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 100
+YFS      YFSRead Exit
 YFS      --------------------Replied successfully--------------------
 YFS      --------------------Getting Message--------------------
 YFS      Received Message
@@ -346,25 +554,24 @@ YFS      ----------YFSCreateMkDir Entry----------
 YFS      GetPathName Entry
 YFS      GetPathName Exit
 YFS      YFSCreateMkDir: Dir is 0
-YFS      YFSCreateMkDir null path length: 4
+YFS      YFSCreateMkDir null path length: 1
 YFS      YFSCreateMkDir finding last slash
-YFS      YFSCreateMkDir pathname: /bar
-YFS      YFSCreateMkDir loop entry 0
+YFS      YFSCreateMkDir pathname: 1
 YFS      YFSCreateMkDir directory: 
-YFS      YFSCreateMkDir new_file: bar
+YFS      YFSCreateMkDir new_file: 1
 YFS      YFSCreateMkDir parent_inum: 1
 YFS      GetInodeAt Entry
-YFS      GetInodeCache Nodes 2 size: 0
+YFS      GetInodeCache Nodes 2 size: 11
 YFS      GetInodeAt getting cached inode
 YFS      GetInodeAt inum: 1
 YFS      GetInodeAt node->size: 96
 YFS      GetInodeAt node->type: 1
 YFS      YFSCreateMkDir parent type: 1
 YFS      TraverseDirs Entry
-YFS      Traversing path bar at inum 1
+YFS      Traversing path 1 at inum 1
 YFS      ParseFileName Exit
 YFS      GetInodeAt Entry
-YFS      GetInodeCache Nodes 2 size: 0
+YFS      GetInodeCache Nodes 2 size: 11
 YFS      GetInodeAt getting cached inode
 YFS      GetInodeAt inum: 1
 YFS      GetInodeAt node->size: 96
@@ -373,74 +580,77 @@ YFS      TraverseDirs inode type: 1
 YFS      TraverseDirs traversing direct block 0
 YFS      Size Remaining :96
 YFS      TraverseDirsHelper Entry
-YFS      TraverseDirsHelper dir_name: bar
+YFS      TraverseDirsHelper dir_name: 1
 YFS      TraverseDirsHelper curr_block: 7
 YFS      TraverseDirsHelper num_dir_entries: 3
 YFS      ---------------ReadFromBlock------------------
 YFS      Reading from block 7
-YFS      Buf now contains ory
-
+YFS      Buf now contains ƒÀ¶
 YFS      Shoving in 
 YFS      Shoving into 0x26664
 YFS      ptr 7 is 0x26664
 YFS      Buf now contains 
 YFS      Filled buf at hash index 7
 YFS      Returning dirty bit 1
-YFS      TraverseDirsHelper curr_dir_name: .
-YFS      TraverseDirsHelper dir_name: bar
-YFS      TraverseDirsHelper curr_dir_name: ..
-YFS      TraverseDirsHelper dir_name: bar
-YFS      TraverseDirsHelper curr_dir_name: foo
-YFS      TraverseDirsHelper dir_name: bar
+YFS      Helper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: 1
+YFS      Helper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: 1
+YFS      Helper curr_dir_name: 0
+YFS      TraverseDirsHelper dir_name: 1
 YFS      TraverseDirsHelper Exit (fail)
 YFS      TraverseDirs found inum -1
 YFS      TraverseDirs traversing direct block 1
 YFS      TraverseDirs Exit
 YFS      GetInodeAt Entry
+YFS      Inum is 3
+YFS      IPB is 8
+YFS      Math is 1
+YFS      Sector num is 1
 YFS      ---------------ReadFromBlock------------------
 YFS      Reading from block 1
-YFS      Buf now contains ngth: %d
-
+YFS      Buf now contains ‹EÈHƒÀësH‹EÈHƒÀ¶
 YFS      Shoving in ’
 YFS      Shoving into 0x25a64
 YFS      ptr 7 is 0x26664
 YFS      Buf now contains ’
 YFS      Filled buf at hash index 1
-YFS      Buf's current contents: 178936
+YFS      Buf's current contents: 182144
 YFS      Inserting block 1 into cache
-YFS      inserting 178936 into cache
+YFS      inserting 182144 into cache
 YFS      Block cache OG hash is 1
-YFS      Block cache counter is 13
+YFS      Block cache counter is 23
 YFS      Found Block in cache
 YFS      Inserting at position 1
-YFS      In insert pre-memcpy block 8 position 0, entry 
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
 YFS      In insert pre-memcpy block 8 position 1, entry 
 YFS      In insert pre-memcpy block 8 position 2, entry 
 YFS      initial block contents: ’
 YFS      initial block hash contents: ’
-YFS      In insert post-memcpy block 8 position 0, entry 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
 YFS      In insert post-memcpy block 8 position 1, entry 
 YFS      In insert post-memcpy block 8 position 2, entry 
 YFS      b_cache.blocks[hash] contents: ’
-YFS      InsertBlockCache counter is 14
+YFS      InsertBlockCache counter is 23
 YFS      InsertBlockoCache Exit
 YFS      ParseFileName Exit
 YFS      GetInodeAt inserting into inode cache
+YFS      GetInodeAt node: 0x2c840
 YFS      GetInodeAt inum: 3
 YFS      GetInodeAt node->size: 0
 YFS      InsertInodeCache Entry
 YFS      InsertInodeCache inum: 3
 YFS      Inserting node of size 0
 YFS      Inode OG hash is 3
-YFS      Inode cache counter is 11
+YFS      Inode cache counter is 24
 YFS      InsertInodeCache found Inode in cache
 YFS      InsertInodeCache inserting at position 3
 YFS      InsertInodeCache node hash 3
-YFS      GetInodeCache Nodes 2 size: 0
-YFS      InsertInodeCache counter is 12
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      InsertInodeCache counter is 24
 YFS      InsertInodeCache Exit
 YFS      GetInodeAt Entry
-YFS      GetInodeCache Nodes 2 size: 0
+YFS      GetInodeCache Nodes 2 size: 11
 YFS      GetInodeAt getting cached inode
 YFS      GetInodeAt inum: 3
 YFS      GetInodeAt node->size: 0
@@ -448,7 +658,7 @@ YFS      GetInodeAt node->type: 0
 YFS      InsertOFDeluxe Entry
 YFS      InsertOFDeluxe inum: 3
 YFS      GetInodeAt Entry
-YFS      GetInodeCache Nodes 2 size: 0
+YFS      GetInodeCache Nodes 2 size: 11
 YFS      GetInodeAt getting cached inode
 YFS      GetInodeAt inum: 3
 YFS      GetInodeAt node->size: 0
@@ -459,6 +669,12 @@ YFS      InsertOFDeluxe: there is no reused fd
 YFS      InsertOpenFile Entry
 YFS          *wait 0x22198
 YFS          open_files: 0x22198
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 3
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
 YFS      InsertOpenFile list: 0x22198
 YFS      InsertNode: Outside loop 1
 YFS      InsertNode: Outside loop 2
@@ -470,15 +686,14 @@ YFS      AddToBlock len: 32
 YFS      SearchOpenFile Entry
 YFS      SearchOpenFile Exit (first one)
 YFS      GetInodeAt Entry
-YFS      GetInodeCache Nodes 2 size: 0
+YFS      GetInodeCache Nodes 2 size: 11
 YFS      GetInodeAt getting cached inode
 YFS      GetInodeAt inum: 1
 YFS      GetInodeAt node->size: 96
 YFS      GetInodeAt node->type: 1
 YFS      ---------------ReadFromBlock------------------
 YFS      Reading from block 7
-YFS      Buf now contains s zero links, freeing inode and blocks
-
+YFS      Buf now contains HƒøtGH‹E¨H‹
 YFS      Shoving in 
 YFS      Shoving into 0x26664
 YFS      ptr 7 is 0x26664
@@ -487,21 +702,21 @@ YFS      Filled buf at hash index 7
 YFS      Returning dirty bit 1
 YFS      AddToBlock: writing to block 7 at position 96
 YFS      AddToBlock: writing to block 7
-YFS      inserting 179744 into cache
+YFS      inserting 183032 into cache
 YFS      Block cache OG hash is 7
-YFS      Block cache counter is 15
+YFS      Block cache counter is 25
 YFS      Found Block in cache
 YFS      Inserting at position 7
-YFS      In insert pre-memcpy block 8 position 0, entry 
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
 YFS      In insert pre-memcpy block 8 position 1, entry 
 YFS      In insert pre-memcpy block 8 position 2, entry 
 YFS      initial block contents: 
 YFS      initial block hash contents: 
-YFS      In insert post-memcpy block 8 position 0, entry 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
 YFS      In insert post-memcpy block 8 position 1, entry 
 YFS      In insert post-memcpy block 8 position 2, entry 
 YFS      b_cache.blocks[hash] contents: 
-YFS      InsertBlockCache counter is 16
+YFS      InsertBlockCache counter is 25
 YFS      InsertBlockoCache Exit
 YFS      AddToBlock open_files: 0x22198 
 YFS      AddToBlock len: 32
@@ -511,7 +726,7 @@ YFS      AddToBlock new size: 128
 YFS      WriteINum Entry
 YFS      WriteInum inum: 1
 YFS      WriteInum node->size: 128
-YFS      Buf now contains 
+YFS      Buf now contains ÁHÓî‹E¸H‹Uð‰ÁHÓâH‰ÐH	ðH‰E°H‹E°H;EÐtH‹UÐH‹E°H‰ÖH‰ÇèÉúÿÿéÓ
 YFS      Shoving in ’
 YFS      Shoving into 0x25a64
 YFS      ptr 7 is 0x26664
@@ -521,36 +736,36 @@ YFS      InsertInodeCache Entry
 YFS      InsertInodeCache inum: 1
 YFS      Inserting node of size 128
 YFS      Inode OG hash is 1
-YFS      Inode cache counter is 15
+YFS      Inode cache counter is 29
 YFS      InsertInodeCache found Inode in cache
 YFS      InsertInodeCache inserting at position 1
 YFS      InsertInodeCache Dirty is true
 YFS      InsertInodeCache writing inum 1 to block 1 at position 1
 YFS      ---------------ReadFromBlock------------------
 YFS      Reading from block 1
-YFS      Buf now contains UH‰åH‰}ØH‰uÐHEØH‰EøHEÐH‰EðH‹Eø¶
+YFS      Buf now contains øH‰ÂH‹EøHÐH‰EøH‹E¸HƒàøH‰ÂH‹EðHÐH‰EðHƒe¸ëLëJH‹Eø¶
 YFS      Shoving in ’
 YFS      Shoving into 0x25a64
 YFS      ptr 7 is 0x26664
 YFS      Buf now contains ’
 YFS      Filled buf at hash index 1
-YFS      Buf's current contents: 180784
+YFS      Buf's current contents: 184072
 YFS      Inserting block 1 into cache
-YFS      inserting 180784 into cache
+YFS      inserting 184072 into cache
 YFS      Block cache OG hash is 1
-YFS      Block cache counter is 18
+YFS      Block cache counter is 28
 YFS      Found Block in cache
 YFS      Inserting at position 1
-YFS      In insert pre-memcpy block 8 position 0, entry 
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
 YFS      In insert pre-memcpy block 8 position 1, entry 
 YFS      In insert pre-memcpy block 8 position 2, entry 
 YFS      initial block contents: ’
 YFS      initial block hash contents: ’
-YFS      In insert post-memcpy block 8 position 0, entry 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
 YFS      In insert post-memcpy block 8 position 1, entry 
 YFS      In insert post-memcpy block 8 position 2, entry 
 YFS      b_cache.blocks[hash] contents: ’
-YFS      InsertBlockCache counter is 19
+YFS      InsertBlockCache counter is 28
 YFS      InsertBlockoCache Exit
 YFS      ParseFileName Exit
 YFS      AddToBlock Exit
@@ -573,7 +788,7 @@ YFS      YFSCreateMkDir: Parent node size: 96
 YFS      WriteINum Entry
 YFS      WriteInum inum: 3
 YFS      WriteInum node->size: 0
-YFS      Buf now contains àH‹EðH‰ÖH‰Çèèýÿÿé‰
+YFS      Buf now contains  ÿÿÿH‰…HÿÿÿH‹…HÿÿÿH=
 YFS      Shoving in ’
 YFS      Shoving into 0x25a64
 YFS      ptr 7 is 0x26664
@@ -583,17 +798,202 @@ YFS      InsertInodeCache Entry
 YFS      InsertInodeCache inum: 3
 YFS      Inserting node of size 0
 YFS      Inode OG hash is 3
-YFS      Inode cache counter is 16
+YFS      Inode cache counter is 30
 YFS      InsertInodeCache found Inode in cache
 YFS      InsertInodeCache inserting at position 3
 YFS      InsertInodeCache node hash 3
-YFS      GetInodeCache Nodes 2 size: 0
-YFS      InsertInodeCache counter is 17
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      InsertInodeCache counter is 30
 YFS      InsertInodeCache Exit
 YFS      YFSCreateMkDir: Dir is 0
 YFS      YFSCreateMkDir (after adding ., ..) child node->size: 0
 YFS      YFSCreateMkDir msg->retval 2
 YFS      ----------YFSCreateMkDir Exit----------
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 4
+YFS      Message Pid: 3
+YFS      4: Write
+YFS      YFSWrite Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 3
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 3
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 3
+YFS      AddToBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 3
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock: getting a free block for inum 3
+YFS      AddToBlock: got block 9
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 9
+YFS      Buf's current contents: 185352
+YFS      Inserting block 9 into cache
+YFS      inserting 185352 into cache
+YFS      Block cache OG hash is 9
+YFS      Block cache counter is 31
+YFS      Found Block in cache
+YFS      Inserting at position 9
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 31
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock: writing to block 9 at position 0
+YFS      AddToBlock: writing to block 9
+YFS      inserting 185352 into cache
+YFS      Block cache OG hash is 9
+YFS      Block cache counter is 32
+YFS      Found Block in cache
+YFS      Inserting at position 9
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: Hello world
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: Hello world
+YFS      InsertBlockCache counter is 32
+YFS      InsertBlockoCache Exit
+YFS      AddToBlock open_files: 0x22198 
+YFS      AddToBlock len: 11
+YFS      AddToBlock old size: 0
+YFS      AddToBlock len: 11
+YFS      AddToBlock new size: 11
+YFS      WriteINum Entry
+YFS      WriteInum inum: 3
+YFS      WriteInum node->size: 11
+YFS      Buf now contains Àt¸
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 3
+YFS      Inserting node of size 11
+YFS      Inode OG hash is 3
+YFS      Inode cache counter is 34
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 3
+YFS      InsertInodeCache Dirty is true
+YFS      InsertInodeCache writing inum 3 to block 1 at position 3
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 1
+YFS      Buf now contains 
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      Buf's current contents: 186392
+YFS      Inserting block 1 into cache
+YFS      inserting 186392 into cache
+YFS      Block cache OG hash is 1
+YFS      Block cache counter is 35
+YFS      Found Block in cache
+YFS      Inserting at position 1
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: ’
+YFS      initial block hash contents: ’
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: ’
+YFS      InsertBlockCache counter is 35
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock Exit
+YFS      YFSWrite: returning 11
+YFS      YFSWrite Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 5
+YFS      Message Pid: 3
+YFS      5: Seek
+YFS      YFSSeek Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 3
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      YFSSeek set
+YFS      YFSSeek Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 3
+YFS      Message Pid: 3
+YFS      3: Read
+YFS      YFSRead Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 3
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock Entry
+YFS      GetFromBlock inum: 3
+YFS      GetFromBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 3
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock: reading from block 9 at position 0
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 9
+YFS      Buf now contains 
+YFS      Shoving in Hello world
+YFS      Shoving into 0x26a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains Hello world
+YFS      Filled buf at hash index 9
+YFS      Returning dirty bit 1
+YFS      GetFromBlock character 72
+YFS      GetFromBlock character 101
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 32
+YFS      GetFromBlock character 119
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 114
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 100
+YFS      YFSRead Exit
 YFS      --------------------Replied successfully--------------------
 YFS      --------------------Getting Message--------------------
 YFS      Received Message
@@ -606,19 +1006,24 @@ YFS      ----------YFSCreateMkDir Entry----------
 YFS      GetPathName Entry
 YFS      GetPathName Exit
 YFS      YFSCreateMkDir: Dir is 0
-YFS      YFSCreateMkDir null path length: 8
+YFS      YFSCreateMkDir null path length: 1
 YFS      YFSCreateMkDir finding last slash
-YFS      YFSCreateMkDir pathname: /foo/zzz
-YFS      YFSCreateMkDir loop entry 4
-YFS      ParseFileName Entry
-YFS      ParseFileName new_filename: /foo
-YFS      ParseFileName dir_inum: 1
-YFS      ParseFileName Entering While loop
+YFS      YFSCreateMkDir pathname: 2
+YFS      YFSCreateMkDir directory: 
+YFS      YFSCreateMkDir new_file: 2
+YFS      YFSCreateMkDir parent_inum: 1
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 128
+YFS      GetInodeAt node->type: 1
+YFS      YFSCreateMkDir parent type: 1
 YFS      TraverseDirs Entry
-YFS      Traversing path foo at inum 1
+YFS      Traversing path 2 at inum 1
 YFS      ParseFileName Exit
 YFS      GetInodeAt Entry
-YFS      GetInodeCache Nodes 2 size: 0
+YFS      GetInodeCache Nodes 2 size: 11
 YFS      GetInodeAt getting cached inode
 YFS      GetInodeAt inum: 1
 YFS      GetInodeAt node->size: 128
@@ -627,67 +1032,7 @@ YFS      TraverseDirs inode type: 1
 YFS      TraverseDirs traversing direct block 0
 YFS      Size Remaining :128
 YFS      TraverseDirsHelper Entry
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper curr_block: 7
-YFS      TraverseDirsHelper num_dir_entries: 4
-YFS      ---------------ReadFromBlock------------------
-YFS      Reading from block 7
-YFS      Buf now contains °H‰ÖH‰ÇèdúÿÿëqH‹E¨HƒÀ H‰E¨H‹E HƒÀ H‰E Hƒm˜Hƒ}˜
-YFS      Shoving in 
-YFS      Shoving into 0x26664
-YFS      ptr 7 is 0x26664
-YFS      Buf now contains 
-YFS      Filled buf at hash index 7
-YFS      Returning dirty bit 1
-YFS      TraverseDirsHelper curr_dir_name: .
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper curr_dir_name: ..
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper curr_dir_name: foo
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper Exit (success)
-YFS      TraverseDirs found inum 2
-YFS      ParseFileName Exit
-YFS      YFSCreateMkDir directory: /foo
-YFS      YFSCreateMkDir new_file: zzz
-YFS      YFSCreateMkDir parent_inum: 2
-YFS      GetInodeAt Entry
-YFS      GetInodeCache Nodes 2 size: 0
-YFS      GetInodeAt getting cached inode
-YFS      GetInodeAt inum: 2
-YFS      GetInodeAt node->size: 0
-YFS      GetInodeAt node->type: 2
-YFS      YFSCreateMkDir parent type: 2
-YFS      YFSCreateMkDir: (ERROR) parent node is not a directory
-YFS      ----------YFSCreateMkDir Exit----------
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 0
-YFS      Message Pid: 3
-YFS      0: Open
-YFS      YFSOpen Entry
-YFS      GetPathName Entry
-YFS      GetPathName Exit
-YFS      YFSOpen: opening Path /foo at cd 1
-YFS      ParseFileName Entry
-YFS      ParseFileName new_filename: /foo
-YFS      ParseFileName dir_inum: 1
-YFS      ParseFileName Entering While loop
-YFS      TraverseDirs Entry
-YFS      Traversing path foo at inum 1
-YFS      ParseFileName Exit
-YFS      GetInodeAt Entry
-YFS      GetInodeCache Nodes 2 size: 0
-YFS      GetInodeAt getting cached inode
-YFS      GetInodeAt inum: 1
-YFS      GetInodeAt node->size: 128
-YFS      GetInodeAt node->type: 1
-YFS      TraverseDirs inode type: 1
-YFS      TraverseDirs traversing direct block 0
-YFS      Size Remaining :128
-YFS      TraverseDirsHelper Entry
-YFS      TraverseDirsHelper dir_name: foo
+YFS      TraverseDirsHelper dir_name: 2
 YFS      TraverseDirsHelper curr_block: 7
 YFS      TraverseDirsHelper num_dir_entries: 4
 YFS      ---------------ReadFromBlock------------------
@@ -699,282 +1044,3696 @@ YFS      ptr 7 is 0x26664
 YFS      Buf now contains 
 YFS      Filled buf at hash index 7
 YFS      Returning dirty bit 1
-YFS      TraverseDirsHelper curr_dir_name: .
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper curr_dir_name: ..
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper curr_dir_name: foo
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper Exit (success)
-YFS      TraverseDirs found inum 2
-YFS      ParseFileName Exit
-YFS      GetInodeAt Entry
-YFS      GetInodeCache Nodes 2 size: 0
-YFS      GetInodeAt getting cached inode
-YFS      GetInodeAt inum: 2
-YFS      GetInodeAt node->size: 0
-YFS      GetInodeAt node->type: 2
-YFS      YFSOpen: (ERROR) opening Inode 2 at pathname /foo
-YFS      InsertOFDeluxe Entry
-YFS      InsertOFDeluxe inum: 2
-YFS      GetInodeAt Entry
-YFS      GetInodeCache Nodes 2 size: 0
-YFS      GetInodeAt getting cached inode
-YFS      GetInodeAt inum: 2
-YFS      GetInodeAt node->size: 0
-YFS      GetInodeAt node->type: 2
-YFS      InsertOFDeluxe: we have a file
-YFS      New fd: -2
-YFS      InsertOFDeluxe: there is no reused fd
-YFS      InsertOpenFile Entry
-YFS          *wait 0x22198
-YFS          open_files: 0x22198
-YFS      InsertOpenFile list: 0x22198
-YFS      InsertNode: Outside loop 1
-YFS      InsertNode: Outside loop 2
-YFS      InsertOFDeluxe Exit
-YFS      YFSOpen Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 0
-YFS      Message Pid: 3
-YFS      0: Open
-YFS      YFSOpen Entry
-YFS      GetPathName Entry
-YFS      GetPathName Exit
-YFS      YFSOpen: opening Path /bar at cd 1
-YFS      ParseFileName Entry
-YFS      ParseFileName new_filename: /bar
-YFS      ParseFileName dir_inum: 1
-YFS      ParseFileName Entering While loop
-YFS      TraverseDirs Entry
-YFS      Traversing path bar at inum 1
-YFS      ParseFileName Exit
-YFS      GetInodeAt Entry
-YFS      GetInodeCache Nodes 2 size: 0
-YFS      GetInodeAt getting cached inode
-YFS      GetInodeAt inum: 1
-YFS      GetInodeAt node->size: 128
-YFS      GetInodeAt node->type: 1
-YFS      TraverseDirs inode type: 1
-YFS      TraverseDirs traversing direct block 0
-YFS      Size Remaining :128
-YFS      TraverseDirsHelper Entry
-YFS      TraverseDirsHelper dir_name: bar
-YFS      TraverseDirsHelper curr_block: 7
-YFS      TraverseDirsHelper num_dir_entries: 4
-YFS      ---------------ReadFromBlock------------------
-YFS      Reading from block 7
-YFS      Buf now contains H‰¸
-YFS      Shoving in 
-YFS      Shoving into 0x26664
-YFS      ptr 7 is 0x26664
-YFS      Buf now contains 
-YFS      Filled buf at hash index 7
-YFS      Returning dirty bit 1
-YFS      TraverseDirsHelper curr_dir_name: .
-YFS      TraverseDirsHelper dir_name: bar
-YFS      TraverseDirsHelper curr_dir_name: ..
-YFS      TraverseDirsHelper dir_name: bar
-YFS      TraverseDirsHelper curr_dir_name: foo
-YFS      TraverseDirsHelper dir_name: bar
-YFS      TraverseDirsHelper curr_dir_name: bar
-YFS      TraverseDirsHelper dir_name: bar
-YFS      TraverseDirsHelper Exit (success)
-YFS      TraverseDirs found inum 3
-YFS      ParseFileName Exit
-YFS      GetInodeAt Entry
-YFS      GetInodeCache Nodes 2 size: 0
-YFS      GetInodeAt getting cached inode
-YFS      GetInodeAt inum: 3
-YFS      GetInodeAt node->size: 0
-YFS      GetInodeAt node->type: 2
-YFS      YFSOpen: (ERROR) opening Inode 3 at pathname /bar
-YFS      InsertOFDeluxe Entry
-YFS      InsertOFDeluxe inum: 3
-YFS      GetInodeAt Entry
-YFS      GetInodeCache Nodes 2 size: 0
-YFS      GetInodeAt getting cached inode
-YFS      GetInodeAt inum: 3
-YFS      GetInodeAt node->size: 0
-YFS      GetInodeAt node->type: 2
-YFS      InsertOFDeluxe: we have a file
-YFS      New fd: -2
-YFS      InsertOFDeluxe: there is no reused fd
-YFS      InsertOpenFile Entry
-YFS          *wait 0x22198
-YFS          open_files: 0x22198
-YFS      InsertOpenFile list: 0x22198
-YFS      InsertNode: Outside loop 1
-YFS      InsertNode: Outside loop 2
-YFS      InsertOFDeluxe Exit
-YFS      YFSOpen Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 0
-YFS      Message Pid: 3
-YFS      0: Open
-YFS      YFSOpen Entry
-YFS      GetPathName Entry
-YFS      GetPathName Exit
-YFS      YFSOpen: opening Path /foo at cd 1
-YFS      ParseFileName Entry
-YFS      ParseFileName new_filename: /foo
-YFS      ParseFileName dir_inum: 1
-YFS      ParseFileName Entering While loop
-YFS      TraverseDirs Entry
-YFS      Traversing path foo at inum 1
-YFS      ParseFileName Exit
-YFS      GetInodeAt Entry
-YFS      GetInodeCache Nodes 2 size: 0
-YFS      GetInodeAt getting cached inode
-YFS      GetInodeAt inum: 1
-YFS      GetInodeAt node->size: 128
-YFS      GetInodeAt node->type: 1
-YFS      TraverseDirs inode type: 1
-YFS      TraverseDirs traversing direct block 0
-YFS      Size Remaining :128
-YFS      TraverseDirsHelper Entry
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper curr_block: 7
-YFS      TraverseDirsHelper num_dir_entries: 4
-YFS      ---------------ReadFromBlock------------------
-YFS      Reading from block 7
-YFS      Buf now contains þÿÿH‰µpþÿÿH‰•hþÿÿH‹…pþÿÿ‹@‰EðH‹…pþÿÿ‹
-YFS      Shoving in 
-YFS      Shoving into 0x26664
-YFS      ptr 7 is 0x26664
-YFS      Buf now contains 
-YFS      Filled buf at hash index 7
-YFS      Returning dirty bit 1
-YFS      TraverseDirsHelper curr_dir_name: .
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper curr_dir_name: ..
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper curr_dir_name: foo
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper Exit (success)
-YFS      TraverseDirs found inum 2
-YFS      ParseFileName Exit
-YFS      GetInodeAt Entry
-YFS      GetInodeCache Nodes 2 size: 0
-YFS      GetInodeAt getting cached inode
-YFS      GetInodeAt inum: 2
-YFS      GetInodeAt node->size: 0
-YFS      GetInodeAt node->type: 2
-YFS      YFSOpen: (ERROR) opening Inode 2 at pathname /foo
-YFS      InsertOFDeluxe Entry
-YFS      InsertOFDeluxe inum: 2
-YFS      GetInodeAt Entry
-YFS      GetInodeCache Nodes 2 size: 0
-YFS      GetInodeAt getting cached inode
-YFS      GetInodeAt inum: 2
-YFS      GetInodeAt node->size: 0
-YFS      GetInodeAt node->type: 2
-YFS      InsertOFDeluxe: we have a file
-YFS      New fd: -2
-YFS      InsertOFDeluxe: there is no reused fd
-YFS      InsertOpenFile Entry
-YFS          *wait 0x22198
-YFS          open_files: 0x22198
-YFS      InsertOpenFile list: 0x22198
-YFS      InsertNode: Outside loop 1
-YFS      InsertNode: Outside loop 2
-YFS      InsertOFDeluxe Exit
-YFS      YFSOpen Exit
-YFS      --------------------Replied successfully--------------------
-YFS      --------------------Getting Message--------------------
-YFS      Received Message
-YFS      Message Type: 0
-YFS      Message Pid: 3
-YFS      0: Open
-YFS      YFSOpen Entry
-YFS      GetPathName Entry
-YFS      GetPathName Exit
-YFS      YFSOpen: opening Path /foo/zzz at cd 1
-YFS      ParseFileName Entry
-YFS      ParseFileName new_filename: /foo/zzz
-YFS      ParseFileName dir_inum: 1
-YFS      ParseFileName Entering While loop
-YFS      TraverseDirs Entry
-YFS      Traversing path foo at inum 1
-YFS      ParseFileName Exit
-YFS      GetInodeAt Entry
-YFS      GetInodeCache Nodes 2 size: 0
-YFS      GetInodeAt getting cached inode
-YFS      GetInodeAt inum: 1
-YFS      GetInodeAt node->size: 128
-YFS      GetInodeAt node->type: 1
-YFS      TraverseDirs inode type: 1
-YFS      TraverseDirs traversing direct block 0
-YFS      Size Remaining :128
-YFS      TraverseDirsHelper Entry
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper curr_block: 7
-YFS      TraverseDirsHelper num_dir_entries: 4
-YFS      ---------------ReadFromBlock------------------
-YFS      Reading from block 7
-YFS      Buf now contains þÿÿº
-YFS      Shoving in 
-YFS      Shoving into 0x26664
-YFS      ptr 7 is 0x26664
-YFS      Buf now contains 
-YFS      Filled buf at hash index 7
-YFS      Returning dirty bit 1
-YFS      TraverseDirsHelper curr_dir_name: .
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper curr_dir_name: ..
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper curr_dir_name: foo
-YFS      TraverseDirsHelper dir_name: foo
-YFS      TraverseDirsHelper Exit (success)
-YFS      TraverseDirs found inum 2
-YFS      TraverseDirs Entry
-YFS      Traversing path zzz at inum 1
-YFS      ParseFileName Exit
-YFS      GetInodeAt Entry
-YFS      GetInodeCache Nodes 2 size: 0
-YFS      GetInodeAt getting cached inode
-YFS      GetInodeAt inum: 1
-YFS      GetInodeAt node->size: 128
-YFS      GetInodeAt node->type: 1
-YFS      TraverseDirs inode type: 1
-YFS      TraverseDirs traversing direct block 0
-YFS      Size Remaining :128
-YFS      TraverseDirsHelper Entry
-YFS      TraverseDirsHelper dir_name: zzz
-YFS      TraverseDirsHelper curr_block: 7
-YFS      TraverseDirsHelper num_dir_entries: 4
-YFS      ---------------ReadFromBlock------------------
-YFS      Reading from block 7
-YFS      Buf now contains ƒ} 
-YFS      Shoving in 
-YFS      Shoving into 0x26664
-YFS      ptr 7 is 0x26664
-YFS      Buf now contains 
-YFS      Filled buf at hash index 7
-YFS      Returning dirty bit 1
-YFS      TraverseDirsHelper curr_dir_name: .
-YFS      TraverseDirsHelper dir_name: zzz
-YFS      TraverseDirsHelper curr_dir_name: ..
-YFS      TraverseDirsHelper dir_name: zzz
-YFS      TraverseDirsHelper curr_dir_name: foo
-YFS      TraverseDirsHelper dir_name: zzz
-YFS      TraverseDirsHelper curr_dir_name: bar
-YFS      TraverseDirsHelper dir_name: zzz
+YFS      Helper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: 2
+YFS      Helper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: 2
+YFS      Helper curr_dir_name: 0
+YFS      TraverseDirsHelper dir_name: 2
+YFS      Helper curr_dir_name: 1
+YFS      TraverseDirsHelper dir_name: 2
 YFS      TraverseDirsHelper Exit (fail)
 YFS      TraverseDirs found inum -1
 YFS      TraverseDirs traversing direct block 1
 YFS      TraverseDirs Exit
-YFS      ParseFileName couldn't find file in inum
+YFS      GetInodeAt Entry
+YFS      Inum is 4
+YFS      IPB is 8
+YFS      Math is 1
+YFS      Sector num is 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 1
+YFS      Buf now contains ÐHÁètL‰HƒÁHÿÈuôƒâH…Òt@ˆ1HÿÁHÿÊuõH‰øÃfD
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      Buf's current contents: 188672
+YFS      Inserting block 1 into cache
+YFS      inserting 188672 into cache
+YFS      Block cache OG hash is 1
+YFS      Block cache counter is 39
+YFS      Found Block in cache
+YFS      Inserting at position 1
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: ’
+YFS      initial block hash contents: ’
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: ’
+YFS      InsertBlockCache counter is 39
+YFS      InsertBlockoCache Exit
 YFS      ParseFileName Exit
+YFS      GetInodeAt inserting into inode cache
+YFS      GetInodeAt node: 0x2e200
+YFS      GetInodeAt inum: 4
+YFS      GetInodeAt node->size: 0
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 4
+YFS      Inserting node of size 0
+YFS      Inode OG hash is 4
+YFS      Inode cache counter is 41
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 4
+YFS      InsertInodeCache node hash 4
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      InsertInodeCache counter is 41
+YFS      InsertInodeCache Exit
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 4
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOFDeluxe Entry
+YFS      InsertOFDeluxe inum: 4
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 4
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOFDeluxe: we have a file
+YFS      New fd: -2
+YFS      InsertOFDeluxe: there is no reused fd
+YFS      InsertOpenFile Entry
+YFS          *wait 0x22198
+YFS          open_files: 0x22198
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 4
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOpenFile list: 0x22198
+YFS      InsertNode: Outside loop 1
+YFS      InsertNode: Outside loop 2
+YFS      InsertOFDeluxe Exit
+YFS      YFSCreateMkDir: ADDING ENTRY TO PARENT
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 1
+YFS      AddToBlock len: 32
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (first one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 128
+YFS      GetInodeAt node->type: 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 7
+YFS      Buf now contains 
+YFS      Shoving in 
+YFS      Shoving into 0x26664
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 7
+YFS      Returning dirty bit 1
+YFS      AddToBlock: writing to block 7 at position 128
+YFS      AddToBlock: writing to block 7
+YFS      inserting 189560 into cache
+YFS      Block cache OG hash is 7
+YFS      Block cache counter is 41
+YFS      Found Block in cache
+YFS      Inserting at position 7
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 41
+YFS      InsertBlockoCache Exit
+YFS      AddToBlock open_files: 0x22198 
+YFS      AddToBlock len: 32
+YFS      AddToBlock old size: 128
+YFS      AddToBlock len: 32
+YFS      AddToBlock new size: 160
+YFS      WriteINum Entry
+YFS      WriteInum inum: 1
+YFS      WriteInum node->size: 160
+YFS      Buf now contains E¼H‰Ö‰Çè
+
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 1
+YFS      Inserting node of size 160
+YFS      Inode OG hash is 1
+YFS      Inode cache counter is 46
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 1
+YFS      InsertInodeCache Dirty is true
+YFS      InsertInodeCache writing inum 1 to block 1 at position 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 1
+YFS      Buf now contains ‹ÞÉ
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      Buf's current contents: 190600
+YFS      Inserting block 1 into cache
+YFS      inserting 190600 into cache
+YFS      Block cache OG hash is 1
+YFS      Block cache counter is 44
+YFS      Found Block in cache
+YFS      Inserting at position 1
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: ’
+YFS      initial block hash contents: ’
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: ’
+YFS      InsertBlockCache counter is 44
+YFS      InsertBlockoCache Exit
 YFS      ParseFileName Exit
-YFS      YFSOpen: (ERROR) parseFilename found bullshit
+YFS      AddToBlock Exit
+YFS      MakeNewFile Entry
+YFS      MakeNewFile: Dir is 0
+YFS      Direct 0
+YFS      Direct 1
+YFS      Direct 2
+YFS      Direct 3
+YFS      Direct 4
+YFS      Direct 5
+YFS      Direct 6
+YFS      Direct 7
+YFS      Direct 8
+YFS      Direct 9
+YFS      Direct 10
+YFS      Direct 11
+YFS      MakeNewFile Exit
+YFS      YFSCreateMkDir: Parent node size: 128
+YFS      WriteINum Entry
+YFS      WriteInum inum: 4
+YFS      WriteInum node->size: 0
+YFS      Buf now contains ‹EÈI‰ÈH‰ÑH‰Â¾`ò
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 4
+YFS      Inserting node of size 0
+YFS      Inode OG hash is 4
+YFS      Inode cache counter is 47
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 4
+YFS      InsertInodeCache node hash 4
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      InsertInodeCache counter is 47
+YFS      InsertInodeCache Exit
+YFS      YFSCreateMkDir: Dir is 0
+YFS      YFSCreateMkDir (after adding ., ..) child node->size: 0
+YFS      YFSCreateMkDir msg->retval 3
+YFS      ----------YFSCreateMkDir Exit----------
 YFS      --------------------Replied successfully--------------------
 YFS      --------------------Getting Message--------------------
 YFS      Received Message
-YFS      Message Type: 15
+YFS      Message Type: 4
 YFS      Message Pid: 3
-YFS      15: Shutdown
+YFS      4: Write
+YFS      YFSWrite Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 4
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 4
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 4
+YFS      AddToBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 4
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock: getting a free block for inum 4
+YFS      AddToBlock: got block 10
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 10
+YFS      Buf's current contents: 191880
+YFS      Inserting block 10 into cache
+YFS      inserting 191880 into cache
+YFS      Block cache OG hash is 10
+YFS      Block cache counter is 47
+YFS      Found Block in cache
+YFS      Inserting at position 10
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 47
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock: writing to block 10 at position 0
+YFS      AddToBlock: writing to block 10
+YFS      inserting 191880 into cache
+YFS      Block cache OG hash is 10
+YFS      Block cache counter is 48
+YFS      Found Block in cache
+YFS      Inserting at position 10
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: Hello world
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: Hello world
+YFS      InsertBlockCache counter is 48
+YFS      InsertBlockoCache Exit
+YFS      AddToBlock open_files: 0x22198 
+YFS      AddToBlock len: 11
+YFS      AddToBlock old size: 0
+YFS      AddToBlock len: 11
+YFS      AddToBlock new size: 11
+YFS      WriteINum Entry
+YFS      WriteInum inum: 4
+YFS      WriteInum node->size: 11
+YFS      Buf now contains û
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 4
+YFS      Inserting node of size 11
+YFS      Inode OG hash is 4
+YFS      Inode cache counter is 51
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 4
+YFS      InsertInodeCache Dirty is true
+YFS      InsertInodeCache writing inum 4 to block 1 at position 4
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 1
+YFS      Buf now contains åSHìH
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      Buf's current contents: 192920
+YFS      Inserting block 1 into cache
+YFS      inserting 192920 into cache
+YFS      Block cache OG hash is 1
+YFS      Block cache counter is 51
+YFS      Found Block in cache
+YFS      Inserting at position 1
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: ’
+YFS      initial block hash contents: ’
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: ’
+YFS      InsertBlockCache counter is 51
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock Exit
+YFS      YFSWrite: returning 11
+YFS      YFSWrite Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 5
+YFS      Message Pid: 3
+YFS      5: Seek
+YFS      YFSSeek Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 4
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      YFSSeek set
+YFS      YFSSeek Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 3
+YFS      Message Pid: 3
+YFS      3: Read
+YFS      YFSRead Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 4
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock Entry
+YFS      GetFromBlock inum: 4
+YFS      GetFromBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 4
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock: reading from block 10 at position 0
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 10
+YFS      Buf now contains H‰P‹C‰Eìƒ}ì
+YFS      Shoving in Hello world
+YFS      Shoving into 0x26c64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains Hello world
+YFS      Filled buf at hash index 10
+YFS      Returning dirty bit 1
+YFS      GetFromBlock character 72
+YFS      GetFromBlock character 101
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 32
+YFS      GetFromBlock character 119
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 114
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 100
+YFS      YFSRead Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 2
+YFS      Message Pid: 3
+YFS      2: Create
+YFS      YFSCreate 
+YFS      YFSCreate open_files: 0x22198
+YFS      ----------YFSCreateMkDir Entry----------
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      YFSCreateMkDir: Dir is 0
+YFS      YFSCreateMkDir null path length: 1
+YFS      YFSCreateMkDir finding last slash
+YFS      YFSCreateMkDir pathname: 3
+YFS      YFSCreateMkDir directory: 
+YFS      YFSCreateMkDir new_file: 3
+YFS      YFSCreateMkDir parent_inum: 1
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 160
+YFS      GetInodeAt node->type: 1
+YFS      YFSCreateMkDir parent type: 1
+YFS      TraverseDirs Entry
+YFS      Traversing path 3 at inum 1
+YFS      ParseFileName Exit
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 160
+YFS      GetInodeAt node->type: 1
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      Size Remaining :160
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: 3
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 5
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 7
+YFS      Buf now contains ñ
+YFS      Shoving in 
+YFS      Shoving into 0x26664
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 7
+YFS      Returning dirty bit 1
+YFS      Helper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: 3
+YFS      Helper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: 3
+YFS      Helper curr_dir_name: 0
+YFS      TraverseDirsHelper dir_name: 3
+YFS      Helper curr_dir_name: 1
+YFS      TraverseDirsHelper dir_name: 3
+YFS      Helper curr_dir_name: 2
+YFS      TraverseDirsHelper dir_name: 3
+YFS      TraverseDirsHelper Exit (fail)
+YFS      TraverseDirs found inum -1
+YFS      TraverseDirs traversing direct block 1
+YFS      TraverseDirs Exit
+YFS      GetInodeAt Entry
+YFS      Inum is 5
+YFS      IPB is 8
+YFS      Math is 1
+YFS      Sector num is 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 1
+YFS      Buf now contains }à
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      Buf's current contents: 195200
+YFS      Inserting block 1 into cache
+YFS      inserting 195200 into cache
+YFS      Block cache OG hash is 1
+YFS      Block cache counter is 55
+YFS      Found Block in cache
+YFS      Inserting at position 1
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: ’
+YFS      initial block hash contents: ’
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: ’
+YFS      InsertBlockCache counter is 55
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      GetInodeAt inserting into inode cache
+YFS      GetInodeAt node: 0x2fbc0
+YFS      GetInodeAt inum: 5
+YFS      GetInodeAt node->size: 0
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 5
+YFS      Inserting node of size 0
+YFS      Inode OG hash is 5
+YFS      Inode cache counter is 58
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 5
+YFS      InsertInodeCache node hash 5
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      InsertInodeCache counter is 58
+YFS      InsertInodeCache Exit
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 5
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOFDeluxe Entry
+YFS      InsertOFDeluxe inum: 5
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 5
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOFDeluxe: we have a file
+YFS      New fd: -2
+YFS      InsertOFDeluxe: there is no reused fd
+YFS      InsertOpenFile Entry
+YFS          *wait 0x22198
+YFS          open_files: 0x22198
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 5
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOpenFile list: 0x22198
+YFS      InsertNode: Outside loop 1
+YFS      InsertNode: Outside loop 2
+YFS      InsertOFDeluxe Exit
+YFS      YFSCreateMkDir: ADDING ENTRY TO PARENT
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 1
+YFS      AddToBlock len: 32
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (first one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 160
+YFS      GetInodeAt node->type: 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 7
+YFS      Buf now contains ëO··Àƒà@…Àt>·fEêf5@·À%@
+YFS      Shoving in 
+YFS      Shoving into 0x26664
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 7
+YFS      Returning dirty bit 1
+YFS      AddToBlock: writing to block 7 at position 160
+YFS      AddToBlock: writing to block 7
+YFS      inserting 196088 into cache
+YFS      Block cache OG hash is 7
+YFS      Block cache counter is 57
+YFS      Found Block in cache
+YFS      Inserting at position 7
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 57
+YFS      InsertBlockoCache Exit
+YFS      AddToBlock open_files: 0x22198 
+YFS      AddToBlock len: 32
+YFS      AddToBlock old size: 160
+YFS      AddToBlock len: 32
+YFS      AddToBlock new size: 192
+YFS      WriteINum Entry
+YFS      WriteInum inum: 1
+YFS      WriteInum node->size: 192
+YFS      Buf now contains ìH‰uàH‰UØH‹EàH‰EøëH‹Eø¶
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 1
+YFS      Inserting node of size 192
+YFS      Inode OG hash is 1
+YFS      Inode cache counter is 63
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 1
+YFS      InsertInodeCache Dirty is true
+YFS      InsertInodeCache writing inum 1 to block 1 at position 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 1
+YFS      Buf now contains •`ÿÿÿH‰hÿÿÿL‰…pÿÿÿL‰xÿÿÿ„Àt )E€)M)U )]°)eÀ)mÐ)uà)}ð‰µÿÿÿH‹…ÿÿÿH‰…HÿÿÿëHƒ…HÿÿÿH‹…Hÿÿÿ¶
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      Buf's current contents: 197136
+YFS      Inserting block 1 into cache
+YFS      inserting 197136 into cache
+YFS      Block cache OG hash is 1
+YFS      Block cache counter is 60
+YFS      Found Block in cache
+YFS      Inserting at position 1
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: ’
+YFS      initial block hash contents: ’
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: ’
+YFS      InsertBlockCache counter is 60
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock Exit
+YFS      MakeNewFile Entry
+YFS      MakeNewFile: Dir is 0
+YFS      Direct 0
+YFS      Direct 1
+YFS      Direct 2
+YFS      Direct 3
+YFS      Direct 4
+YFS      Direct 5
+YFS      Direct 6
+YFS      Direct 7
+YFS      Direct 8
+YFS      Direct 9
+YFS      Direct 10
+YFS      Direct 11
+YFS      MakeNewFile Exit
+YFS      YFSCreateMkDir: Parent node size: 160
+YFS      WriteINum Entry
+YFS      WriteInum inum: 5
+YFS      WriteInum node->size: 0
+YFS      Buf now contains @PÿÐUH‰å¸
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 5
+YFS      Inserting node of size 0
+YFS      Inode OG hash is 5
+YFS      Inode cache counter is 64
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 5
+YFS      InsertInodeCache node hash 5
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      InsertInodeCache counter is 64
+YFS      InsertInodeCache Exit
+YFS      YFSCreateMkDir: Dir is 0
+YFS      YFSCreateMkDir (after adding ., ..) child node->size: 0
+YFS      YFSCreateMkDir msg->retval 4
+YFS      ----------YFSCreateMkDir Exit----------
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 4
+YFS      Message Pid: 3
+YFS      4: Write
+YFS      YFSWrite Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 5
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 5
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 5
+YFS      AddToBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 5
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock: getting a free block for inum 5
+YFS      AddToBlock: got block 11
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 11
+YFS      Buf's current contents: 198416
+YFS      Inserting block 11 into cache
+YFS      inserting 198416 into cache
+YFS      Block cache OG hash is 11
+YFS      Block cache counter is 63
+YFS      Found Block in cache
+YFS      Inserting at position 11
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 63
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock: writing to block 11 at position 0
+YFS      AddToBlock: writing to block 11
+YFS      inserting 198416 into cache
+YFS      Block cache OG hash is 11
+YFS      Block cache counter is 64
+YFS      Found Block in cache
+YFS      Inserting at position 11
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: Hello world
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: Hello world
+YFS      InsertBlockCache counter is 64
+YFS      InsertBlockoCache Exit
+YFS      AddToBlock open_files: 0x22198 
+YFS      AddToBlock len: 11
+YFS      AddToBlock old size: 0
+YFS      AddToBlock len: 11
+YFS      AddToBlock new size: 11
+YFS      WriteINum Entry
+YFS      WriteInum inum: 5
+YFS      WriteInum node->size: 11
+YFS      Buf now contains 
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 5
+YFS      Inserting node of size 11
+YFS      Inode OG hash is 5
+YFS      Inode cache counter is 68
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 5
+YFS      InsertInodeCache Dirty is true
+YFS      InsertInodeCache writing inum 5 to block 1 at position 5
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 1
+YFS      Buf now contains ôH˜H‰EØHƒ}Ø
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      Buf's current contents: 199456
+YFS      Inserting block 1 into cache
+YFS      inserting 199456 into cache
+YFS      Block cache OG hash is 1
+YFS      Block cache counter is 67
+YFS      Found Block in cache
+YFS      Inserting at position 1
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: ’
+YFS      initial block hash contents: ’
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: ’
+YFS      InsertBlockCache counter is 67
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock Exit
+YFS      YFSWrite: returning 11
+YFS      YFSWrite Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 5
+YFS      Message Pid: 3
+YFS      5: Seek
+YFS      YFSSeek Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 5
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      YFSSeek set
+YFS      YFSSeek Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 3
+YFS      Message Pid: 3
+YFS      3: Read
+YFS      YFSRead Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 5
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock Entry
+YFS      GetFromBlock inum: 5
+YFS      GetFromBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 5
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock: reading from block 11 at position 0
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 11
+YFS      Buf now contains 0t	H‹EèƒÀë¸
+YFS      Shoving in Hello world
+YFS      Shoving into 0x26e64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains Hello world
+YFS      Filled buf at hash index 11
+YFS      Returning dirty bit 1
+YFS      GetFromBlock character 72
+YFS      GetFromBlock character 101
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 32
+YFS      GetFromBlock character 119
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 114
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 100
+YFS      YFSRead Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 2
+YFS      Message Pid: 3
+YFS      2: Create
+YFS      YFSCreate 
+YFS      YFSCreate open_files: 0x22198
+YFS      ----------YFSCreateMkDir Entry----------
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      YFSCreateMkDir: Dir is 0
+YFS      YFSCreateMkDir null path length: 1
+YFS      YFSCreateMkDir finding last slash
+YFS      YFSCreateMkDir pathname: 4
+YFS      YFSCreateMkDir directory: 
+YFS      YFSCreateMkDir new_file: 4
+YFS      YFSCreateMkDir parent_inum: 1
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 192
+YFS      GetInodeAt node->type: 1
+YFS      YFSCreateMkDir parent type: 1
+YFS      TraverseDirs Entry
+YFS      Traversing path 4 at inum 1
+YFS      ParseFileName Exit
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 192
+YFS      GetInodeAt node->type: 1
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      Size Remaining :192
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: 4
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 6
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 7
+YFS      Buf now contains ‹EÐH‰Â¾¦ì
+YFS      Shoving in 
+YFS      Shoving into 0x26664
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 7
+YFS      Returning dirty bit 1
+YFS      Helper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: 4
+YFS      Helper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: 4
+YFS      Helper curr_dir_name: 0
+YFS      TraverseDirsHelper dir_name: 4
+YFS      Helper curr_dir_name: 1
+YFS      TraverseDirsHelper dir_name: 4
+YFS      Helper curr_dir_name: 2
+YFS      TraverseDirsHelper dir_name: 4
+YFS      Helper curr_dir_name: 3
+YFS      TraverseDirsHelper dir_name: 4
+YFS      TraverseDirsHelper Exit (fail)
+YFS      TraverseDirs found inum -1
+YFS      TraverseDirs traversing direct block 1
+YFS      TraverseDirs Exit
+YFS      GetInodeAt Entry
+YFS      Inum is 6
+YFS      IPB is 8
+YFS      Math is 1
+YFS      Sector num is 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 1
+YFS      Buf now contains 
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      Buf's current contents: 201736
+YFS      Inserting block 1 into cache
+YFS      inserting 201736 into cache
+YFS      Block cache OG hash is 1
+YFS      Block cache counter is 71
+YFS      Found Block in cache
+YFS      Inserting at position 1
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: ’
+YFS      initial block hash contents: ’
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: ’
+YFS      InsertBlockCache counter is 71
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      GetInodeAt inserting into inode cache
+YFS      GetInodeAt node: 0x31588
+YFS      GetInodeAt inum: 6
+YFS      GetInodeAt node->size: 0
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 6
+YFS      Inserting node of size 0
+YFS      Inode OG hash is 6
+YFS      Inode cache counter is 75
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 6
+YFS      InsertInodeCache node hash 6
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      InsertInodeCache counter is 75
+YFS      InsertInodeCache Exit
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 6
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOFDeluxe Entry
+YFS      InsertOFDeluxe inum: 6
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 6
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOFDeluxe: we have a file
+YFS      New fd: -2
+YFS      InsertOFDeluxe: there is no reused fd
+YFS      InsertOpenFile Entry
+YFS          *wait 0x22198
+YFS          open_files: 0x22198
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 6
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOpenFile list: 0x22198
+YFS      InsertNode: Outside loop 1
+YFS      InsertNode: Outside loop 2
+YFS      InsertOFDeluxe Exit
+YFS      YFSCreateMkDir: ADDING ENTRY TO PARENT
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 1
+YFS      AddToBlock len: 32
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (first one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 192
+YFS      GetInodeAt node->type: 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 7
+YFS      Buf now contains 
+YFS      Shoving in 
+YFS      Shoving into 0x26664
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 7
+YFS      Returning dirty bit 1
+YFS      AddToBlock: writing to block 7 at position 192
+YFS      AddToBlock: writing to block 7
+YFS      inserting 202624 into cache
+YFS      Block cache OG hash is 7
+YFS      Block cache counter is 73
+YFS      Found Block in cache
+YFS      Inserting at position 7
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 73
+YFS      InsertBlockoCache Exit
+YFS      AddToBlock open_files: 0x22198 
+YFS      AddToBlock len: 32
+YFS      AddToBlock old size: 192
+YFS      AddToBlock len: 32
+YFS      AddToBlock new size: 224
+YFS      WriteINum Entry
+YFS      WriteInum inum: 1
+YFS      WriteInum node->size: 224
+YFS      Buf now contains ÁàHpS
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 1
+YFS      Inserting node of size 224
+YFS      Inode OG hash is 1
+YFS      Inode cache counter is 80
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 1
+YFS      InsertInodeCache Dirty is true
+YFS      InsertInodeCache writing inum 1 to block 1 at position 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 1
+YFS      Buf now contains àA¸
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      Buf's current contents: 203664
+YFS      Inserting block 1 into cache
+YFS      inserting 203664 into cache
+YFS      Block cache OG hash is 1
+YFS      Block cache counter is 76
+YFS      Found Block in cache
+YFS      Inserting at position 1
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: ’
+YFS      initial block hash contents: ’
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: ’
+YFS      InsertBlockCache counter is 76
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock Exit
+YFS      MakeNewFile Entry
+YFS      MakeNewFile: Dir is 0
+YFS      Direct 0
+YFS      Direct 1
+YFS      Direct 2
+YFS      Direct 3
+YFS      Direct 4
+YFS      Direct 5
+YFS      Direct 6
+YFS      Direct 7
+YFS      Direct 8
+YFS      Direct 9
+YFS      Direct 10
+YFS      Direct 11
+YFS      MakeNewFile Exit
+YFS      YFSCreateMkDir: Parent node size: 192
+YFS      WriteINum Entry
+YFS      WriteInum inum: 6
+YFS      WriteInum node->size: 0
+YFS      Buf now contains H(H‹J4H‰H0H‹R<H‰P8‹Ðù
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 6
+YFS      Inserting node of size 0
+YFS      Inode OG hash is 6
+YFS      Inode cache counter is 81
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 6
+YFS      InsertInodeCache node hash 6
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      InsertInodeCache counter is 81
+YFS      InsertInodeCache Exit
+YFS      YFSCreateMkDir: Dir is 0
+YFS      YFSCreateMkDir (after adding ., ..) child node->size: 0
+YFS      YFSCreateMkDir msg->retval 5
+YFS      ----------YFSCreateMkDir Exit----------
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 4
+YFS      Message Pid: 3
+YFS      4: Write
+YFS      YFSWrite Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 6
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 6
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 6
+YFS      AddToBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 6
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock: getting a free block for inum 6
+YFS      AddToBlock: got block 12
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 12
+YFS      Buf's current contents: 204952
+YFS      Inserting block 12 into cache
+YFS      inserting 204952 into cache
+YFS      Block cache OG hash is 12
+YFS      Block cache counter is 79
+YFS      Found Block in cache
+YFS      Inserting at position 12
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 79
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock: writing to block 12 at position 0
+YFS      AddToBlock: writing to block 12
+YFS      inserting 204952 into cache
+YFS      Block cache OG hash is 12
+YFS      Block cache counter is 80
+YFS      Found Block in cache
+YFS      Inserting at position 12
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: Hello world
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: Hello world
+YFS      InsertBlockCache counter is 80
+YFS      InsertBlockoCache Exit
+YFS      AddToBlock open_files: 0x22198 
+YFS      AddToBlock len: 11
+YFS      AddToBlock old size: 0
+YFS      AddToBlock len: 11
+YFS      AddToBlock new size: 11
+YFS      WriteINum Entry
+YFS      WriteInum inum: 6
+YFS      WriteInum node->size: 11
+YFS      Buf now contains ùÿÿ‹E¸‹UÜH‹Eà‹@‹Uü‰Æ¿È˜
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 6
+YFS      Inserting node of size 11
+YFS      Inode OG hash is 6
+YFS      Inode cache counter is 85
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 6
+YFS      InsertInodeCache Dirty is true
+YFS      InsertInodeCache writing inum 6 to block 1 at position 6
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 1
+YFS      Buf now contains 
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      Buf's current contents: 205992
+YFS      Inserting block 1 into cache
+YFS      inserting 205992 into cache
+YFS      Block cache OG hash is 1
+YFS      Block cache counter is 83
+YFS      Found Block in cache
+YFS      Inserting at position 1
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: ’
+YFS      initial block hash contents: ’
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: ’
+YFS      InsertBlockCache counter is 83
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock Exit
+YFS      YFSWrite: returning 11
+YFS      YFSWrite Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 5
+YFS      Message Pid: 3
+YFS      5: Seek
+YFS      YFSSeek Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 6
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      YFSSeek set
+YFS      YFSSeek Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 3
+YFS      Message Pid: 3
+YFS      3: Read
+YFS      YFSRead Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 6
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock Entry
+YFS      GetFromBlock inum: 6
+YFS      GetFromBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 6
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock: reading from block 12 at position 0
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 12
+YFS      Buf now contains UäÐ;Eø…H‹Eè‹@‹Mø‹Uü‰Æ¿È˜
+YFS      Shoving in Hello world
+YFS      Shoving into 0x27064
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains Hello world
+YFS      Filled buf at hash index 12
+YFS      Returning dirty bit 1
+YFS      GetFromBlock character 72
+YFS      GetFromBlock character 101
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 32
+YFS      GetFromBlock character 119
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 114
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 100
+YFS      YFSRead Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 2
+YFS      Message Pid: 3
+YFS      2: Create
+YFS      YFSCreate 
+YFS      YFSCreate open_files: 0x22198
+YFS      ----------YFSCreateMkDir Entry----------
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      YFSCreateMkDir: Dir is 0
+YFS      YFSCreateMkDir null path length: 1
+YFS      YFSCreateMkDir finding last slash
+YFS      YFSCreateMkDir pathname: 5
+YFS      YFSCreateMkDir directory: 
+YFS      YFSCreateMkDir new_file: 5
+YFS      YFSCreateMkDir parent_inum: 1
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 224
+YFS      GetInodeAt node->type: 1
+YFS      YFSCreateMkDir parent type: 1
+YFS      TraverseDirs Entry
+YFS      Traversing path 5 at inum 1
+YFS      ParseFileName Exit
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 224
+YFS      GetInodeAt node->type: 1
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      Size Remaining :224
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: 5
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 7
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 7
+YFS      Buf now contains é
+YFS      Shoving in 
+YFS      Shoving into 0x26664
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 7
+YFS      Returning dirty bit 1
+YFS      Helper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: 5
+YFS      Helper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: 5
+YFS      Helper curr_dir_name: 0
+YFS      TraverseDirsHelper dir_name: 5
+YFS      Helper curr_dir_name: 1
+YFS      TraverseDirsHelper dir_name: 5
+YFS      Helper curr_dir_name: 2
+YFS      TraverseDirsHelper dir_name: 5
+YFS      Helper curr_dir_name: 3
+YFS      TraverseDirsHelper dir_name: 5
+YFS      Helper curr_dir_name: 4
+YFS      TraverseDirsHelper dir_name: 5
+YFS      TraverseDirsHelper Exit (fail)
+YFS      TraverseDirs found inum -1
+YFS      TraverseDirs traversing direct block 1
+YFS      TraverseDirs Exit
+YFS      GetInodeAt Entry
+YFS      Inum is 7
+YFS      IPB is 8
+YFS      Math is 1
+YFS      Sector num is 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 1
+YFS      Buf now contains 
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      Buf's current contents: 208272
+YFS      Inserting block 1 into cache
+YFS      inserting 208272 into cache
+YFS      Block cache OG hash is 1
+YFS      Block cache counter is 87
+YFS      Found Block in cache
+YFS      Inserting at position 1
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: ’
+YFS      initial block hash contents: ’
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: ’
+YFS      InsertBlockCache counter is 87
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      GetInodeAt inserting into inode cache
+YFS      GetInodeAt node: 0x32f50
+YFS      GetInodeAt inum: 7
+YFS      GetInodeAt node->size: 0
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 7
+YFS      Inserting node of size 0
+YFS      Inode OG hash is 7
+YFS      Inode cache counter is 92
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 7
+YFS      InsertInodeCache node hash 7
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      InsertInodeCache counter is 92
+YFS      InsertInodeCache Exit
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 7
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOFDeluxe Entry
+YFS      InsertOFDeluxe inum: 7
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 7
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOFDeluxe: we have a file
+YFS      New fd: -2
+YFS      InsertOFDeluxe: there is no reused fd
+YFS      InsertOpenFile Entry
+YFS          *wait 0x22198
+YFS          open_files: 0x22198
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 7
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOpenFile list: 0x22198
+YFS      InsertNode: Outside loop 1
+YFS      InsertNode: Outside loop 2
+YFS      InsertOFDeluxe Exit
+YFS      YFSCreateMkDir: ADDING ENTRY TO PARENT
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 1
+YFS      AddToBlock len: 32
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (first one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 224
+YFS      GetInodeAt node->type: 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 7
+YFS      Buf now contains ™,
+YFS      Shoving in 
+YFS      Shoving into 0x26664
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 7
+YFS      Returning dirty bit 1
+YFS      AddToBlock: writing to block 7 at position 224
+YFS      AddToBlock: writing to block 7
+YFS      inserting 209200 into cache
+YFS      Block cache OG hash is 7
+YFS      Block cache counter is 89
+YFS      Found Block in cache
+YFS      Inserting at position 7
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 89
+YFS      InsertBlockoCache Exit
+YFS      AddToBlock open_files: 0x22198 
+YFS      AddToBlock len: 32
+YFS      AddToBlock old size: 224
+YFS      AddToBlock len: 32
+YFS      AddToBlock new size: 256
+YFS      WriteINum Entry
+YFS      WriteInum inum: 1
+YFS      WriteInum node->size: 256
+YFS      Buf now contains 
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 1
+YFS      Inserting node of size 256
+YFS      Inode OG hash is 1
+YFS      Inode cache counter is 97
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 1
+YFS      InsertInodeCache Dirty is true
+YFS      InsertInodeCache writing inum 1 to block 1 at position 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 1
+YFS      Buf now contains ·
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      Buf's current contents: 210240
+YFS      Inserting block 1 into cache
+YFS      inserting 210240 into cache
+YFS      Block cache OG hash is 1
+YFS      Block cache counter is 92
+YFS      Found Block in cache
+YFS      Inserting at position 1
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: ’
+YFS      initial block hash contents: ’
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: ’
+YFS      InsertBlockCache counter is 92
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock Exit
+YFS      MakeNewFile Entry
+YFS      MakeNewFile: Dir is 0
+YFS      Direct 0
+YFS      Direct 1
+YFS      Direct 2
+YFS      Direct 3
+YFS      Direct 4
+YFS      Direct 5
+YFS      Direct 6
+YFS      Direct 7
+YFS      Direct 8
+YFS      Direct 9
+YFS      Direct 10
+YFS      Direct 11
+YFS      MakeNewFile Exit
+YFS      YFSCreateMkDir: Parent node size: 224
+YFS      WriteINum Entry
+YFS      WriteInum inum: 7
+YFS      WriteInum node->size: 0
+YFS      Buf now contains H‰EˆH‹EˆH‹U˜H‹
+H‰H‹JH‰HH‹JH‰HH‹RH‰PH‹EˆHP H‹EH‹H‰
+H‹HH‰JH‹HH‰JH‹@H‰B¾Pà
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 7
+YFS      Inserting node of size 0
+YFS      Inode OG hash is 7
+YFS      Inode cache counter is 98
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 7
+YFS      InsertInodeCache node hash 7
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      InsertInodeCache counter is 98
+YFS      InsertInodeCache Exit
+YFS      YFSCreateMkDir: Dir is 0
+YFS      YFSCreateMkDir (after adding ., ..) child node->size: 0
+YFS      YFSCreateMkDir msg->retval 6
+YFS      ----------YFSCreateMkDir Exit----------
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 4
+YFS      Message Pid: 3
+YFS      4: Write
+YFS      YFSWrite Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 7
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 7
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 7
+YFS      AddToBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 7
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock: getting a free block for inum 7
+YFS      AddToBlock: got block 13
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 13
+YFS      Buf's current contents: 211520
+YFS      Inserting block 13 into cache
+YFS      inserting 211520 into cache
+YFS      Block cache OG hash is 13
+YFS      Block cache counter is 95
+YFS      Found Block in cache
+YFS      Inserting at position 13
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 95
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock: writing to block 13 at position 0
+YFS      AddToBlock: writing to block 13
+YFS      inserting 211520 into cache
+YFS      Block cache OG hash is 13
+YFS      Block cache counter is 96
+YFS      Found Block in cache
+YFS      Inserting at position 13
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: Hello world
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: Hello world
+YFS      InsertBlockCache counter is 96
+YFS      InsertBlockoCache Exit
+YFS      AddToBlock open_files: 0x22198 
+YFS      AddToBlock len: 11
+YFS      AddToBlock old size: 0
+YFS      AddToBlock len: 11
+YFS      AddToBlock new size: 11
+YFS      WriteINum Entry
+YFS      WriteInum inum: 7
+YFS      WriteInum node->size: 11
+YFS      Buf now contains ‰Î‰Çè#
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 7
+YFS      Inserting node of size 11
+YFS      Inode OG hash is 7
+YFS      Inode cache counter is 102
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 7
+YFS      InsertInodeCache Dirty is true
+YFS      InsertInodeCache writing inum 7 to block 1 at position 7
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 1
+YFS      Buf now contains H‹Eø‹@‰Â¾®ã
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      Buf's current contents: 212560
+YFS      Inserting block 1 into cache
+YFS      inserting 212560 into cache
+YFS      Block cache OG hash is 1
+YFS      Block cache counter is 99
+YFS      Found Block in cache
+YFS      Inserting at position 1
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: ’
+YFS      initial block hash contents: ’
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: ’
+YFS      InsertBlockCache counter is 99
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock Exit
+YFS      YFSWrite: returning 11
+YFS      YFSWrite Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 5
+YFS      Message Pid: 3
+YFS      5: Seek
+YFS      YFSSeek Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 7
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      YFSSeek set
+YFS      YFSSeek Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 3
+YFS      Message Pid: 3
+YFS      3: Read
+YFS      YFSRead Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 7
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock Entry
+YFS      GetFromBlock inum: 7
+YFS      GetFromBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 7
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock: reading from block 13 at position 0
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 13
+YFS      Buf now contains 
+YFS      Shoving in Hello world
+YFS      Shoving into 0x27264
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains Hello world
+YFS      Filled buf at hash index 13
+YFS      Returning dirty bit 1
+YFS      GetFromBlock character 72
+YFS      GetFromBlock character 101
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 32
+YFS      GetFromBlock character 119
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 114
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 100
+YFS      YFSRead Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 2
+YFS      Message Pid: 3
+YFS      2: Create
+YFS      YFSCreate 
+YFS      YFSCreate open_files: 0x22198
+YFS      ----------YFSCreateMkDir Entry----------
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      YFSCreateMkDir: Dir is 0
+YFS      YFSCreateMkDir null path length: 1
+YFS      YFSCreateMkDir finding last slash
+YFS      YFSCreateMkDir pathname: 6
+YFS      YFSCreateMkDir directory: 
+YFS      YFSCreateMkDir new_file: 6
+YFS      YFSCreateMkDir parent_inum: 1
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 256
+YFS      GetInodeAt node->type: 1
+YFS      YFSCreateMkDir parent type: 1
+YFS      TraverseDirs Entry
+YFS      Traversing path 6 at inum 1
+YFS      ParseFileName Exit
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 256
+YFS      GetInodeAt node->type: 1
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      Size Remaining :256
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: 6
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 8
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 7
+YFS      Buf now contains 
+YFS      Shoving in 
+YFS      Shoving into 0x26664
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 7
+YFS      Returning dirty bit 1
+YFS      Helper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: 6
+YFS      Helper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: 6
+YFS      Helper curr_dir_name: 0
+YFS      TraverseDirsHelper dir_name: 6
+YFS      Helper curr_dir_name: 1
+YFS      TraverseDirsHelper dir_name: 6
+YFS      Helper curr_dir_name: 2
+YFS      TraverseDirsHelper dir_name: 6
+YFS      Helper curr_dir_name: 3
+YFS      TraverseDirsHelper dir_name: 6
+YFS      Helper curr_dir_name: 4
+YFS      TraverseDirsHelper dir_name: 6
+YFS      Helper curr_dir_name: 5
+YFS      TraverseDirsHelper dir_name: 6
+YFS      TraverseDirsHelper Exit (fail)
+YFS      TraverseDirs found inum -1
+YFS      TraverseDirs traversing direct block 1
+YFS      TraverseDirs Exit
+YFS      GetInodeAt Entry
+YFS      Inum is 8
+YFS      IPB is 8
+YFS      Math is 1
+YFS      Sector num is 2
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 2
+YFS      Buf's current contents: 214840
+YFS      Inserting block 2 into cache
+YFS      inserting 214840 into cache
+YFS      Block cache OG hash is 2
+YFS      Block cache counter is 103
+YFS      Found Block in cache
+YFS      Inserting at position 2
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 103
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      GetInodeAt inserting into inode cache
+YFS      GetInodeAt node: 0x34738
+YFS      GetInodeAt inum: 8
+YFS      GetInodeAt node->size: 0
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 8
+YFS      Inserting node of size 0
+YFS      Inode OG hash is 8
+YFS      Inode cache counter is 109
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 8
+YFS      InsertInodeCache node hash 8
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      InsertInodeCache counter is 109
+YFS      InsertInodeCache Exit
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 8
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOFDeluxe Entry
+YFS      InsertOFDeluxe inum: 8
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 8
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOFDeluxe: we have a file
+YFS      New fd: -2
+YFS      InsertOFDeluxe: there is no reused fd
+YFS      InsertOpenFile Entry
+YFS          *wait 0x22198
+YFS          open_files: 0x22198
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 8
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOpenFile list: 0x22198
+YFS      InsertNode: Outside loop 1
+YFS      InsertNode: Outside loop 2
+YFS      InsertOFDeluxe Exit
+YFS      YFSCreateMkDir: ADDING ENTRY TO PARENT
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 1
+YFS      AddToBlock len: 32
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (first one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 256
+YFS      GetInodeAt node->type: 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 7
+YFS      Buf now contains è3
+YFS      Shoving in 
+YFS      Shoving into 0x26664
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 7
+YFS      Returning dirty bit 1
+YFS      AddToBlock: writing to block 7 at position 256
+YFS      AddToBlock: writing to block 7
+YFS      inserting 215728 into cache
+YFS      Block cache OG hash is 7
+YFS      Block cache counter is 105
+YFS      Found Block in cache
+YFS      Inserting at position 7
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 105
+YFS      InsertBlockoCache Exit
+YFS      AddToBlock open_files: 0x22198 
+YFS      AddToBlock len: 32
+YFS      AddToBlock old size: 256
+YFS      AddToBlock len: 32
+YFS      AddToBlock new size: 288
+YFS      WriteINum Entry
+YFS      WriteInum inum: 1
+YFS      WriteInum node->size: 288
+YFS      Buf now contains @@
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 1
+YFS      Inserting node of size 288
+YFS      Inode OG hash is 1
+YFS      Inode cache counter is 114
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 1
+YFS      InsertInodeCache Dirty is true
+YFS      InsertInodeCache writing inum 1 to block 1 at position 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 1
+YFS      Buf now contains f;Eäu¾ÐÜ
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      Buf's current contents: 216768
+YFS      Inserting block 1 into cache
+YFS      inserting 216768 into cache
+YFS      Block cache OG hash is 1
+YFS      Block cache counter is 108
+YFS      Found Block in cache
+YFS      Inserting at position 1
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: ’
+YFS      initial block hash contents: ’
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: ’
+YFS      InsertBlockCache counter is 108
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock Exit
+YFS      MakeNewFile Entry
+YFS      MakeNewFile: Dir is 0
+YFS      Direct 0
+YFS      Direct 1
+YFS      Direct 2
+YFS      Direct 3
+YFS      Direct 4
+YFS      Direct 5
+YFS      Direct 6
+YFS      Direct 7
+YFS      Direct 8
+YFS      Direct 9
+YFS      Direct 10
+YFS      Direct 11
+YFS      MakeNewFile Exit
+YFS      YFSCreateMkDir: Parent node size: 256
+YFS      WriteINum Entry
+YFS      WriteInum inum: 8
+YFS      WriteInum node->size: 0
+YFS      Buf now contains H˜H‰Çèox
+YFS      Shoving in 
+YFS      Shoving into 0x25c64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 2
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 8
+YFS      Inserting node of size 0
+YFS      Inode OG hash is 8
+YFS      Inode cache counter is 115
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 8
+YFS      InsertInodeCache node hash 8
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      InsertInodeCache counter is 115
+YFS      InsertInodeCache Exit
+YFS      YFSCreateMkDir: Dir is 0
+YFS      YFSCreateMkDir (after adding ., ..) child node->size: 0
+YFS      YFSCreateMkDir msg->retval 7
+YFS      ----------YFSCreateMkDir Exit----------
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 4
+YFS      Message Pid: 3
+YFS      4: Write
+YFS      YFSWrite Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 8
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 8
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 8
+YFS      AddToBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 8
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock: getting a free block for inum 8
+YFS      AddToBlock: got block 14
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 14
+YFS      Buf's current contents: 218048
+YFS      Inserting block 14 into cache
+YFS      inserting 218048 into cache
+YFS      Block cache OG hash is 14
+YFS      Block cache counter is 111
+YFS      Found Block in cache
+YFS      Inserting at position 14
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 111
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock: writing to block 14 at position 0
+YFS      AddToBlock: writing to block 14
+YFS      inserting 218048 into cache
+YFS      Block cache OG hash is 14
+YFS      Block cache counter is 112
+YFS      Found Block in cache
+YFS      Inserting at position 14
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: Hello world
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: Hello world
+YFS      InsertBlockCache counter is 112
+YFS      InsertBlockoCache Exit
+YFS      AddToBlock open_files: 0x22198 
+YFS      AddToBlock len: 11
+YFS      AddToBlock old size: 0
+YFS      AddToBlock len: 11
+YFS      AddToBlock new size: 11
+YFS      WriteINum Entry
+YFS      WriteInum inum: 8
+YFS      WriteInum node->size: 11
+YFS      Buf now contains ÿÿº 
+YFS      Shoving in 
+YFS      Shoving into 0x25c64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 2
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 8
+YFS      Inserting node of size 11
+YFS      Inode OG hash is 8
+YFS      Inode cache counter is 119
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 8
+YFS      InsertInodeCache Dirty is true
+YFS      InsertInodeCache writing inum 8 to block 2 at position 0
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 2
+YFS      Buf now contains ~Z‹EÜƒÀH˜H‰Çè`q
+YFS      Shoving in 
+YFS      Shoving into 0x25c64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 2
+YFS      Buf's current contents: 219088
+YFS      Inserting block 2 into cache
+YFS      inserting 219088 into cache
+YFS      Block cache OG hash is 2
+YFS      Block cache counter is 115
+YFS      Found Block in cache
+YFS      Inserting at position 2
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 115
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock Exit
+YFS      YFSWrite: returning 11
+YFS      YFSWrite Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 5
+YFS      Message Pid: 3
+YFS      5: Seek
+YFS      YFSSeek Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 8
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      YFSSeek set
+YFS      YFSSeek Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 3
+YFS      Message Pid: 3
+YFS      3: Read
+YFS      YFSRead Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 8
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock Entry
+YFS      GetFromBlock inum: 8
+YFS      GetFromBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 8
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock: reading from block 14 at position 0
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 14
+YFS      Buf now contains ‰Çès
+
+YFS      Shoving in Hello world
+YFS      Shoving into 0x27464
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains Hello world
+YFS      Filled buf at hash index 14
+YFS      Returning dirty bit 1
+YFS      GetFromBlock character 72
+YFS      GetFromBlock character 101
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 32
+YFS      GetFromBlock character 119
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 114
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 100
+YFS      YFSRead Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 2
+YFS      Message Pid: 3
+YFS      2: Create
+YFS      YFSCreate 
+YFS      YFSCreate open_files: 0x22198
+YFS      ----------YFSCreateMkDir Entry----------
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      YFSCreateMkDir: Dir is 0
+YFS      YFSCreateMkDir null path length: 1
+YFS      YFSCreateMkDir finding last slash
+YFS      YFSCreateMkDir pathname: 7
+YFS      YFSCreateMkDir directory: 
+YFS      YFSCreateMkDir new_file: 7
+YFS      YFSCreateMkDir parent_inum: 1
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 288
+YFS      GetInodeAt node->type: 1
+YFS      YFSCreateMkDir parent type: 1
+YFS      TraverseDirs Entry
+YFS      Traversing path 7 at inum 1
+YFS      ParseFileName Exit
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 288
+YFS      GetInodeAt node->type: 1
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      Size Remaining :288
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: 7
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 9
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 7
+YFS      Buf now contains H‹EØ‹@H‰Ö‰ÇèÈ
+YFS      Shoving in 
+YFS      Shoving into 0x26664
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 7
+YFS      Returning dirty bit 1
+YFS      Helper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: 7
+YFS      Helper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: 7
+YFS      Helper curr_dir_name: 0
+YFS      TraverseDirsHelper dir_name: 7
+YFS      Helper curr_dir_name: 1
+YFS      TraverseDirsHelper dir_name: 7
+YFS      Helper curr_dir_name: 2
+YFS      TraverseDirsHelper dir_name: 7
+YFS      Helper curr_dir_name: 3
+YFS      TraverseDirsHelper dir_name: 7
+YFS      Helper curr_dir_name: 4
+YFS      TraverseDirsHelper dir_name: 7
+YFS      Helper curr_dir_name: 5
+YFS      TraverseDirsHelper dir_name: 7
+YFS      Helper curr_dir_name: 6
+YFS      TraverseDirsHelper dir_name: 7
+YFS      TraverseDirsHelper Exit (fail)
+YFS      TraverseDirs found inum -1
+YFS      TraverseDirs traversing direct block 1
+YFS      TraverseDirs Exit
+YFS      GetInodeAt Entry
+YFS      Inum is 9
+YFS      IPB is 8
+YFS      Math is 1
+YFS      Sector num is 2
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 2
+YFS      Buf now contains 
+YFS      Shoving in 
+YFS      Shoving into 0x25c64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 2
+YFS      Buf's current contents: 221368
+YFS      Inserting block 2 into cache
+YFS      inserting 221368 into cache
+YFS      Block cache OG hash is 2
+YFS      Block cache counter is 119
+YFS      Found Block in cache
+YFS      Inserting at position 2
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 119
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      GetInodeAt inserting into inode cache
+YFS      GetInodeAt node: 0x360f8
+YFS      GetInodeAt inum: 9
+YFS      GetInodeAt node->size: 0
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 9
+YFS      Inserting node of size 0
+YFS      Inode OG hash is 9
+YFS      Inode cache counter is 126
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 9
+YFS      InsertInodeCache node hash 9
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      InsertInodeCache counter is 126
+YFS      InsertInodeCache Exit
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 9
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOFDeluxe Entry
+YFS      InsertOFDeluxe inum: 9
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 9
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOFDeluxe: we have a file
+YFS      New fd: -2
+YFS      InsertOFDeluxe: there is no reused fd
+YFS      InsertOpenFile Entry
+YFS          *wait 0x22198
+YFS          open_files: 0x22198
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 9
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOpenFile list: 0x22198
+YFS      InsertNode: Outside loop 1
+YFS      InsertNode: Outside loop 2
+YFS      InsertOFDeluxe Exit
+YFS      YFSCreateMkDir: ADDING ENTRY TO PARENT
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 1
+YFS      AddToBlock len: 32
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (first one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 288
+YFS      GetInodeAt node->type: 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 7
+YFS      Buf now contains ¾Ê
+YFS      Shoving in 
+YFS      Shoving into 0x26664
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 7
+YFS      Returning dirty bit 1
+YFS      AddToBlock: writing to block 7 at position 288
+YFS      AddToBlock: writing to block 7
+YFS      inserting 222256 into cache
+YFS      Block cache OG hash is 7
+YFS      Block cache counter is 121
+YFS      Found Block in cache
+YFS      Inserting at position 7
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 121
+YFS      InsertBlockoCache Exit
+YFS      AddToBlock open_files: 0x22198 
+YFS      AddToBlock len: 32
+YFS      AddToBlock old size: 288
+YFS      AddToBlock len: 32
+YFS      AddToBlock new size: 320
+YFS      WriteINum Entry
+YFS      WriteInum inum: 1
+YFS      WriteInum node->size: 320
+YFS      Buf now contains 
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 1
+YFS      Inserting node of size 320
+YFS      Inode OG hash is 1
+YFS      Inode cache counter is 131
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 1
+YFS      InsertInodeCache Dirty is true
+YFS      InsertInodeCache writing inum 1 to block 1 at position 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 1
+YFS      Buf now contains üÿÿÉÃUH‰åHƒì0H‰}Ø¾pÌ
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      Buf's current contents: 223296
+YFS      Inserting block 1 into cache
+YFS      inserting 223296 into cache
+YFS      Block cache OG hash is 1
+YFS      Block cache counter is 124
+YFS      Found Block in cache
+YFS      Inserting at position 1
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: ’
+YFS      initial block hash contents: ’
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: ’
+YFS      InsertBlockCache counter is 124
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock Exit
+YFS      MakeNewFile Entry
+YFS      MakeNewFile: Dir is 0
+YFS      Direct 0
+YFS      Direct 1
+YFS      Direct 2
+YFS      Direct 3
+YFS      Direct 4
+YFS      Direct 5
+YFS      Direct 6
+YFS      Direct 7
+YFS      Direct 8
+YFS      Direct 9
+YFS      Direct 10
+YFS      Direct 11
+YFS      MakeNewFile Exit
+YFS      YFSCreateMkDir: Parent node size: 288
+YFS      WriteINum Entry
+YFS      WriteInum inum: 9
+YFS      WriteInum node->size: 0
+YFS      Buf now contains 
+YFS      Shoving in 
+YFS      Shoving into 0x25c64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 2
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 9
+YFS      Inserting node of size 0
+YFS      Inode OG hash is 9
+YFS      Inode cache counter is 132
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 9
+YFS      InsertInodeCache node hash 9
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      InsertInodeCache counter is 132
+YFS      InsertInodeCache Exit
+YFS      YFSCreateMkDir: Dir is 0
+YFS      YFSCreateMkDir (after adding ., ..) child node->size: 0
+YFS      YFSCreateMkDir msg->retval 8
+YFS      ----------YFSCreateMkDir Exit----------
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 4
+YFS      Message Pid: 3
+YFS      4: Write
+YFS      YFSWrite Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 9
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 9
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 9
+YFS      AddToBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 9
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock: getting a free block for inum 9
+YFS      AddToBlock: got block 15
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 15
+YFS      Buf's current contents: 224576
+YFS      Inserting block 15 into cache
+YFS      inserting 224576 into cache
+YFS      Block cache OG hash is 15
+YFS      Block cache counter is 127
+YFS      Found Block in cache
+YFS      Inserting at position 15
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 127
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock: writing to block 15 at position 0
+YFS      AddToBlock: writing to block 15
+YFS      inserting 224576 into cache
+YFS      Block cache OG hash is 15
+YFS      Block cache counter is 128
+YFS      Found Block in cache
+YFS      Inserting at position 15
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: Hello world
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: Hello world
+YFS      InsertBlockCache counter is 128
+YFS      InsertBlockoCache Exit
+YFS      AddToBlock open_files: 0x22198 
+YFS      AddToBlock len: 11
+YFS      AddToBlock old size: 0
+YFS      AddToBlock len: 11
+YFS      AddToBlock new size: 11
+YFS      WriteINum Entry
+YFS      WriteInum inum: 9
+YFS      WriteInum node->size: 11
+YFS      Buf now contains Ø‰P‹Eüÿ
+YFS      Shoving in 
+YFS      Shoving into 0x25c64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 2
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 9
+YFS      Inserting node of size 11
+YFS      Inode OG hash is 9
+YFS      Inode cache counter is 136
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 9
+YFS      InsertInodeCache Dirty is true
+YFS      InsertInodeCache writing inum 9 to block 2 at position 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 2
+YFS      Buf now contains 
+YFS      Shoving in 
+YFS      Shoving into 0x25c64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 2
+YFS      Buf's current contents: 225616
+YFS      Inserting block 2 into cache
+YFS      inserting 225616 into cache
+YFS      Block cache OG hash is 2
+YFS      Block cache counter is 131
+YFS      Found Block in cache
+YFS      Inserting at position 2
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 131
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock Exit
+YFS      YFSWrite: returning 11
+YFS      YFSWrite Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 5
+YFS      Message Pid: 3
+YFS      5: Seek
+YFS      YFSSeek Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 9
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      YFSSeek set
+YFS      YFSSeek Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 3
+YFS      Message Pid: 3
+YFS      3: Read
+YFS      YFSRead Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 9
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock Entry
+YFS      GetFromBlock inum: 9
+YFS      GetFromBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 9
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock: reading from block 15 at position 0
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 15
+YFS      Buf now contains 
+YFS      Shoving in Hello world
+YFS      Shoving into 0x27664
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains Hello world
+YFS      Filled buf at hash index 15
+YFS      Returning dirty bit 1
+YFS      GetFromBlock character 72
+YFS      GetFromBlock character 101
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 32
+YFS      GetFromBlock character 119
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 114
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 100
+YFS      YFSRead Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 2
+YFS      Message Pid: 3
+YFS      2: Create
+YFS      YFSCreate 
+YFS      YFSCreate open_files: 0x22198
+YFS      ----------YFSCreateMkDir Entry----------
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      YFSCreateMkDir: Dir is 0
+YFS      YFSCreateMkDir null path length: 1
+YFS      YFSCreateMkDir finding last slash
+YFS      YFSCreateMkDir pathname: 8
+YFS      YFSCreateMkDir directory: 
+YFS      YFSCreateMkDir new_file: 8
+YFS      YFSCreateMkDir parent_inum: 1
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 320
+YFS      GetInodeAt node->type: 1
+YFS      YFSCreateMkDir parent type: 1
+YFS      TraverseDirs Entry
+YFS      Traversing path 8 at inum 1
+YFS      ParseFileName Exit
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 320
+YFS      GetInodeAt node->type: 1
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      Size Remaining :320
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: 8
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 10
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 7
+YFS      Buf now contains 
+YFS      Shoving in 
+YFS      Shoving into 0x26664
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 7
+YFS      Returning dirty bit 1
+YFS      Helper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: 8
+YFS      Helper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: 8
+YFS      Helper curr_dir_name: 0
+YFS      TraverseDirsHelper dir_name: 8
+YFS      Helper curr_dir_name: 1
+YFS      TraverseDirsHelper dir_name: 8
+YFS      Helper curr_dir_name: 2
+YFS      TraverseDirsHelper dir_name: 8
+YFS      Helper curr_dir_name: 3
+YFS      TraverseDirsHelper dir_name: 8
+YFS      Helper curr_dir_name: 4
+YFS      TraverseDirsHelper dir_name: 8
+YFS      Helper curr_dir_name: 5
+YFS      TraverseDirsHelper dir_name: 8
+YFS      Helper curr_dir_name: 6
+YFS      TraverseDirsHelper dir_name: 8
+YFS      Helper curr_dir_name: 7
+YFS      TraverseDirsHelper dir_name: 8
+YFS      TraverseDirsHelper Exit (fail)
+YFS      TraverseDirs found inum -1
+YFS      TraverseDirs traversing direct block 1
+YFS      TraverseDirs Exit
+YFS      GetInodeAt Entry
+YFS      Inum is 10
+YFS      IPB is 8
+YFS      Math is 1
+YFS      Sector num is 2
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 2
+YFS      Buf now contains 
+YFS      Shoving in 
+YFS      Shoving into 0x25c64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 2
+YFS      Buf's current contents: 227896
+YFS      Inserting block 2 into cache
+YFS      inserting 227896 into cache
+YFS      Block cache OG hash is 2
+YFS      Block cache counter is 135
+YFS      Found Block in cache
+YFS      Inserting at position 2
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 135
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      GetInodeAt inserting into inode cache
+YFS      GetInodeAt node: 0x37ab8
+YFS      GetInodeAt inum: 10
+YFS      GetInodeAt node->size: 0
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 10
+YFS      Inserting node of size 0
+YFS      Inode OG hash is 10
+YFS      Inode cache counter is 143
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 10
+YFS      InsertInodeCache node hash 10
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      InsertInodeCache counter is 143
+YFS      InsertInodeCache Exit
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 10
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOFDeluxe Entry
+YFS      InsertOFDeluxe inum: 10
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 10
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOFDeluxe: we have a file
+YFS      New fd: -2
+YFS      InsertOFDeluxe: there is no reused fd
+YFS      InsertOpenFile Entry
+YFS          *wait 0x22198
+YFS          open_files: 0x22198
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 10
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOpenFile list: 0x22198
+YFS      InsertNode: Outside loop 1
+YFS      InsertNode: Outside loop 2
+YFS      InsertOFDeluxe Exit
+YFS      YFSCreateMkDir: ADDING ENTRY TO PARENT
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 1
+YFS      AddToBlock len: 32
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (first one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 320
+YFS      GetInodeAt node->type: 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 7
+YFS      Buf now contains 
+YFS      Shoving in 
+YFS      Shoving into 0x26664
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 7
+YFS      Returning dirty bit 1
+YFS      AddToBlock: writing to block 7 at position 320
+YFS      AddToBlock: writing to block 7
+YFS      inserting 228784 into cache
+YFS      Block cache OG hash is 7
+YFS      Block cache counter is 137
+YFS      Found Block in cache
+YFS      Inserting at position 7
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 137
+YFS      InsertBlockoCache Exit
+YFS      AddToBlock open_files: 0x22198 
+YFS      AddToBlock len: 32
+YFS      AddToBlock old size: 320
+YFS      AddToBlock len: 32
+YFS      AddToBlock new size: 352
+YFS      WriteINum Entry
+YFS      WriteInum inum: 1
+YFS      WriteInum node->size: 352
+YFS      Buf now contains 
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 1
+YFS      Inserting node of size 352
+YFS      Inode OG hash is 1
+YFS      Inode cache counter is 148
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 1
+YFS      InsertInodeCache Dirty is true
+YFS      InsertInodeCache writing inum 1 to block 1 at position 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 1
+YFS      Buf now contains 
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      Buf's current contents: 229824
+YFS      Inserting block 1 into cache
+YFS      inserting 229824 into cache
+YFS      Block cache OG hash is 1
+YFS      Block cache counter is 140
+YFS      Found Block in cache
+YFS      Inserting at position 1
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: ’
+YFS      initial block hash contents: ’
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: ’
+YFS      InsertBlockCache counter is 140
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock Exit
+YFS      MakeNewFile Entry
+YFS      MakeNewFile: Dir is 0
+YFS      Direct 0
+YFS      Direct 1
+YFS      Direct 2
+YFS      Direct 3
+YFS      Direct 4
+YFS      Direct 5
+YFS      Direct 6
+YFS      Direct 7
+YFS      Direct 8
+YFS      Direct 9
+YFS      Direct 10
+YFS      Direct 11
+YFS      MakeNewFile Exit
+YFS      YFSCreateMkDir: Parent node size: 320
+YFS      WriteINum Entry
+YFS      WriteInum inum: 10
+YFS      WriteInum node->size: 0
+YFS      Buf now contains 
+YFS      Shoving in 
+YFS      Shoving into 0x25c64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 2
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 10
+YFS      Inserting node of size 0
+YFS      Inode OG hash is 10
+YFS      Inode cache counter is 149
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 10
+YFS      InsertInodeCache node hash 10
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      InsertInodeCache counter is 149
+YFS      InsertInodeCache Exit
+YFS      YFSCreateMkDir: Dir is 0
+YFS      YFSCreateMkDir (after adding ., ..) child node->size: 0
+YFS      YFSCreateMkDir msg->retval 9
+YFS      ----------YFSCreateMkDir Exit----------
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 4
+YFS      Message Pid: 3
+YFS      4: Write
+YFS      YFSWrite Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 10
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 10
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 10
+YFS      AddToBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 10
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock: getting a free block for inum 10
+YFS      AddToBlock: got block 16
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 16
+YFS      Buf's current contents: 231104
+YFS      Inserting block 16 into cache
+YFS      inserting 231104 into cache
+YFS      Block cache OG hash is 16
+YFS      Block cache counter is 143
+YFS      Found Block in cache
+YFS      Inserting at position 16
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 143
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock: writing to block 16 at position 0
+YFS      AddToBlock: writing to block 16
+YFS      inserting 231104 into cache
+YFS      Block cache OG hash is 16
+YFS      Block cache counter is 144
+YFS      Found Block in cache
+YFS      Inserting at position 16
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: Hello world
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: Hello world
+YFS      InsertBlockCache counter is 144
+YFS      InsertBlockoCache Exit
+YFS      AddToBlock open_files: 0x22198 
+YFS      AddToBlock len: 11
+YFS      AddToBlock old size: 0
+YFS      AddToBlock len: 11
+YFS      AddToBlock new size: 11
+YFS      WriteINum Entry
+YFS      WriteInum inum: 10
+YFS      WriteInum node->size: 11
+YFS      Buf now contains 
+YFS      Shoving in 
+YFS      Shoving into 0x25c64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 2
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 10
+YFS      Inserting node of size 11
+YFS      Inode OG hash is 10
+YFS      Inode cache counter is 153
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 10
+YFS      InsertInodeCache Dirty is true
+YFS      InsertInodeCache writing inum 10 to block 2 at position 2
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 2
+YFS      Buf now contains 
+YFS      Shoving in 
+YFS      Shoving into 0x25c64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 2
+YFS      Buf's current contents: 232144
+YFS      Inserting block 2 into cache
+YFS      inserting 232144 into cache
+YFS      Block cache OG hash is 2
+YFS      Block cache counter is 147
+YFS      Found Block in cache
+YFS      Inserting at position 2
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 147
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock Exit
+YFS      YFSWrite: returning 11
+YFS      YFSWrite Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 5
+YFS      Message Pid: 3
+YFS      5: Seek
+YFS      YFSSeek Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 10
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      YFSSeek set
+YFS      YFSSeek Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 3
+YFS      Message Pid: 3
+YFS      3: Read
+YFS      YFSRead Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 10
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock Entry
+YFS      GetFromBlock inum: 10
+YFS      GetFromBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 10
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock: reading from block 16 at position 0
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 16
+YFS      Buf now contains 
+YFS      Shoving in Hello world
+YFS      Shoving into 0x27864
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains Hello world
+YFS      Filled buf at hash index 16
+YFS      Returning dirty bit 1
+YFS      GetFromBlock character 72
+YFS      GetFromBlock character 101
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 32
+YFS      GetFromBlock character 119
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 114
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 100
+YFS      YFSRead Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 2
+YFS      Message Pid: 3
+YFS      2: Create
+YFS      YFSCreate 
+YFS      YFSCreate open_files: 0x22198
+YFS      ----------YFSCreateMkDir Entry----------
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      YFSCreateMkDir: Dir is 0
+YFS      YFSCreateMkDir null path length: 1
+YFS      YFSCreateMkDir finding last slash
+YFS      YFSCreateMkDir pathname: 9
+YFS      YFSCreateMkDir directory: 
+YFS      YFSCreateMkDir new_file: 9
+YFS      YFSCreateMkDir parent_inum: 1
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 352
+YFS      GetInodeAt node->type: 1
+YFS      YFSCreateMkDir parent type: 1
+YFS      TraverseDirs Entry
+YFS      Traversing path 9 at inum 1
+YFS      ParseFileName Exit
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 352
+YFS      GetInodeAt node->type: 1
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      Size Remaining :352
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: 9
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 11
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 7
+YFS      Buf now contains 
+YFS      Shoving in 
+YFS      Shoving into 0x26664
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 7
+YFS      Returning dirty bit 1
+YFS      Helper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: 9
+YFS      Helper curr_dir_name: ..
+YFS      TraverseDirsHelper dir_name: 9
+YFS      Helper curr_dir_name: 0
+YFS      TraverseDirsHelper dir_name: 9
+YFS      Helper curr_dir_name: 1
+YFS      TraverseDirsHelper dir_name: 9
+YFS      Helper curr_dir_name: 2
+YFS      TraverseDirsHelper dir_name: 9
+YFS      Helper curr_dir_name: 3
+YFS      TraverseDirsHelper dir_name: 9
+YFS      Helper curr_dir_name: 4
+YFS      TraverseDirsHelper dir_name: 9
+YFS      Helper curr_dir_name: 5
+YFS      TraverseDirsHelper dir_name: 9
+YFS      Helper curr_dir_name: 6
+YFS      TraverseDirsHelper dir_name: 9
+YFS      Helper curr_dir_name: 7
+YFS      TraverseDirsHelper dir_name: 9
+YFS      Helper curr_dir_name: 8
+YFS      TraverseDirsHelper dir_name: 9
+YFS      TraverseDirsHelper Exit (fail)
+YFS      TraverseDirs found inum -1
+YFS      TraverseDirs traversing direct block 1
+YFS      TraverseDirs Exit
+YFS      GetInodeAt Entry
+YFS      Inum is 11
+YFS      IPB is 8
+YFS      Math is 1
+YFS      Sector num is 2
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 2
+YFS      Buf now contains 
+YFS      Shoving in 
+YFS      Shoving into 0x25c64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 2
+YFS      Buf's current contents: 234424
+YFS      Inserting block 2 into cache
+YFS      inserting 234424 into cache
+YFS      Block cache OG hash is 2
+YFS      Block cache counter is 151
+YFS      Found Block in cache
+YFS      Inserting at position 2
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 151
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      GetInodeAt inserting into inode cache
+YFS      GetInodeAt node: 0x39478
+YFS      GetInodeAt inum: 11
+YFS      GetInodeAt node->size: 0
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 11
+YFS      Inserting node of size 0
+YFS      Inode OG hash is 11
+YFS      Inode cache counter is 160
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 11
+YFS      InsertInodeCache node hash 11
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      InsertInodeCache counter is 160
+YFS      InsertInodeCache Exit
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 11
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOFDeluxe Entry
+YFS      InsertOFDeluxe inum: 11
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 11
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOFDeluxe: we have a file
+YFS      New fd: -2
+YFS      InsertOFDeluxe: there is no reused fd
+YFS      InsertOpenFile Entry
+YFS          *wait 0x22198
+YFS          open_files: 0x22198
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 11
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 0
+YFS      InsertOpenFile list: 0x22198
+YFS      InsertNode: Outside loop 1
+YFS      InsertNode: Outside loop 2
+YFS      InsertOFDeluxe Exit
+YFS      YFSCreateMkDir: ADDING ENTRY TO PARENT
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 1
+YFS      AddToBlock len: 32
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (first one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 352
+YFS      GetInodeAt node->type: 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 7
+YFS      Buf now contains 
+YFS      Shoving in 
+YFS      Shoving into 0x26664
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 7
+YFS      Returning dirty bit 1
+YFS      AddToBlock: writing to block 7 at position 352
+YFS      AddToBlock: writing to block 7
+YFS      inserting 235312 into cache
+YFS      Block cache OG hash is 7
+YFS      Block cache counter is 153
+YFS      Found Block in cache
+YFS      Inserting at position 7
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 153
+YFS      InsertBlockoCache Exit
+YFS      AddToBlock open_files: 0x22198 
+YFS      AddToBlock len: 32
+YFS      AddToBlock old size: 352
+YFS      AddToBlock len: 32
+YFS      AddToBlock new size: 384
+YFS      WriteINum Entry
+YFS      WriteInum inum: 1
+YFS      WriteInum node->size: 384
+YFS      Buf now contains 
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 1
+YFS      Inserting node of size 384
+YFS      Inode OG hash is 1
+YFS      Inode cache counter is 165
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 1
+YFS      InsertInodeCache Dirty is true
+YFS      InsertInodeCache writing inum 1 to block 1 at position 1
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 1
+YFS      Buf now contains 
+YFS      Shoving in ’
+YFS      Shoving into 0x25a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains ’
+YFS      Filled buf at hash index 1
+YFS      Buf's current contents: 236352
+YFS      Inserting block 1 into cache
+YFS      inserting 236352 into cache
+YFS      Block cache OG hash is 1
+YFS      Block cache counter is 156
+YFS      Found Block in cache
+YFS      Inserting at position 1
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: ’
+YFS      initial block hash contents: ’
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: ’
+YFS      InsertBlockCache counter is 156
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock Exit
+YFS      MakeNewFile Entry
+YFS      MakeNewFile: Dir is 0
+YFS      Direct 0
+YFS      Direct 1
+YFS      Direct 2
+YFS      Direct 3
+YFS      Direct 4
+YFS      Direct 5
+YFS      Direct 6
+YFS      Direct 7
+YFS      Direct 8
+YFS      Direct 9
+YFS      Direct 10
+YFS      Direct 11
+YFS      MakeNewFile Exit
+YFS      YFSCreateMkDir: Parent node size: 352
+YFS      WriteINum Entry
+YFS      WriteInum inum: 11
+YFS      WriteInum node->size: 0
+YFS      Buf now contains 
+YFS      Shoving in 
+YFS      Shoving into 0x25c64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 2
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 11
+YFS      Inserting node of size 0
+YFS      Inode OG hash is 11
+YFS      Inode cache counter is 166
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 11
+YFS      InsertInodeCache node hash 11
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      InsertInodeCache counter is 166
+YFS      InsertInodeCache Exit
+YFS      YFSCreateMkDir: Dir is 0
+YFS      YFSCreateMkDir (after adding ., ..) child node->size: 0
+YFS      YFSCreateMkDir msg->retval 10
+YFS      ----------YFSCreateMkDir Exit----------
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 4
+YFS      Message Pid: 3
+YFS      4: Write
+YFS      YFSWrite Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 11
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 11
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock Entry
+YFS      AddToBlock inum: 11
+YFS      AddToBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 11
+YFS      GetInodeAt node->size: 0
+YFS      GetInodeAt node->type: 2
+YFS      AddToBlock: getting a free block for inum 11
+YFS      AddToBlock: got block 17
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 17
+YFS      Buf's current contents: 237648
+YFS      Inserting block 17 into cache
+YFS      inserting 237648 into cache
+YFS      Block cache OG hash is 17
+YFS      Block cache counter is 159
+YFS      Found Block in cache
+YFS      Inserting at position 17
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 159
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock: writing to block 17 at position 0
+YFS      AddToBlock: writing to block 17
+YFS      inserting 237648 into cache
+YFS      Block cache OG hash is 17
+YFS      Block cache counter is 160
+YFS      Found Block in cache
+YFS      Inserting at position 17
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: Hello world
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: Hello world
+YFS      InsertBlockCache counter is 160
+YFS      InsertBlockoCache Exit
+YFS      AddToBlock open_files: 0x22198 
+YFS      AddToBlock len: 11
+YFS      AddToBlock old size: 0
+YFS      AddToBlock len: 11
+YFS      AddToBlock new size: 11
+YFS      WriteINum Entry
+YFS      WriteInum inum: 11
+YFS      WriteInum node->size: 11
+YFS      Buf now contains 
+YFS      Shoving in 
+YFS      Shoving into 0x25c64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 2
+YFS      InsertInodeCache Entry
+YFS      InsertInodeCache inum: 11
+YFS      Inserting node of size 11
+YFS      Inode OG hash is 11
+YFS      Inode cache counter is 170
+YFS      InsertInodeCache found Inode in cache
+YFS      InsertInodeCache inserting at position 11
+YFS      InsertInodeCache Dirty is true
+YFS      InsertInodeCache writing inum 11 to block 2 at position 3
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 2
+YFS      Buf now contains 
+YFS      Shoving in 
+YFS      Shoving into 0x25c64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 2
+YFS      Buf's current contents: 238688
+YFS      Inserting block 2 into cache
+YFS      inserting 238688 into cache
+YFS      Block cache OG hash is 2
+YFS      Block cache counter is 163
+YFS      Found Block in cache
+YFS      Inserting at position 2
+YFS      In insert pre-memcpy block 8 position 0, entry llo world
+YFS      In insert pre-memcpy block 8 position 1, entry 
+YFS      In insert pre-memcpy block 8 position 2, entry 
+YFS      initial block contents: 
+YFS      initial block hash contents: 
+YFS      In insert post-memcpy block 8 position 0, entry llo world
+YFS      In insert post-memcpy block 8 position 1, entry 
+YFS      In insert post-memcpy block 8 position 2, entry 
+YFS      b_cache.blocks[hash] contents: 
+YFS      InsertBlockCache counter is 163
+YFS      InsertBlockoCache Exit
+YFS      ParseFileName Exit
+YFS      AddToBlock Exit
+YFS      YFSWrite: returning 11
+YFS      YFSWrite Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 5
+YFS      Message Pid: 3
+YFS      5: Seek
+YFS      YFSSeek Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 11
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      YFSSeek set
+YFS      YFSSeek Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 3
+YFS      Message Pid: 3
+YFS      3: Read
+YFS      YFSRead Entry
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 11
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock Entry
+YFS      GetFromBlock inum: 11
+YFS      GetFromBlock len: 11
+YFS      SearchOpenFile Entry
+YFS      SearchOpenFile Exit (middle one)
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 11
+YFS      GetInodeAt node->size: 11
+YFS      GetInodeAt node->type: 2
+YFS      GetFromBlock: reading from block 17 at position 0
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 17
+YFS      Buf now contains 
+YFS      Shoving in Hello world
+YFS      Shoving into 0x27a64
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains Hello world
+YFS      Filled buf at hash index 17
+YFS      Returning dirty bit 1
+YFS      GetFromBlock character 72
+YFS      GetFromBlock character 101
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 32
+YFS      GetFromBlock character 119
+YFS      GetFromBlock character 111
+YFS      GetFromBlock character 114
+YFS      GetFromBlock character 108
+YFS      GetFromBlock character 100
+YFS      YFSRead Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Received Message
+YFS      Message Type: 13
+YFS      Message Pid: 3
+YFS      13: Stat
+YFS      YFSStat Entry
+YFS      GetPathName Entry
+YFS      GetPathName Exit
+YFS      ParseFileName Entry
+YFS      ParseFileName new_filename: .
+YFS      ParseFileName dir_inum: 1
+YFS      ParseFileName Entering While loop
+YFS      TraverseDirs Entry
+YFS      Traversing path . at inum 1
+YFS      ParseFileName Exit
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 384
+YFS      GetInodeAt node->type: 1
+YFS      TraverseDirs inode type: 1
+YFS      TraverseDirs traversing direct block 0
+YFS      Size Remaining :384
+YFS      TraverseDirsHelper Entry
+YFS      TraverseDirsHelper dir_name: .
+YFS      TraverseDirsHelper curr_block: 7
+YFS      TraverseDirsHelper num_dir_entries: 12
+YFS      ---------------ReadFromBlock------------------
+YFS      Reading from block 7
+YFS      Buf now contains 
+YFS      Shoving in 
+YFS      Shoving into 0x26664
+YFS      ptr 7 is 0x26664
+YFS      Buf now contains 
+YFS      Filled buf at hash index 7
+YFS      Returning dirty bit 1
+YFS      Helper curr_dir_name: .
+YFS      TraverseDirsHelper dir_name: .
+YFS      TraverseDirsHelper Exit (success)
+YFS      TraverseDirs found inum 1
+YFS      ParseFileName Exit
+YFS      YFSStat parent_directory: 
+YFS      YFSStat child_directory: .
+YFS      YFSStat parent_inum: 1
+YFS      YFSStat file_inum: 1
+YFS      GetInodeAt Entry
+YFS      GetInodeCache Nodes 2 size: 11
+YFS      GetInodeAt getting cached inode
+YFS      GetInodeAt inum: 1
+YFS      GetInodeAt node->size: 384
+YFS      GetInodeAt node->type: 1
+YFS      YFSStat Exit
+YFS      --------------------Replied successfully--------------------
+YFS      --------------------Getting Message--------------------
+YFS      Receive Call Breaks Deadlock! Fuck!

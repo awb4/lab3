@@ -18,6 +18,7 @@ main(int argc, char **argv)
 	for (i = 0; i < 32; i++) {
 		sprintf(name, "file%02d", i);
 		fd = Create(name);
+		printf("Create returned %d\n", fd);
 		Close(fd);
 	}
 

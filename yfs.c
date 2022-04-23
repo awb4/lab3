@@ -18,6 +18,7 @@ union {
 } *read_block;
 
 struct open_file_list {
+    int cur_reuse;
     int fd;
     short inum;
     int blocknum;
@@ -148,11 +149,23 @@ main(int argc, char **argv)
         }
         nb = read_block->head.num_blocks;
         ni = read_block->head.num_inodes;
+        int i;
+        struct inode *nodes = malloc(BLOCKSIZE);
+        for (i = 1; i <= CeilDiv(ni , IPB) + 1; i++) {
+            if (ReadSector(i, nodes) < 0) {
+                TracePrintf(0, "Couldn't readsector in initalization of reuses\n");
+            }
+            int j;
+            for (j = 0; j < IPB; j++) {
+                nodes[j].reuse = 0;
+            }
+            WriteSector(i, nodes);
+        }
         // int maxfb =  nb - CeilDiv(ni + 1, IPB); 
         block_bitmap = malloc(sizeof(bool) * nb);
         inode_bitmap = malloc(sizeof(bool) * ni);
         
-        int i;
+        
         //Init free blocks
         TracePrintf(0, "Initializing Free Blocks\n");
         for (i = 0; i < CeilDiv(ni + 1, IPB) + 2; i++) {
@@ -362,6 +375,11 @@ YFSRead(void *m)
             msg->retval = ERROR;
             return;
         }
+        if (GetInodeAt(file->inum)->reuse != file->cur_reuse) {
+            TracePrintf(0, "Wrong Reuse!!! Can't read from new file\n");
+            msg->retval = ERROR;
+            return;
+        }
         char *my_buf = malloc(size);
         int gfb = GetFromBlock(file->inum, my_buf, size);
         
@@ -370,6 +388,7 @@ YFSRead(void *m)
             msg->retval = ERROR;
             return;
         }
+        
         msg->retval = gfb;
     }
     TracePrintf(0, "YFSRead Exit\n");
@@ -396,6 +415,11 @@ YFSWrite(void *m)
         struct open_file_list *file = SearchByFD(&open_files, fd);
         if (file == NULL) {
             TracePrintf(0, "YFSWrite: (ERROR) file not in open_files list\n");
+            msg->retval = ERROR;
+            return;
+        }
+        if (GetInodeAt(file->inum)->reuse != file->cur_reuse) {
+            TracePrintf(0, "Wrong Reuse!!! Can't write to new file\n");
             msg->retval = ERROR;
             return;
         }
@@ -966,13 +990,13 @@ YFSSync(void *m)
             struct inode *blk = malloc(BLOCKSIZE);
             int sector = GetSectorNum((int) inum);
             if (ReadFromBlock(sector, blk) < 0) {
-                TracePrintf("YFSSync inode readfromblock failed\n");
+                TracePrintf(0, "YFSSync inode readfromblock failed\n");
                 msg->retval = ERROR;
                 return;
             }
             blk[GetSectorPosition(inum)] = i_cache.nodes[i];
             if (WriteSector(sector, blk) < 0) {
-                TracePrintf("YFSSync inode writesector failed\n");
+                TracePrintf(0, "YFSSync inode writesector failed\n");
                 msg->retval = ERROR;
                 return;
             }
@@ -981,7 +1005,7 @@ YFSSync(void *m)
     for (i = 0; i < BLOCK_CACHESIZE; i++) {
         if (b_cache.dirty_bits[i]) {
             if (WriteSector(b_cache.nums[i], b_cache.blocks[i]) < 0) {
-                TracePrintf("YFSSync block writesector failed\n");
+                TracePrintf(0, "YFSSync block writesector failed\n");
                 msg->retval = ERROR;
                 return;
             }
@@ -992,16 +1016,45 @@ YFSSync(void *m)
 }
 
 /**
- * Shutdoen 
+ * Shutdown 
  * 
  * Expected message struct: messageSinglePath
  */
 void
 YFSShutdown(void *m)
 {
-    struct messageSinglePath *msg = (struct messageSinglePath *) m;
-    (void) msg;
-    //DO DIRTY BIT SHIT
+   struct messageSinglePath *msg = (struct messageSinglePath *) m;
+    (void) m;
+    int i;
+    for (i = 0; i < INODE_CACHESIZE; i++) {
+        if (i_cache.dirty_bits[i]) {
+            int inum = i_cache.nums[i];
+            struct inode *blk = malloc(BLOCKSIZE);
+            int sector = GetSectorNum((int) inum);
+            if (ReadFromBlock(sector, blk) < 0) {
+                TracePrintf(0, "YFSSync inode readfromblock failed\n");
+                msg->retval = ERROR;
+                return;
+            }
+            blk[GetSectorPosition(inum)] = i_cache.nodes[i];
+            if (WriteSector(sector, blk) < 0) {
+                TracePrintf(0, "YFSSync inode writesector failed\n");
+                msg->retval = ERROR;
+                return;
+            }
+        }
+    }
+    for (i = 0; i < BLOCK_CACHESIZE; i++) {
+        if (b_cache.dirty_bits[i]) {
+            if (WriteSector(b_cache.nums[i], b_cache.blocks[i]) < 0) {
+                TracePrintf(0, "YFSSync block writesector failed\n");
+                msg->retval = ERROR;
+                return;
+            }
+        }
+    }
+    msg->retval = 0;
+    TracePrintf(0, "Take that, bitch! Sync -- oops, I mean shutdown!\n");
     printf("System is shutting down due to user request\n");
     Exit(0);
 }
@@ -1195,7 +1248,7 @@ TraverseDirsHelper(char *dir_name, int curr_block, int num_dir_entries, bool del
     int j;
     for (j = 0; j < num_dir_entries; j++) {
         char *curr_dir_name = MakeNullTerminated(curr_entry->name, DIRNAMELEN);
-        TracePrintf(0, "TraverseDirsHelper curr_dir_name: %s\n", curr_dir_name);
+        TracePrintf(0, "Helper curr_dir_name: %s\n", curr_dir_name);
         TracePrintf(0, "TraverseDirsHelper dir_name: %s\n", dir_name);
         if (strcmp(curr_dir_name, dir_name) == 0) {
             short inum = curr_entry->inum;
@@ -1227,6 +1280,7 @@ InsertOpenFile(struct open_file_list **wait, int fd, short inum)
   
 	new->fd = fd;
 	new->inum = inum;
+    new->cur_reuse = GetInodeAt(inum)->reuse;
     new->next = NULL;
     if (fd > 0) {
         new->blocknum = 0;
@@ -1616,7 +1670,6 @@ MakeNewFile(struct inode *node, bool directory)
     }
     node->size = 0;
     node->nlink = 1;
-    node->reuse = 0;
     node->indirect = 0;
     TracePrintf(0, "MakeNewFile Exit\n");
 }
@@ -1656,7 +1709,7 @@ GetFreeBlock()
 int 
 GetSectorNum(int inum) 
 {
-    return (inum / IPB) + 1;
+    return (inum / ((int) IPB)) + 1;
 }
 
 //For readsector
@@ -1740,7 +1793,7 @@ WriteINum(int inum, struct inode node)
     TracePrintf(0, "WriteInum inum: %d\n", inum);
     TracePrintf(0, "WriteInum node->size: %d\n", node.size);
     void *block = malloc(BLOCKSIZE);
-    short sector = GetSectorNum(inum);
+    short sector = (short) GetSectorNum(inum);
     if (GetBlockCache(sector, block) == -1) {
         if (ReadSector(sector, block) == -1) {
             TracePrintf(0, "Couldn't read sector in WriteInum\n");
@@ -1768,13 +1821,18 @@ GetInodeAt(short inum)
         return node;
     }
     struct inode *blk = malloc(BLOCKSIZE);
-    int sector = GetSectorNum((int) inum);
+    TracePrintf(0, "Inum is %d\n", inum);
+    TracePrintf(0, "IPB is %d\n", IPB);
+    TracePrintf(0, "Math is %d\n", 23 / IPB + 1);
+    int sector = (int) inum / ((int) IPB) + 1;
+    TracePrintf(0, "Sector num is %d\n", sector);
     if (ReadFromBlock(sector, blk) < 0) {
-        TracePrintf("GetInodeAt readfromblock failed\n");
+        TracePrintf(0, "GetInodeAt readfromblock failed\n");
         return NULL;
     }
     struct inode *read_node = (struct inode *) blk + GetSectorPosition((int) inum);
     TracePrintf(0, "GetInodeAt inserting into inode cache\n");
+    TracePrintf(0, "GetInodeAt node: %p\n", read_node);
     TracePrintf(0, "GetInodeAt inum: %d\n", inum);
     TracePrintf(0, "GetInodeAt node->size: %d\n", read_node->size);
     InsertInodeCache(inum, *read_node, false);
@@ -1995,7 +2053,7 @@ AddBlockToInode(struct inode *node, int block_num)
     TracePrintf(0, "AddBlockToInode Entry\n");
     int i;
     for (i = 0; i < NUM_DIRECT; i++) {
-        if (node->direct[i] == 0) {
+        if (node->direct[i] <= 0 || node->direct[i] > (int) (sizeof(b_cache) / BLOCKSIZE)) {
             node->direct[i] = block_num;
         }
     }
@@ -2241,6 +2299,7 @@ FreeFileBlocks(struct inode *node)
 int
 InsertBlockCache(short blknum, void *block, bool dirty)
 {
+    b_cache.counter++;
     short oghash = blknum % BLOCK_CACHESIZE;
     
 
@@ -2267,7 +2326,7 @@ InsertBlockCache(short blknum, void *block, bool dirty)
         int min = INT_MAX;
         int i;
         for (i = 0; i < BLOCK_CACHESIZE; i++) {
-            int test = i_cache.lru[hash];
+            int test = i_cache.lru[i];
             if (test < min) {
                 min = test;
                 hash = i;
@@ -2306,7 +2365,7 @@ InsertBlockCache(short blknum, void *block, bool dirty)
 
     b_cache.lru[hash] = b_cache.counter;
     b_cache.dirty_bits[hash] = dirty;
-    b_cache.counter++;
+
    
     TracePrintf(0, "InsertBlockCache counter is %d\n", b_cache.counter);
 
@@ -2317,6 +2376,7 @@ InsertBlockCache(short blknum, void *block, bool dirty)
 int
 InsertInodeCache(short inum, struct inode node, bool dirty)
 {
+    i_cache.counter++;
     TracePrintf(0, "InsertInodeCache Entry\n");
     TracePrintf(0, "InsertInodeCache inum: %d\n", inum);
 
@@ -2340,7 +2400,10 @@ InsertInodeCache(short inum, struct inode node, bool dirty)
         int min = INT_MAX;
         int i;
         for (i = 0; i < INODE_CACHESIZE; i++) {
-            int test = i_cache.lru[hash];
+
+            int test = i_cache.lru[i];
+            TracePrintf(0, "Test: %d, Min: %d, i: %d\n", test, min, i);
+
             if (test < min) {
                 min = test;
                 hash = i;
@@ -2365,16 +2428,17 @@ InsertInodeCache(short inum, struct inode node, bool dirty)
         i_cache.nums[hash] = inum;
         i_cache.dirty_bits[hash] = dirty;
         i_cache.nodes[hash] = node;
-        i_cache.lru[hash] = i_cache.counter;
-        i_cache.counter++;
+        int ctr = i_cache.counter;
+        i_cache.lru[hash] = ctr;
         return WriteSector(sector, nodes);
     }
     TracePrintf(0, "InsertInodeCache node hash %d\n", hash);
     i_cache.nums[hash] = inum;
     i_cache.dirty_bits[hash] = dirty;
     i_cache.nodes[hash] = node;
-    i_cache.lru[hash] = i_cache.counter;
-    i_cache.counter++;
+    int ctr = i_cache.counter;
+    i_cache.lru[hash] = ctr;
+    
     TracePrintf(0, "GetInodeCache Nodes 2 size: %d\n", i_cache.nodes[2].size);
     TracePrintf(0, "InsertInodeCache counter is %d\n", i_cache.counter);
 //  
@@ -2385,6 +2449,7 @@ InsertInodeCache(short inum, struct inode node, bool dirty)
 int
 GetBlockCache(short index, void *buf)
 {
+    b_cache.counter++;
     int hash = index % BLOCK_CACHESIZE;
     int j = 0;
     while (b_cache.nums[hash] != index) {
@@ -2414,7 +2479,7 @@ GetBlockCache(short index, void *buf)
     TracePrintf(0, "Buf now contains %s\n", (char *) buf);
 
     b_cache.lru[hash] = b_cache.counter;
-    b_cache.counter++;
+    
     TracePrintf(0, "Filled buf at hash index %d\n", hash);
     return b_cache.dirty_bits[hash];
 
@@ -2423,6 +2488,7 @@ GetBlockCache(short index, void *buf)
 int
 GetInodeCache(short index,  struct inode *buf)
 {
+    i_cache.counter++;
     int hash = index % INODE_CACHESIZE;
     int j = 0;
     while (i_cache.nums[hash] != index) {
@@ -2443,6 +2509,5 @@ GetInodeCache(short index,  struct inode *buf)
     // copy data from block cache into buf
     *buf = i_cache.nodes[hash];
     i_cache.lru[hash] = b_cache.counter;
-    i_cache.counter++;
     return i_cache.dirty_bits[hash];
 }
