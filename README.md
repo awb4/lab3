@@ -6,8 +6,14 @@
 
 ## Implementation Details
 
-### `iolib.a`
+### `message.h`
+Message types:
+- `struct messageSinglePath` used for Open, Create, Unlink, MkDir, RmDir, ChDir, Sync, and Shutdown calls.
+- `struct messageDoublePath` used for Link and Stat
+- `struct messageFDSizeBuf` used for Close, Read, and Write
+- `struct messageSeek` used for Seek
 
+### `iolib.a`
 
 ### `yfs`
 
