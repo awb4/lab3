@@ -30,17 +30,13 @@ struct block_cache {
     int lru[BLOCK_CACHESIZE];
     bool dirty_bits[BLOCK_CACHESIZE];
     short nums[BLOCK_CACHESIZE];
-    union {
-        struct fs_header head;
-        struct inode inode[IPB];
-        char buf[BLOCKSIZE];
-    } blocks[BLOCK_CACHESIZE];
+    char blocks[BLOCK_CACHESIZE][BLOCKSIZE];
 };
 
 
 struct inode_cache {
     int counter;
-    int lru[BLOCK_CACHESIZE];
+    int lru[INODE_CACHESIZE];
     bool dirty_bits[INODE_CACHESIZE];
     short nums[INODE_CACHESIZE];
     struct inode nodes[INODE_CACHESIZE];
@@ -140,6 +136,8 @@ main(int argc, char **argv)
         TracePrintf(0, "Register File Server: Freak the Fuck out\n");
         Exit(-1);
     }
+    b_cache.counter = 0;
+    i_cache.counter = 0;
     if (Fork() == 0) {
         Exec(argv[1], argv + 1);
     } else {
@@ -674,9 +672,9 @@ YFSUnlink(void *m)
     
     if (parent_inum <= 0) {
         TracePrintf(0, "YFSUnlink: (ERROR) parent_inum <= 0\n");
-        free(pathname);
-        free(null_path);
-        free(file);
+        // free(pathname);
+        // free(null_path);
+        // free(file);
         msg->retval = ERROR;
         return;
     }
@@ -687,9 +685,9 @@ YFSUnlink(void *m)
     short child_inum = ParseFileName(file, parent_inum);
     if (child_inum < 0) {
         TracePrintf(0, "YFSUnlink: (ERROR) child_inum < 0\n");
-        free(pathname);
-        free(null_path);
-        free(file);
+        // free(pathname);
+        // free(null_path);
+        // free(file);
         msg->retval = ERROR;
         return;
     }
@@ -697,9 +695,9 @@ YFSUnlink(void *m)
     struct inode *child_node = GetInodeAt(child_inum);
     if (child_node->type == INODE_DIRECTORY) {
         TracePrintf(0, "YFSUnlink: (ERROR) cannot unlink a directory\n");
-        free(pathname);
-        free(null_path);
-        free(file);
+        // free(pathname);
+        // free(null_path);
+        // free(file);
         msg->retval = ERROR;
         return;
     }
@@ -716,9 +714,9 @@ YFSUnlink(void *m)
     TraverseDirs(MakeNullTerminated(file, DIRNAMELEN), parent_inum, true);
 
     msg->retval = 0;
-    free(pathname);
-    free(null_path);
-    free(file);
+    // free(pathname);
+    // free(null_path);
+    // free(file);
     TracePrintf(0, "YFSUnlink Exit\n");
 }
 
@@ -811,34 +809,34 @@ YFSRmDir(void *m)
     if (child_dir_inum <= 0) {
         TracePrintf(0, "YFSRmDir: (ERROR) child_dir_inum <= 0\n");
         msg->retval = ERROR;
-        free(pathname);
-        free(null_path);
-        free(child_directory);
+        // free(pathname);
+        // free(null_path);
+        // free(child_directory);
         return;
     } else if (child_dir_inum == 1) {
         TracePrintf(0, "YFSRmDir: (ERROR) can't remove root directory\n");
         msg->retval = ERROR;
-        free(pathname);
-        free(null_path);
-        free(child_directory);
+        // free(pathname);
+        // free(null_path);
+        // free(child_directory);
         return;
     } else {
         struct inode *node = GetInodeAt(child_dir_inum);
         if (node->type != INODE_DIRECTORY) {
             TracePrintf(0, "YFSRmDir: (ERROR) can't remove non directory failure\n");
             msg->retval = ERROR;
-            free(pathname);
-            free(null_path);
-            free(child_directory);
+            // free(pathname);
+            // free(null_path);
+            // free(child_directory);
             return;
         }
         
         if (!CheckDir(node)) {
             TracePrintf(0, "YFSRmDir: (ERROR) chosen directory is not empty\n");
             msg->retval = ERROR;
-            free(pathname);
-            free(null_path);
-            free(child_directory);
+            // free(pathname);
+            // free(null_path);
+            // free(child_directory);
             return;
         }
         // Remove the entry corresponding to new_file
@@ -846,9 +844,9 @@ YFSRmDir(void *m)
         FreeFileBlocks(node);
         inode_bitmap[child_dir_inum] = 1;
         msg->retval = 0;
-        free(pathname);
-        free(null_path);
-        free(child_directory);
+        // free(pathname);
+        // free(null_path);
+        // free(child_directory);
         TracePrintf(0, "YFSRmDir Exit\n");
     }
 }
@@ -864,7 +862,7 @@ YFSChDir(void *m)
     struct messageSinglePath *msg = (struct messageSinglePath *) m;
     char *pathname = GetPathName(msg->pid, msg->pathname); // Free this bitch at some point
     msg->retval = ParseFileName(pathname, msg->cd);
-    free(pathname);
+    // free(pathname);
 }
 
 /**
@@ -923,9 +921,9 @@ YFSStat(void *m)
     if (file_inum <= 0) {
         TracePrintf(0, "YFSStat: (ERROR) file_inum <= 0");
         msg->retval = ERROR;
-        free(pathname);
-        free(null_path);
-        free(file_path);
+        // free(pathname);
+        // free(null_path);
+        // free(file_path);
         return;
     }
     struct inode *my_node = GetInodeAt(file_inum);
@@ -939,15 +937,15 @@ YFSStat(void *m)
     if (CopyTo(msg->pid, msg->pathname2, my_stat, sizeof(struct Stat)) < 0) {
         TracePrintf(0, "YFSStat: (ERROR) CopyTo failed\n");
         msg->retval = ERROR;
-        free(pathname);
-        free(null_path);
-        free(file_path);
+        // free(pathname);
+        // free(null_path);
+        // free(file_path);
         return;
     }
     msg->retval = 0;
-    free(pathname);
-    free(null_path);
-    free(file_path);
+    // free(pathname);
+    // free(null_path);
+    // free(file_path);
     TracePrintf(0, "YFSStat Exit\n");
 }
 
@@ -1023,12 +1021,24 @@ ParseFileName(char *filename, short dir_inum)
         if (temp < 0) {
             TracePrintf(0, "ParseFileName couldn't find file in inum\n");
             TracePrintf(0, "ParseFileName Exit\n");
+            
+            // struct dir_entry *buf = (struct dir_entry *) b_cache.blocks[8];
+            // int i;
+            // for (i = 0; i < 3; i++) {
+            //     TracePrintf(0, "in pfn block 8 position %d, entry %s\n", i, (buf + i)->name);
+            // }
+            TracePrintf(0, "ParseFileName Exit\n");
             return -1;
         }
         inum = temp;
         token = strtok(0, "/");
     }
     //free(new_filename);
+    // struct dir_entry *buf = (struct dir_entry *) b_cache.blocks[8];
+    // int i;
+    // for (i = 0; i < 3; i++) {
+    //     TracePrintf(0, "prior to pfn exit block 8 position %d, entry %s\n", i, (buf + i)->name);
+    // }
     TracePrintf(0, "ParseFileName Exit\n");
     return inum;
 }
@@ -1047,6 +1057,12 @@ TraverseDirs(char *dir_name, short dir_inum, bool delete)
     TracePrintf(0, "TraverseDirs Entry\n");
     TracePrintf(0, "Traversing path %s at inum %d\n", dir_name, dir_inum);
 
+    // struct dir_entry *buf = (struct dir_entry *) b_cache.blocks[8];
+    // int j;
+    // for (j = 0; j< 3; j++) {
+    //     TracePrintf(0, "TraverseDirs block 8 position %d, entry %s\n", j, (buf+j)->name);
+    // }
+    TracePrintf(0, "ParseFileName Exit\n");
     char *dir_name_copy = MakeNullTerminated(dir_name, DIRNAMELEN);
     struct inode *root_inode = GetInodeAt(dir_inum);
     TracePrintf(0, "TraverseDirs inode type: %d\n", root_inode->type);
@@ -1065,6 +1081,7 @@ TraverseDirs(char *dir_name, short dir_inum, bool delete)
             break;
 
         int num_dir_entries = size_remaining;
+        TracePrintf(0, "Size Remaining :%d\n", size_remaining);
         if (size_remaining > BLOCKSIZE)
             num_dir_entries = BLOCKSIZE;
         num_dir_entries = num_dir_entries / sizeof(struct dir_entry);
@@ -1134,13 +1151,13 @@ TraverseDirsHelper(char *dir_name, int curr_block, int num_dir_entries, bool del
     struct dir_entry *dir_entries = malloc(SECTORSIZE);
     if (curr_block == 0) {
         TracePrintf(0, "TraverseDirsHelper: (ERROR) curr_block is 0\n");
-        free(dir_entries);
+        // free(dir_entries);
         return -1;
     }    
         
-    if (ReadFromBlock(curr_block, dir_entries) != 0) {
+    if (ReadFromBlock(curr_block, dir_entries) < 0) {
         TracePrintf(0, "TraverseDirsHelper: (ERROR) ReadFromBlock failed\n");
-        Exit(-1);
+        return -1;
     }
         
     struct dir_entry *curr_entry = dir_entries;
@@ -1152,7 +1169,7 @@ TraverseDirsHelper(char *dir_name, int curr_block, int num_dir_entries, bool del
         TracePrintf(0, "TraverseDirsHelper dir_name: %s\n", dir_name);
         if (strcmp(curr_dir_name, dir_name) == 0) {
             short inum = curr_entry->inum;
-            free(dir_entries);
+            // free(dir_entries);
             TracePrintf(0, "TraverseDirsHelper Exit (success)\n");
             if (delete) {
                 curr_entry->inum = 0;
@@ -1162,7 +1179,7 @@ TraverseDirsHelper(char *dir_name, int curr_block, int num_dir_entries, bool del
         curr_entry++;
     }
 
-    free(dir_entries);
+    // free(dir_entries);
     TracePrintf(0, "TraverseDirsHelper Exit (fail)\n");
     return -1;
 }
@@ -1301,29 +1318,29 @@ SearchByFD(struct open_file_list **wait, int fd)
 //Gives open file in open file list a given block num and position.
 int
 EditOpenFile(struct open_file_list **wait, int fd, int blocknum, int position) {
-    TracePrintf(0, "EditOpenFile Entry\n");
+    //TracePrintf(0, "EditOpenFile Entry\n");
     struct open_file_list *q = (*wait);
-    TracePrintf(0, "EditOpenFile open_files: %p\n", open_files);
-    TracePrintf(0, "EditOpenFile *wait: %p\n", *wait);
-    TracePrintf(0, "EditOpenFile q: %p\n", q);
+    // TracePrintf(0, "EditOpenFile open_files: %p\n", open_files);
+    // TracePrintf(0, "EditOpenFile *wait: %p\n", *wait);
+    // TracePrintf(0, "EditOpenFile q: %p\n", q);
 
     // First file is the one we want to edit
 	if (q != NULL && q->fd == fd) {
 		q->blocknum = blocknum;
         q->position = position;
-        TracePrintf(0, "EditOpenFile q != NULL and q->fd == fd\n");
-        TracePrintf(0, "EditOpenFile q->blocknum: %d\n", q->blocknum);
-        TracePrintf(0, "EditOpenFile q->position: %d\n", q->position);
+        // TracePrintf(0, "EditOpenFile q != NULL and q->fd == fd\n");
+        // TracePrintf(0, "EditOpenFile q->blocknum: %d\n", q->blocknum);
+        // TracePrintf(0, "EditOpenFile q->position: %d\n", q->position);
         //free(q);
-        TracePrintf(0, "EditOpenFile Exit\n");
+        // TracePrintf(0, "EditOpenFile Exit\n");
 		return (0);
 	}
 
     // File we want to edit is not first
 	while (q != NULL && q->fd != fd) {
 		q = q->next;
-        TracePrintf(0, "EditOpenFile q != NULL and q->fd != fd\n");
-        TracePrintf(0, "EditOpenFile q->next: %p\n", q->next);
+        // TracePrintf(0, "EditOpenFile q != NULL and q->fd != fd\n");
+        // TracePrintf(0, "EditOpenFile q->next: %p\n", q->next);
 	}
 
 	if (q == NULL) {
@@ -1332,10 +1349,10 @@ EditOpenFile(struct open_file_list **wait, int fd, int blocknum, int position) {
 
 	q->blocknum = blocknum;
     q->position = position;
-    TracePrintf(0, "EditOpenFile q->blocknum: %d\n", q->blocknum);
-    TracePrintf(0, "EditOpenFile q->position: %d\n", q->position);
+    // TracePrintf(0, "EditOpenFile q->blocknum: %d\n", q->blocknum);
+    // TracePrintf(0, "EditOpenFile q->position: %d\n", q->position);
     //free(q);
-    TracePrintf(0, "EditOpenFile Exit\n");
+    //TracePrintf(0, "EditOpenFile Exit\n");
 	return(0);
 }
 
@@ -1477,17 +1494,17 @@ YFSCreateMkDir(void *m, bool dir)
             if (child_inum < 0) {
                 TracePrintf(0, "YFSCreateMkDir: (ERROR) child_inum <= 0\n");
                 msg->retval = ERROR;
-                free(pathname);
-                free(null_path);
-                free(new_file);
+                // free(pathname);
+                // free(null_path);
+                // free(new_file);
                 return;
             }
         } else if (dir) {
             TracePrintf(0, "YFSCreateMkDir: (ERROR) we are trying to make a directory that already exists\n");
             msg->retval = ERROR;
-            free(pathname);
-            free(null_path);
-            free(new_file);
+            // free(pathname);
+            // free(null_path);
+            // free(new_file);
             return;
         }
         new_node = GetInodeAt(child_inum);
@@ -1495,10 +1512,17 @@ YFSCreateMkDir(void *m, bool dir)
         // create dir entry and add it to parent directory
         struct dir_entry *new_file_entry = CreateDirEntry(child_inum, new_file);
         int openval = InsertOFDeluxe(child_inum);
+        TracePrintf(0, "YFSCreateMkDir: ADDING ENTRY TO PARENT\n");
         AddToBlock(parent_inum, new_file_entry, sizeof(struct dir_entry));
         
+        // struct dir_entry *buf = (struct dir_entry *) b_cache.blocks[8];
+        // for (i = 0; i < 3; i++) {
+        //     TracePrintf(0, "Before WriteInum in Cmkdir block 8 position %d, entry %s\n", i, (buf+i)->name);
+        // }
+
         // Update the inode
         MakeNewFile(new_node, dir);
+        TracePrintf(0, "YFSCreateMkDir: Parent node size: %d\n", parent_node->size);
         WriteINum(child_inum, *new_node);
         
         // Add "." and ".."" entries if we are creating a directory
@@ -1510,8 +1534,10 @@ YFSCreateMkDir(void *m, bool dir)
             struct dir_entry *blk = malloc(2 * sizeof(struct dir_entry)); //check in office hours, seems sus
             blk[0] = *dot;
             blk[1] = *dotdot;
+            TracePrintf(0, "YFSCreateMkDir ADDING ., .. ENTRY TO CHILD\n");
             AddToBlock(child_inum, blk, 2*sizeof(struct dir_entry));
         }
+        TracePrintf(0, "YFSCreateMkDir (after adding ., ..) child node->size: %d\n", new_node->size);
 
         if (dir) {
             msg->retval = 0;
@@ -1527,9 +1553,9 @@ YFSCreateMkDir(void *m, bool dir)
         msg->retval = ERROR;
     }
     TracePrintf(0, "----------YFSCreateMkDir Exit----------\n");
-    free(pathname);
-    free(null_path);
-    free(new_file);
+    // free(pathname);
+    // free(null_path);
+    // free(new_file);
 }
 
 // Shoves data into empty inode struct
@@ -1628,21 +1654,37 @@ CreateDirEntry(short inum, char name[])
 int
 ReadFromBlock(int sector_num, void *buf) 
 {
+    TracePrintf(0, "---------------ReadFromBlock------------------\n");
+    TracePrintf(0, "Reading from block %d\n", sector_num);
+
     int gbc = GetBlockCache((short) sector_num, buf);
     if (gbc > 0) {
+        TracePrintf(0, "Returning dirty bit %d\n", gbc);
         return gbc;
     } else {
         int r = ReadSector(sector_num, buf);
+        TracePrintf(0, "Buf's current contents: %d\n", (char *) buf);
         if (r < 0) {
             TracePrintf(0, "ReadFromBlock readSector error\n");
             return ERROR;
         }
+        TracePrintf(0, "Inserting block %d into cache\n", sector_num);
+        // struct dir_entry *buf2 = (struct dir_entry *) b_cache.blocks[8];
+        // int i;
+        // for (i = 0; i < 3; i++) {
+        //     TracePrintf(0, "In ReadFromBlock block 8 position %d, entry %s\n", i, (buf2+i)->name);
+        // }
         InsertBlockCache(sector_num, buf, 0);
+        // buf2 = (struct dir_entry *) b_cache.blocks[8];
+        // for (i = 0; i < 3; i++) {
+        //     TracePrintf(0, "In ReadFromBlock block 8 position %d, entry %s\n", i, (buf2+i)->name);
+        // }
+        TracePrintf(0, "ParseFileName Exit\n");
         return 0;
     }
-    int r = ReadSector(sector_num, buf);
-    TracePrintf(0, "ReadFromBlock readSector returned %d\n", r);
-    return r;
+    // int r = ReadSector(sector_num, buf);
+    // TracePrintf(0, "ReadFromBlock readSector returned %d\n", r);
+    // return r;
 }
 
 /**
@@ -1658,6 +1700,21 @@ WriteToBlock(int sector_num, void *buf)
 int
 WriteINum(int inum, struct inode node) 
 {
+    TracePrintf(0, "WriteINum Entry\n");
+    TracePrintf(0, "WriteInum inum: %d\n", inum);
+    TracePrintf(0, "WriteInum node->size: %d\n", node.size);
+    void *block = malloc(BLOCKSIZE);
+    short sector = GetSectorNum(inum);
+    if (GetBlockCache(sector, block) == -1) {
+        if (ReadSector(sector, block) == -1) {
+            TracePrintf(0, "Couldn't read sector in WriteInum\n");
+            return -1;
+        }
+        if (InsertBlockCache(sector, block, false) < 0) {
+            TracePrintf(0, "Couldn't insert block in WriteInum\n");
+            return -1;
+        }
+    }
     return InsertInodeCache(inum, node, true);
 }
 
@@ -1665,15 +1722,23 @@ WriteINum(int inum, struct inode node)
 struct inode *
 GetInodeAt(short inum) 
 {
+    TracePrintf(0, "GetInodeAt Entry\n");
     struct inode *node = malloc(sizeof(struct inode));
     if (GetInodeCache(inum, node) >= 0) {
+        TracePrintf(0, "GetInodeAt getting cached inode\n");
+        TracePrintf(0, "GetInodeAt inum: %d\n", inum);
+        TracePrintf(0, "GetInodeAt node->size: %d\n", node->size);
+        TracePrintf(0, "GetInodeAt node->type: %d\n", node->type);
         return node;
     }
     struct inode *blk = malloc(BLOCKSIZE);
     int sector = GetSectorNum((int) inum);
     ReadFromBlock(sector, blk);
     struct inode *read_node = (struct inode *) blk + GetSectorPosition((int) inum);
-    InsertInodeCache(inum, read_node, false);
+    TracePrintf(0, "GetInodeAt inserting into inode cache\n");
+    TracePrintf(0, "GetInodeAt inum: %d\n", inum);
+    TracePrintf(0, "GetInodeAt node->size: %d\n", read_node->size);
+    InsertInodeCache(inum, *read_node, false);
     return read_node;
 }
 
@@ -1685,6 +1750,12 @@ AddToBlock(short inum, void *buf, int len)
     TracePrintf(0, "AddToBlock Entry\n");
     TracePrintf(0, "AddToBlock inum: %d\n", inum);
     TracePrintf(0, "AddToBlock len: %d\n", len);
+
+    // struct dir_entry *bufff = (struct dir_entry *) b_cache.blocks[8];
+    // int j;
+    // for (j = 0; j < 3; j++) {
+    //     TracePrintf(0, "in Addtoblock block 8 position %d, entry %s\n", j, (bufff+j)->name);
+    // }
 
     // Get file from open file list
     struct open_file_list *file = SearchOpenFile(&open_files, inum);
@@ -1721,6 +1792,7 @@ AddToBlock(short inum, void *buf, int len)
             TracePrintf(0, "AddToBlock Exit\n");
             return (-1);
         }
+        
         TracePrintf(0, "AddToBlock: writing to block %d at position %d\n", write_num, pos);
         for (i = pos; i < pos + len; i++) {
             edit_blk[i] = *((char *) (buf + i - pos));
@@ -1730,6 +1802,11 @@ AddToBlock(short inum, void *buf, int len)
         TracePrintf(0, "AddToBlock: writing to block %d\n", write_num);
 
         WriteToBlock(write_num, edit_blk);
+
+        // struct dir_entry *buf2 = (struct dir_entry *) b_cache.blocks[8];
+        // for (j = 0; j < 3; j++) {
+        //     TracePrintf(0, "in add2blk after write2blk block 8 position %d, entry %s\n", j, (buf2+j)->name);
+        // }
 
         // update position and blocknum
         EditOpenFile(&open_files, file->fd, blknum, pos + len);
@@ -2050,11 +2127,11 @@ CheckDirHelper(int curr_block, int num_dir_entries)
     TracePrintf(0, "CheckDirHelper num_dir_entries: %d\n", num_dir_entries);
     struct dir_entry *dir_entries = malloc(SECTORSIZE);
     if (curr_block == 0) {
-        free(dir_entries);
+        // free(dir_entries);
         return -1;
     }    
         
-    if (ReadFromBlock(curr_block, dir_entries) != 0) {
+    if (ReadFromBlock(curr_block, dir_entries) < 0) {
         TracePrintf(0, "CheckDirHelper: (ERROR) ReadFromBlock failed\n");
         Exit(-1);
     }
@@ -2072,14 +2149,14 @@ CheckDirHelper(int curr_block, int num_dir_entries)
             continue;
         }
         if (curr_entry->inum != 0) {
-            free(dir_entries);
+            // free(dir_entries);
             TracePrintf(0, "CheckDirHelper Exit (false)\n");
             return (false);
         }
         curr_entry++;
     }
 
-    free(dir_entries);
+    // free(dir_entries);
     TracePrintf(0, "CheckDirHelper Exit (true)\n");
     return true;
 }
@@ -2130,12 +2207,13 @@ InsertBlockCache(short blknum, void *block, bool dirty)
 
     short hash;
     bool found = false;
+    TracePrintf(0, "inserting %d into cache\n", (char *) block);
     TracePrintf(0, "Block cache OG hash is %d\n", oghash);
     TracePrintf(0, "Block cache counter is %d\n", b_cache.counter);
     int i;
     for (i = 0; i < BLOCK_CACHESIZE; i++) {
         hash = (oghash + i) % BLOCK_CACHESIZE;
-        if (b_cache.nums[hash] && b_cache.nums[hash] == blknum) {
+        if (b_cache.nums[hash] == 0 || b_cache.nums[hash] == blknum) {
             TracePrintf(0, "Found Block in cache\n");
             found = true;
             break;
@@ -2168,13 +2246,25 @@ InsertBlockCache(short blknum, void *block, bool dirty)
 
     // copy from block into cache
     b_cache.nums[hash] = blknum;
-    char *curr_cache_entry = (char *) &(b_cache.blocks[hash]);
-    char *curr_block_entry = (char *) block;
-    for (i = 0; i < BLOCKSIZE; i++) {
-        curr_cache_entry = curr_block_entry;
-        curr_block_entry++;
-        curr_cache_entry++;
+
+    struct dir_entry *buf2 = (struct dir_entry *) b_cache.blocks[8];
+    for (i = 0; i < 3; i++) {
+        TracePrintf(0, "In insert pre-memcpy block 8 position %d, entry %s\n", i, (buf2+i)->name);
     }
+    TracePrintf(0, "initial block contents: %s\n", (char *) block);
+    TracePrintf(0, "initial block hash contents: %s\n", b_cache.blocks[hash]);
+    memcpy(b_cache.blocks[hash], block, BLOCKSIZE);
+    // char *curr_cache_entry = (char *) &(b_cache.blocks[hash]);
+    // char *curr_block_entry = (char *) block;
+    // for (i = 0; i < BLOCKSIZE; i++) {
+    //     curr_cache_entry[i] = curr_block_entry[i];
+    // }
+    buf2 = (struct dir_entry *) b_cache.blocks[8];
+    for (i = 0; i < 3; i++) {
+        TracePrintf(0, "In insert post-memcpy block 8 position %d, entry %s\n", i, (buf2+i)->name);
+    }
+    TracePrintf(0, "b_cache.blocks[hash] contents: %s\n", b_cache.blocks[hash]);
+
     b_cache.lru[hash] = b_cache.counter;
     b_cache.dirty_bits[hash] = dirty;
     b_cache.counter++;
@@ -2188,17 +2278,21 @@ InsertBlockCache(short blknum, void *block, bool dirty)
 int
 InsertInodeCache(short inum, struct inode node, bool dirty)
 {
+    TracePrintf(0, "InsertInodeCache Entry\n");
+    TracePrintf(0, "InsertInodeCache inum: %d\n", inum);
+
     short oghash = inum % INODE_CACHESIZE;
     short hash;
     bool found = false;
+    TracePrintf(0, "Inserting node of size %d\n", node.size);
     TracePrintf(0, "Inode OG hash is %d\n", oghash);
     TracePrintf(0, "Inode cache counter is %d\n", i_cache.counter);
     int i;
     for (i = 0; i < INODE_CACHESIZE; i++) {
         hash = (oghash + i) % INODE_CACHESIZE;
-        if (i_cache.nums[hash] && i_cache.nums[hash] == inum) {
+        if (i_cache.nums[hash] == 0 || i_cache.nums[hash] == inum) {
             found = true;
-            TracePrintf(0, "Found Inode in cache\n");
+            TracePrintf(0, "InsertInodeCache found Inode in cache\n");
             break;
         }
     }
@@ -2213,44 +2307,38 @@ InsertInodeCache(short inum, struct inode node, bool dirty)
                 hash = i;
             }
         }
-        TracePrintf(0, "min lru is %d\n", min);
+        TracePrintf(0, "InsertInodeCache min lru is %d\n", min);
     }
-    else {
-        int j = 0;
-        while (i_cache.nums[hash] && i_cache.nums[hash] == inum) {
-            hash++;
-            hash %= INODE_CACHESIZE;
-            if (j > INODE_CACHESIZE) {
-                TracePrintf(0, "InsertInodeCache Freak the fuck out\n");
-                return -1;
-            }
-            j++;
-            
-        }
-    }
-    TracePrintf(0, "Inserting at position %d\n", hash);
+    
+    TracePrintf(0, "InsertInodeCache inserting at position %d\n", hash);
     if (i_cache.dirty_bits[hash]) {
-        TracePrintf(0, "Dirty is true\n", hash);
+        TracePrintf(0, "InsertInodeCache Dirty is true\n", hash);
         int removenum = i_cache.nums[hash];
         int sector = GetSectorNum(removenum);
         int position = GetSectorPosition(removenum);
-        TracePrintf(0, "Writing inum %d to block %d at position %d\n", removenum, sector, position);
+        TracePrintf(0, "InsertInodeCache writing inum %d to block %d at position %d\n", removenum, sector, position);
         struct inode *nodes = malloc(BLOCKSIZE);
         if (ReadFromBlock(sector, nodes) < 0) {
-            TracePrintf(0, "Writing inum can't read block\n");
+            TracePrintf(0, "InsertInodeCache Writing inum can't read block\n");
             return -1;
         }
         nodes[position] = node;
+        i_cache.nums[hash] = inum;
+        i_cache.dirty_bits[hash] = dirty;
+        i_cache.nodes[hash] = node;
+        i_cache.lru[hash] = i_cache.counter;
+        i_cache.counter++;
         return WriteSector(sector, nodes);
     }
+    TracePrintf(0, "InsertInodeCache node hash %d\n", hash);
     i_cache.nums[hash] = inum;
     i_cache.dirty_bits[hash] = dirty;
     i_cache.nodes[hash] = node;
     i_cache.lru[hash] = i_cache.counter;
     i_cache.counter++;
-    
+    TracePrintf(0, "GetInodeCache Nodes 2 size: %d\n", i_cache.nodes[2].size);
     TracePrintf(0, "InsertInodeCache counter is %d\n", i_cache.counter);
-
+//  
     TracePrintf(0, "InsertInodeCache Exit\n");
     return 0;
 }
@@ -2271,18 +2359,24 @@ GetBlockCache(short index, void *buf)
         }
         j++;
     }
-
+    TracePrintf(0, "Buf now contains %s\n", (char *) buf);
     // copy data from block cache into buf
-    int i;
-    char *curr_block_entry = (char *) &(b_cache.blocks[hash]);
-    char *curr_buf_entry = (char *) buf;
-    for (i = 0; i < BLOCKSIZE; i++) {
-        curr_buf_entry = curr_block_entry;
-        curr_buf_entry++;
-        curr_block_entry++;
-    }
+    //int i;
+    //char *char_block = (char *) &(b_cache.blocks[hash]);
+    TracePrintf(0, "Shoving in %s\n", (char *) b_cache.blocks[hash]);
+    TracePrintf(0, "Shoving into %p\n", (char *) b_cache.blocks[hash]);
+    TracePrintf(0, "ptr 7 is %p\n", (char *) b_cache.blocks[7]);
+    memcpy(buf, b_cache.blocks[hash], BLOCKSIZE);
+    // char *char_buf = (char *) buf;
+    // for (i = 0; i < BLOCKSIZE; i++) {
+    //     //TracePrintf(0, "char_block[i]: %s\n", char_block[i]);
+    //     char_buf[i] = char_block[i];
+    // }
+    TracePrintf(0, "Buf now contains %s\n", (char *) buf);
+
     b_cache.lru[hash] = b_cache.counter;
     b_cache.counter++;
+    TracePrintf(0, "Filled buf at hash index %d\n", hash);
     return b_cache.dirty_bits[hash];
 
 }
@@ -2303,6 +2397,9 @@ GetInodeCache(short index,  struct inode *buf)
         }
         j++;
     }
+
+    TracePrintf(0, "GetInodeCache Nodes 2 size: %d\n", i_cache.nodes[2].size);
+
 
     // copy data from block cache into buf
     *buf = i_cache.nodes[hash];

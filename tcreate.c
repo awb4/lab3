@@ -17,7 +17,7 @@ main(int argc, char **argv)
     printf("Tcreate\n");
     write(2, "A\n", 2);
     TracePrintf(0, "Written\n");
-    Create("/foo");
+    MkDir("/foo");
     err = MkDir("/foo/bar");
     ChDir("/foo");
     err2 = RmDir("bar");
