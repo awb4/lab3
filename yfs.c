@@ -9,7 +9,7 @@
 #include <comp421/hardware.h>
 #include "message.h"
 
-#define IPB BLOCKSIZE / INODESIZE
+#define IPB (BLOCKSIZE / INODESIZE)
 
 union {
     struct fs_header head;
@@ -1822,7 +1822,7 @@ GetInodeAt(short inum)
     }
     struct inode *blk = malloc(BLOCKSIZE);
     TracePrintf(0, "Inum is %d\n", inum);
-    TracePrintf(0, "IPB is %d\n", IPB);
+    TracePrintf(0, "IPB  is %d\n", IPB);
     TracePrintf(0, "Math is %d\n", 23 / IPB + 1);
     int sector = (int) inum / ((int) IPB) + 1;
     TracePrintf(0, "Sector num is %d\n", sector);
