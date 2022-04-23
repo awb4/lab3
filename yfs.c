@@ -1173,6 +1173,7 @@ TraverseDirsHelper(char *dir_name, int curr_block, int num_dir_entries, bool del
             TracePrintf(0, "TraverseDirsHelper Exit (success)\n");
             if (delete) {
                 curr_entry->inum = 0;
+                WriteToBlock(curr_block, dir_entries);
             }
             return (inum);
         }
@@ -1572,9 +1573,14 @@ MakeNewFile(struct inode *node, bool directory)
     }
     int i;
     for (i = 0; i < NUM_DIRECT; i++){
+        TracePrintf(0, "Direct %d\n", i);
         if (node->direct[i] != 0) {
+            TracePrintf(0, "Direct %d is not zero\n", i);
             int position = node->direct[i];
-            block_bitmap[position] = 1;
+            TracePrintf(0, "Position is %d\n", position);
+            if (0 < position && position < (int) (sizeof(block_bitmap) / sizeof(bool))) {
+                block_bitmap[position] = 1;
+            }
         }
         node->direct[i] = 0;
     }
